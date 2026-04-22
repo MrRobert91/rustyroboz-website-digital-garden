@@ -5,7 +5,6 @@ export const siteConfig = {
     "Personal site by David Robert, computer engineer based in Madrid, with projects in AI, VR, games, quantum computing and software experiments.",
   location: "Madrid · Spain",
   email: "",
-  apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000",
   navigation: [
     { href: "/", label: "Inicio" },
     { href: "/about", label: "Sobre mí" },

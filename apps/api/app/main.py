@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -24,7 +24,7 @@ def create_app(settings=None) -> FastAPI:
     vector_store = FaissVectorStore(dimension=settings.faiss_dimension, index_path=settings.faiss_index_path)
     knowledge_base = KnowledgeBase(settings=settings, repository=repository, vector_store=vector_store)
     knowledge_base.sync()
-    chat_service = ChatService(repository=repository, knowledge_base=knowledge_base)
+    chat_service = ChatService(settings=settings, repository=repository, knowledge_base=knowledge_base)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -54,11 +54,19 @@ def create_app(settings=None) -> FastAPI:
                 "sqlite": "ready" if settings.sqlite_path.exists() else "missing",
                 "faiss": "ready",
             },
+            "llm": {
+                "provider": "openrouter",
+                "model": settings.openrouter_model,
+                "configured": bool(settings.openrouter_api_key),
+            },
         }
 
     @app.post("/api/v1/chat")
     async def chat(payload: ChatRequest):
-        return await chat_service.ask(payload.message, payload.session_id)
+        try:
+            return await chat_service.ask(payload.message, payload.session_id)
+        except RuntimeError as exc:
+            raise HTTPException(status_code=502, detail=str(exc)) from exc
 
     @app.post("/api/v1/chat/stream")
     async def chat_stream(payload: ChatRequest):

@@ -18,6 +18,11 @@ class Settings(BaseSettings):
     faiss_dimension: int = Field(default=1536, alias="FAISS_DIMENSION")
     cors_origins: str = Field(default="http://localhost:3000,http://web:3000", alias="CORS_ORIGINS")
     content_root: Path = Field(default=Path("./content"), alias="CONTENT_ROOT")
+    openrouter_api_key: str = Field(default="", alias="OPENROUTER_API_KEY")
+    openrouter_base_url: str = Field(default="https://openrouter.ai/api/v1", alias="OPENROUTER_BASE_URL")
+    openrouter_model: str = Field(default="google/gemma-4-31b-it:free", alias="OPENROUTER_MODEL")
+    openrouter_site_url: str = Field(default="", alias="OPENROUTER_SITE_URL")
+    openrouter_site_name: str = Field(default="rustyroboz", alias="OPENROUTER_SITE_NAME")
 
     @property
     def allowed_origins(self) -> list[str]:
@@ -26,6 +31,10 @@ class Settings(BaseSettings):
     @property
     def resolved_content_root(self) -> Path:
         return self.content_root.resolve()
+
+    @property
+    def openrouter_chat_url(self) -> str:
+        return f"{self.openrouter_base_url.rstrip('/')}/chat/completions"
 
 
 @lru_cache

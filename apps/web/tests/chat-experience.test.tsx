@@ -1,5 +1,5 @@
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi, afterEach } from "vitest";
 import { ChatExperience } from "@/components/chat-experience";
 
 function buildStreamResponse(lines: string[]) {
@@ -22,7 +22,7 @@ describe("ChatExperience", () => {
   it("renders an interactive chat form", () => {
     render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
     expect(screen.getByLabelText(/pregunta/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /preguntar/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /enviar/i })).toBeInTheDocument();
   });
 
   it("handles a successful streaming response", async () => {
@@ -31,25 +31,25 @@ describe("ChatExperience", () => {
       vi.fn().mockResolvedValue({
         ok: true,
         body: buildStreamResponse([
-          'event: chunk\ndata: {"delta":"AI Safety Evals Workbench es una plataforma para evaluaciones.","session_id":1}\n\n',
-          'event: done\ndata: {"answer":"AI Safety Evals Workbench es una plataforma para evaluaciones.","citations":[{"slug":"ai-safety-evals-workbench","href":"/projects/ai-safety-evals-workbench","title":"AI Safety Evals Workbench"}],"session_id":1}\n\n',
+          'event: chunk\ndata: {"delta":"Technical Interview Chatbot es un asistente para practicar entrevistas.","session_id":1}\n\n',
+          'event: done\ndata: {"answer":"Technical Interview Chatbot es un asistente para practicar entrevistas.","citations":[{"slug":"technical-interview-chatbot","href":"/projects/technical-interview-chatbot","title":"Technical Interview Chatbot"}],"session_id":1}\n\n',
         ]),
       }),
     );
 
     render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
-    fireEvent.change(screen.getByLabelText(/pregunta/i), { target: { value: "¿Qué es AI Safety Evals Workbench?" } });
-    fireEvent.click(screen.getByRole("button", { name: /preguntar/i }));
+    fireEvent.change(screen.getByLabelText(/pregunta/i), { target: { value: "¿Qué es el Technical Interview Chatbot?" } });
+    fireEvent.click(screen.getByRole("button", { name: /enviar/i }));
 
     expect(screen.getByRole("button", { name: /preguntando/i })).toBeDisabled();
 
     await waitFor(() => {
-      expect(screen.getByText(/plataforma para evaluaciones/i)).toBeInTheDocument();
+      expect(screen.getByText(/practicar entrevistas/i)).toBeInTheDocument();
     });
 
-    expect(screen.getByRole("link", { name: /ai safety evals workbench/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /technical interview chatbot/i })).toHaveAttribute(
       "href",
-      "/projects/ai-safety-evals-workbench",
+      "/projects/technical-interview-chatbot",
     );
   });
 
@@ -65,11 +65,28 @@ describe("ChatExperience", () => {
 
     render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
     fireEvent.change(screen.getByLabelText(/pregunta/i), { target: { value: "hola" } });
-    fireEvent.click(screen.getByRole("button", { name: /preguntar/i }));
+    fireEvent.click(screen.getByRole("button", { name: /enviar/i }));
 
     await waitFor(() => {
       expect(screen.getByText(/backend failure/i)).toBeInTheDocument();
     });
   });
-});
 
+  it("shows stream errors emitted by the backend", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        body: buildStreamResponse(['event: error\ndata: {"detail":"OpenRouter devolvió 429: rate limit"}\n\n']),
+      }),
+    );
+
+    render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
+    fireEvent.change(screen.getByLabelText(/pregunta/i), { target: { value: "hola" } });
+    fireEvent.click(screen.getByRole("button", { name: /enviar/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/rate limit/i)).toBeInTheDocument();
+    });
+  });
+});

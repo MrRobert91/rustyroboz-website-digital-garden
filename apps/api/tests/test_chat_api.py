@@ -2,6 +2,7 @@ from pathlib import Path
 
 from httpx import ASGITransport, AsyncClient
 
+from app.chat_service import ChatService
 from app.config import Settings
 from app.main import create_app
 
@@ -18,11 +19,17 @@ def build_test_app() -> tuple:
         FAISS_META_PATH=temp_dir / "chat-test.meta.json",
         CONTENT_ROOT=root / "content",
         FAISS_DIMENSION=256,
+        OPENROUTER_API_KEY="test-key",
     )
     return create_app(settings), settings
 
 
-async def test_chat_endpoint_returns_relevant_project_context():
+async def test_chat_endpoint_returns_relevant_project_context(monkeypatch):
+    async def fake_request_completion(self, message, retrieved, citations):
+        assert "Technical Interview Chatbot" in retrieved[0].title
+        return "Technical Interview Chatbot es un asistente para practicar entrevistas técnicas."
+
+    monkeypatch.setattr(ChatService, "_request_completion", fake_request_completion)
     app, _ = build_test_app()
     transport = ASGITransport(app=app)
 
@@ -55,7 +62,11 @@ async def test_chat_endpoint_handles_out_of_scope_questions():
     assert "No tengo suficiente contexto" in payload["answer"]
 
 
-async def test_chat_stream_emits_chunks_and_done_event():
+async def test_chat_stream_emits_chunks_and_done_event(monkeypatch):
+    async def fake_request_completion(self, message, retrieved, citations):
+        return "Metroidvania Game Using AI Generated Art mezcla exploración, combate y arte generado con IA."
+
+    monkeypatch.setattr(ChatService, "_request_completion", fake_request_completion)
     app, _ = build_test_app()
     transport = ASGITransport(app=app)
 
@@ -73,3 +84,44 @@ async def test_chat_stream_emits_chunks_and_done_event():
     assert "event: chunk" in body
     assert "event: done" in body
     assert "metroidvania-game-using-ai-generated-art" in body
+
+
+async def test_chat_endpoint_returns_openrouter_errors(monkeypatch):
+    async def fake_request_completion(self, message, retrieved, citations):
+        raise RuntimeError("OpenRouter devolvió 401: invalid key")
+
+    monkeypatch.setattr(ChatService, "_request_completion", fake_request_completion)
+    app, _ = build_test_app()
+    transport = ASGITransport(app=app)
+
+    async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        response = await client.post(
+            "/api/v1/chat",
+            json={"message": "Háblame del chatbot de entrevistas técnicas", "session_id": None},
+        )
+
+    assert response.status_code == 502
+    assert "invalid key" in response.json()["detail"]
+
+
+async def test_chat_stream_emits_error_event_when_model_request_fails(monkeypatch):
+    async def fake_request_completion(self, message, retrieved, citations):
+        raise RuntimeError("OpenRouter devolvió 429: rate limit")
+
+    monkeypatch.setattr(ChatService, "_request_completion", fake_request_completion)
+    app, _ = build_test_app()
+    transport = ASGITransport(app=app)
+
+    async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with client.stream(
+            "POST",
+            "/api/v1/chat/stream",
+            json={"message": "Háblame del chatbot de entrevistas técnicas", "session_id": None},
+        ) as response:
+            body = ""
+            async for chunk in response.aiter_text():
+                body += chunk
+
+    assert response.status_code == 200
+    assert "event: error" in body
+    assert "rate limit" in body

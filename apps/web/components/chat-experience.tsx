@@ -20,7 +20,7 @@ type ChatMessage = {
 };
 
 type ChatExperienceProps = {
-  apiBaseUrl: string;
+  apiBaseUrl?: string;
 };
 
 type StreamEvent = {
@@ -60,6 +60,10 @@ async function* parseEventStream(stream: ReadableStream<Uint8Array>) {
   }
 }
 
+function buildStreamUrl(apiBaseUrl?: string) {
+  return apiBaseUrl ? `${apiBaseUrl}/api/v1/chat/stream` : "/api/chat/stream";
+}
+
 export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -87,7 +91,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
     setMessages((current) => [...current, userMessage, { id: assistantMessageId, role: "assistant", content: "" }]);
 
     try {
-      const response = await fetch(`${apiBaseUrl}/api/v1/chat/stream`, {
+      const response = await fetch(buildStreamUrl(apiBaseUrl), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -138,9 +142,19 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
             }
           });
         }
+
+        if (eventPayload.event === "error") {
+          throw new Error(String(eventPayload.data.detail ?? "La API del chat devolvió un error."));
+        }
       }
     } catch (caughtError) {
-      const message = caughtError instanceof Error ? caughtError.message : "No se pudo completar la solicitud.";
+      const message =
+        caughtError instanceof Error && caughtError.message === "Failed to fetch"
+          ? "No se pudo conectar con el backend del chat. Revisa la URL de la API y el despliegue."
+          : caughtError instanceof Error
+            ? caughtError.message
+            : "No se pudo completar la solicitud.";
+
       setError(message);
       setMessages((current) => current.filter((item) => item.id !== assistantMessageId));
     } finally {
@@ -149,90 +163,83 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
   }
 
   const suggestions = [
-    "¿Qué es AI Safety Evals Workbench?",
-    "¿Qué temas tratas en tus artículos?",
-    "¿Cómo entiendes el trabajo técnico?",
+    "¿Qué proyectos de IA tienes publicados?",
+    "Háblame del chatbot de entrevistas técnicas.",
+    "¿Qué tipo de artículos escribes?",
   ];
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-      <section className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
-        <Badge>Asistente</Badge>
-        <h2 className="mt-5 font-manrope text-3xl font-semibold tracking-tight text-foreground">Pregunta sobre proyectos, artículos o trayectoria</h2>
-        <p className="mt-4 text-base leading-7 text-muted-foreground">
-          El asistente responde solo con contenido indexado del sitio. Si no tiene contexto suficiente, lo indica de forma explícita.
-        </p>
-
-        <form className="mt-8 flex flex-col gap-4" onSubmit={handleSubmit}>
-          <label className="text-sm font-medium text-foreground" htmlFor="chat-prompt">
-            Pregunta
-          </label>
-          <textarea
-            className="min-h-36 rounded-[1.5rem] border border-border bg-background px-5 py-4 text-base text-foreground outline-none transition-colors focus:border-accent"
-            id="chat-prompt"
-            name="prompt"
-            onChange={(event) => setInput(event.target.value)}
-            placeholder="Ejemplo: ¿Qué es Personal RAG Observatory y por qué lo construiste?"
-            value={input}
-          />
-          <div className="flex flex-wrap gap-3">
-            <Button disabled={loading || !input.trim()} type="submit">
-              {loading ? "Preguntando..." : "Preguntar"}
-            </Button>
-            {suggestions.map((suggestion) => (
-              <button
-                className="rounded-full border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-accent hover:text-accent"
-                key={suggestion}
-                onClick={() => setInput(suggestion)}
-                type="button"
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
-        </form>
-
-        {error ? (
-          <div className="mt-6 rounded-[1.5rem] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
-        ) : null}
-      </section>
-
-      <section className="rounded-[2rem] border border-border bg-background p-6 shadow-soft">
-        <div className="flex items-center justify-between gap-4">
+    <section className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-soft">
+      <div className="border-b border-border px-6 py-6 lg:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Stream</p>
-            <h2 className="mt-2 font-manrope text-2xl font-semibold text-foreground">Conversación</h2>
+            <Badge>Gemma 4 + RAG</Badge>
+            <h2 className="mt-4 font-manrope text-3xl font-semibold tracking-tight text-foreground">
+              Pregunta sobre proyectos, artículos o trayectoria
+            </h2>
+            <p className="mt-3 max-w-3xl text-base leading-7 text-muted-foreground">
+              El asistente recupera contexto del índice local de la web y genera la respuesta con Gemma 4 a través de
+              OpenRouter.
+            </p>
           </div>
           {sessionId ? <Badge variant="muted">Sesión {sessionId}</Badge> : null}
         </div>
+      </div>
 
-        <div className="mt-6 flex min-h-[26rem] flex-col gap-4">
+      <div className="border-b border-border px-6 py-4 lg:px-8">
+        <div className="flex flex-wrap gap-2">
+          {suggestions.map((suggestion) => (
+            <button
+              className="rounded-full border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-accent hover:text-accent"
+              key={suggestion}
+              onClick={() => setInput(suggestion)}
+              type="button"
+            >
+              {suggestion}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex min-h-[34rem] flex-col bg-background/60">
+        <div className="flex-1 space-y-5 px-6 py-6 lg:px-8">
           {messages.length === 0 ? (
-            <div className="flex h-full flex-col justify-between rounded-[1.5rem] border border-dashed border-border p-6">
+            <div className="rounded-[1.5rem] border border-dashed border-border bg-background px-5 py-6">
               <p className="text-base leading-7 text-muted-foreground">
-                Todavía no hay mensajes. Haz una pregunta concreta sobre un proyecto, una nota o la forma en la que está pensado el sitio.
+                Todavía no hay mensajes. Haz una pregunta concreta sobre un proyecto, un artículo o una nota publicada en
+                la web.
               </p>
-              <div className="mt-6 flex flex-wrap gap-2">
+              <div className="mt-5 flex flex-wrap gap-2">
                 <Badge variant="outline">RAG local</Badge>
                 <Badge variant="outline">SQLite</Badge>
                 <Badge variant="outline">FAISS</Badge>
-                <Badge variant="outline">LangGraph</Badge>
+                <Badge variant="outline">Gemma 4</Badge>
               </div>
             </div>
           ) : (
             messages.map((message) => (
               <article
-                className={message.role === "user" ? "ml-8 rounded-[1.5rem] bg-foreground px-5 py-4 text-background" : "mr-8 rounded-[1.5rem] border border-border bg-card px-5 py-4 text-foreground"}
+                className={message.role === "user" ? "ml-auto max-w-3xl rounded-[1.75rem] bg-foreground px-5 py-4 text-background" : "max-w-4xl rounded-[1.75rem] border border-border bg-card px-5 py-4 text-foreground"}
                 key={message.id}
               >
-                <p className={message.role === "user" ? "text-xs font-semibold uppercase tracking-[0.2em] text-background/70" : "text-xs font-semibold uppercase tracking-[0.2em] text-accent"}>
+                <p
+                  className={
+                    message.role === "user"
+                      ? "text-xs font-semibold uppercase tracking-[0.2em] text-background/70"
+                      : "text-xs font-semibold uppercase tracking-[0.2em] text-accent"
+                  }
+                >
                   {message.role === "user" ? "Tú" : "Asistente"}
                 </p>
                 <p className="mt-3 whitespace-pre-wrap text-sm leading-7">{message.content || (loading ? "Pensando..." : "")}</p>
                 {message.citations?.length ? (
-                  <div className="mt-4 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-3">
                     {message.citations.map((citation) => (
-                      <Link className="text-sm text-accent hover:underline" href={citation.href} key={`${message.id}-${citation.slug}`}>
+                      <Link
+                        className="text-sm text-accent hover:underline"
+                        href={citation.href}
+                        key={`${message.id}-${citation.collection}-${citation.slug}`}
+                      >
                         {citation.title}
                       </Link>
                     ))}
@@ -242,8 +249,33 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
             ))
           )}
         </div>
-      </section>
-    </div>
+
+        <div className="border-t border-border bg-card px-6 py-5 lg:px-8">
+          {error ? (
+            <div className="mb-4 rounded-[1.25rem] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
+          ) : null}
+
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <label className="text-sm font-medium text-foreground" htmlFor="chat-prompt">
+              Pregunta
+            </label>
+            <textarea
+              className="min-h-32 w-full rounded-[1.5rem] border border-border bg-background px-5 py-4 text-base text-foreground outline-none transition-colors focus:border-accent"
+              id="chat-prompt"
+              name="prompt"
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="Ejemplo: ¿Qué es Personal RAG Observatory y por qué lo construiste?"
+              value={input}
+            />
+            <div className="flex items-center justify-between gap-4">
+              <p className="text-sm text-muted-foreground">Responderá solo con contenido indexado de la web.</p>
+              <Button disabled={loading || !input.trim()} type="submit">
+                {loading ? "Preguntando..." : "Enviar"}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
   );
 }
-

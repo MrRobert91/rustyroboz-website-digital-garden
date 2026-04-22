@@ -53,6 +53,6 @@ describe("public routes", () => {
     expect(screen.getByRole("heading", { name: /ai lab/i })).toBeInTheDocument();
     render(await ChatPage());
     expect(screen.getByRole("heading", { name: /chat personal/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /preguntar/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /enviar/i })).toBeInTheDocument();
   });
 });
