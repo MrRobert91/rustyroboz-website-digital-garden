@@ -78,6 +78,9 @@ function getContentRoot() {
 
 async function readDirectory(collection: CollectionName) {
   const directory = path.join(getContentRoot(), collection);
+  if (!existsSync(directory)) {
+    return [];
+  }
   const entries = await fs.readdir(directory);
   return entries.filter((entry) => entry.endsWith(".mdx"));
 }
