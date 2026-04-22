@@ -14,15 +14,20 @@ class Settings(BaseSettings):
     port: int = Field(default=8000, alias="PORT")
     sqlite_path: Path = Field(default=Path("./data/site.db"), alias="SQLITE_PATH")
     faiss_index_path: Path = Field(default=Path("./data/faiss.index"), alias="FAISS_INDEX_PATH")
+    faiss_meta_path: Path = Field(default=Path("./data/index_meta.json"), alias="FAISS_META_PATH")
     faiss_dimension: int = Field(default=1536, alias="FAISS_DIMENSION")
     cors_origins: str = Field(default="http://localhost:3000,http://web:3000", alias="CORS_ORIGINS")
+    content_root: Path = Field(default=Path("./content"), alias="CONTENT_ROOT")
 
     @property
     def allowed_origins(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
+    @property
+    def resolved_content_root(self) -> Path:
+        return self.content_root.resolve()
+
 
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-

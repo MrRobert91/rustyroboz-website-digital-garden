@@ -1,0 +1,63 @@
+---
+title: "Metroidvania game using AI ART"
+description: "Ever since image-generative AIs started coming out, I’ve thought they have enormous potential for use in creating game assets, especially for people who, like me, have rusty artistic skills and are not used to using p..."
+slug: "metroidvania-game-using-ai-generated-art"
+publishedAt: "2023-03-20"
+updatedAt: "2023-03-20"
+tags: ["game-development", "ai-art", "midjourney", "unity", "game-jam", "dalle-2"]
+draft: false
+featured: true
+coverImage: "/images/projects/metroidvania-game-using-ai-generated-art/image-01.png"
+readingTime: "5 min"
+status: "completed"
+tech: ["Unity", "Midjourney", "DALL·E 2", "Krita"]
+links: {"video": "https://www.youtube.com/watch?v=BsFxKXcSCFY", "demo": "https://rustyroboz.itch.io/who-is-moloch"}
+---
+
+Ever since image-generative AIs started coming out, I’ve thought they have enormous potential for use in creating game assets, especially for people who, like me, have rusty artistic skills and are not used to using photoshop or other image editing programs.
+
+Inspired by a [video of a horizontall-scrolling spaceship game](https://www.youtube.com/watch?v=BsFxKXcSCFY) that I saw a while ago, I found it interesting to make a small game in which all the images were generated with artificial intelligence. Metroidvania Month Jam 19 seemed like a good place to try, so together with [@hidalguel](https://twitter.com/hidalguel) we got down to work. The fact that it was a jam with a deadline date was going to be very helpful in getting the project done in a reasonable amount of time.
+
+As the game is a metroidvania one, we are going to have a 2D game, in which you go around a map jumping on platforms, defeating enemies and getting new abilities. We used the Unity engine, with which we had some experience from previous experiments.
+
+To make our work easier, we use a [free template from the Unity asset store](https://assetstore.unity.com/packages/2d/characters/metroidvania-controller-166731), which contains the main mechanics that we will need for our metroidvania, that is, a character that can jump, attack and shoot among other things. Although we ended up modifying it to suit our needs, it’s a great starting point.
+
+![Metroidvania game using AI ART image 1](/images/projects/metroidvania-game-using-ai-generated-art/image-01.png)
+
+![Metroidvania game using AI ART image 2](/images/projects/metroidvania-game-using-ai-generated-art/image-02.png)
+
+Once we have the basic mechanics, the first thing we have to do is a main character, in our case a little robot.
+
+At firts we tried to generate the sprites of the character’s running animation with Stable Diffusion, but after much trial and error we couldn’t get the generated sprites to correspond to a specific animation, they look like a sprite sheet, but the sprites tend to have all the same posture, and not an animation cycle at all.
+
+Since the creation of sprites has not gone too well, we decided to make an animation based on bones.
+
+For this we use Midjorney to create the character, and we remove the background with an [AI application that automatically removes the background](https://www.remove.bg/) to make an animation using bones, we use krita to cut the different extremities and create a layer for each bone/extremity that we want to move separately and export it as a psd file (if you are using Krita, change the extension from.psd to.psb so that unity can read it correctly, as it is the format that Unity recognizes). Once in unity we use the Sprite editor to create the bones of our character, and create the different animations with them. I have followed [this tutorial](https://www.youtube.com/watch?v=Qd8TXelVnJ4) to do it.
+
+![Metroidvania game using AI ART image 3](/images/projects/metroidvania-game-using-ai-generated-art/image-03.png)
+
+Once we have the main character with animations of the different actions (run, jump, attack, etc.), it’s time to create the backgrounds.
+
+For the backgrounds we continue to use Midjourney, which is the image-generating AI that has given me the best results so far.
+
+For the backgrounds I have tried to keep the part of the style of the prompt similar in most of the generated images, and keep the ones that fit best for a 2d video game, for generate landscape images we use the — ar 3:2 flag of midjourney.
+
+The workflow that I have followed is to generate images with midjourney, once we find a background that we like, we make 4 variations of that image directly with the midjourney button. We chose two or three of them and used Dalle2’s Inpainting tool to merge the two images as well as to remove unwanted parts, such as the presence of humans or other characters or objects. Finally we Upscale the images so that they have more definition. We do this with this website ([https://imgupscaler.com/](https://imgupscaler.com/)), which is the one that accepts base images with the highest resolution, and increases them by up to 400%, and lets you upscale 5 free images a week.
+
+![Metroidvania game using AI ART image 4](/images/projects/metroidvania-game-using-ai-generated-art/image-04.png)
+
+![Metroidvania game using AI ART image 5](/images/projects/metroidvania-game-using-ai-generated-art/image-05.png)
+
+Although the results are not entirely professional and some integration work is still needed so that they do not look like a collage of different origins, especially in the areas where several different backgrounds come together. Perhaps with a better handling of Krita/photoshop the different backgrounds could be better integrated.
+
+For the story, we tried using chatGPT, but the results weren’t entirely convincing, and we finally ran out of time to add a full story.
+
+The theme of the story, as well as the name of the game, comes from an i [nterview with Liv Boeree on Lex Freidman’s podcast](https://www.youtube.com/watch?v=eF-E40pxxbI) in which Liv explains what is Moloch in terms of game theory, I found it to be a very interesting concept that is found in a multitude of systems, and could also be applied to Reinforcement Learning systems, in which agents end up reward farming as a way of optimizing a reward function. Some agents whose goal is to maximize a poorly designed reward function at all costs, can be the perfect scenario for [maximizing AIs](https://en.wikipedia.org/wiki/Instrumental_convergence) to emerge, ones that we will not be able to stop.
+
+It is a concept that I found very interesting because I believe that it underlies a multitude of complex systems. I recommend watching the podcast for a full explanation.
+
+As an easter egg to recognize the source of inspiration for the story, at the end you talk to Liv, whose image is also generated with Midjourney.
+
+![Metroidvania game using AI ART image 6](/images/projects/metroidvania-game-using-ai-generated-art/image-06.png)
+
+And that’s all, in the end there is a small prototype that still needs to be polished, you can try the game for free [here](https://rustyroboz.itch.io/who-is-moloch).

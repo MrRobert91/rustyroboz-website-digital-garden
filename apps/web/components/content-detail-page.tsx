@@ -10,6 +10,10 @@ type ContentDetailPageProps = {
   related: ContentItem[];
 };
 
+function isProjectItem(item: ContentItem): item is ContentItem & { links?: Record<string, string>; tech?: string[] } {
+  return item.collection === "projects";
+}
+
 export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
   return (
     <article className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
@@ -52,8 +56,26 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
                 <dt className="font-medium text-foreground">Ruta</dt>
                 <dd>{getContentHref(item)}</dd>
               </div>
+              {isProjectItem(item) && item.tech?.length ? (
+                <div className="grid gap-1">
+                  <dt className="font-medium text-foreground">Tecnologías</dt>
+                  <dd>{item.tech.join(", ")}</dd>
+                </div>
+              ) : null}
             </dl>
           </div>
+          {isProjectItem(item) && item.links && Object.keys(item.links).length ? (
+            <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Enlaces</p>
+              <div className="mt-5 flex flex-col gap-3 text-sm">
+                {Object.entries(item.links).map(([label, href]) => (
+                  <Link className="text-accent underline-offset-4 hover:underline" href={href} key={href} rel="noreferrer" target="_blank">
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
           {related.length ? (
             <div className="space-y-4">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Relacionado</p>

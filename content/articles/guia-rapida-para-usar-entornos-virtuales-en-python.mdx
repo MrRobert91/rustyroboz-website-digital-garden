@@ -1,0 +1,67 @@
+---
+title: "Gu?a r?pida para usar entornos virtuales en Python"
+description: "Un recordatorio corto para aislar dependencias de Python con virtualenv y virtualenvwrapper."
+slug: "guia-rapida-para-usar-entornos-virtuales-en-python"
+publishedAt: "2022-11-10"
+updatedAt: "2022-11-10"
+tags: ["virtualenv", "python", "programming", "dependency-management", "data-science"]
+draft: false
+featured: false
+coverImage: ""
+readingTime: "1 min"
+---
+
+Los robots tambi?n usan entornos virtuales.
+
+Cuando programamos en Python, una buena pr?ctica es crear entornos virtuales para cada proyecto. No es m?s que una forma de aislar una instalaci?n de Python con una versi?n concreta y unas librer?as espec?ficas, con el objetivo de evitar conflictos con versiones ya instaladas.
+
+Aunque se pueden crear con `venv` o utilizando `conda`, mi forma preferida de hacerlo es utilizando **virtualenv** y **virtualenvwrapper**.
+
+## Instalaci?n
+
+### En Windows
+
+```bash
+pip install virtualenv virtualenvwrapper
+pip install virtualenvwrapper-win
+```
+
+### En Linux
+
+```bash
+pip3 install virtualenv virtualenvwrapper
+```
+
+## Comandos b?sicos
+
+Creamos un nuevo entorno virtual llamado `f5`:
+
+```bash
+mkvirtualenv f5 -p python3
+```
+
+Para activarlo o cambiar de entorno:
+
+```bash
+workon f5
+```
+
+Para desactivarlo:
+
+```bash
+deactivate f5
+```
+
+Para listar todos los entornos virtuales:
+
+```bash
+lsvirtualenv
+```
+
+Y para eliminar uno que no est? en uso:
+
+```bash
+rmvirtualenv f5
+```
+
+Dentro del entorno virtual puedes instalar las librer?as que quieras de forma normal utilizando `pip`, incluso fijando versiones concretas.

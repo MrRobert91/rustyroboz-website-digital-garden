@@ -1,0 +1,39 @@
+---
+title: "Quantum Random Number Generator"
+description: "The goal is to generate random prices for [Rusty Roboz's collection of NFTs](/projects/nft-collection-ai-art-quantum). The idea is simple, we initialize a series of qubits, in this case 5 which is a common number of q..."
+slug: "quantum-random-number-generator"
+publishedAt: "2021-08-01"
+updatedAt: "2021-08-01"
+tags: ["quantum-computing", "randomness", "ibm-quantum"]
+draft: false
+featured: false
+coverImage: "/images/projects/quantum-random-number-generator/image-01.png"
+readingTime: "4 min"
+status: "completed"
+tech: ["IBM Quantum", "Python"]
+links: {}
+---
+
+![Quantum Random Number Generator image 1](/images/projects/quantum-random-number-generator/image-01.png)
+
+The goal is to generate random prices for [Rusty Roboz's collection of NFTs](/projects/nft-collection-ai-art-quantum). The idea is simple, we initialize a series of qubits, in this case 5 which is a common number of qubits in IBM computers, and we apply a Hadamard gate to each one, to put them in a state of superposition in which the possibilities of each cubit being 0 or 1 is 50% each. Once we perform the measurement and collapse the wave function of the qubits, they go from being in a superposition state to being a 0 or a 1. So we finally have a chain of 5 bits, in which each one of those bits have been produced by a quantum event, so it is one of the most random ways of generating numbers that we know of.
+
+By having only 5 qubits, we only have a 5-bit chain, which allows us to obtain a number between 0 and 32, since 2^5 = 32. Therefore, the random numbers that we generate will be limited to 32 different values, we could say that they are random but quantized since they cannot take all the values ​​of a continuum, only 32 fixed values.
+
+This is the quantum circuit in qiskit
+
+We transform the 5-bit string to a decimal number and then we normalize it to obtain a random number that is between 2 numbers that we want, in this case the minimum and maximum prices in ETH at which we want to put our NFTs. In our case we want the price to be between 0.01 and 0.42 ETH (you know, the ultimate answer to the ultimate question of what is life, the universe and everything else). For this we use the following function.
+
+Normalize values between 0.001 and 0.42
+
+In this way we obtain a random price between 0.01 and 0.42 ETH for one of our NFTs. Now we want to do it for everyone, we can do it with a loop that executes the algorithm 42 times (which is the number of NFTs we have), like the one shown.
+
+Loop for running the algorithm for each NFT
+
+The problem with this method is that if we want to use a real quantum computer instead of a quantum simulator, it will take a long time to do the 42 iterations, each iteration will launch a job to the IBM quantum computer that will have to wait in a queue until all the jobs that have been launched before yours are executed, and this can take quite a long time, to the point that the kernel of your colab notebook could restart and you would have to start over.
+
+A simple solution to this would be to do it in a single Job, adjusting the number of shots to 42. So that only one job is sent to the IBM computer and the algorithm is executed 42 times, however, due to the way qiskit returns the results we could not know to which execution number each value corresponds since it returns the results in a dictionary, which as keys has each of the random values that have been given as a result, and each of these as a value has the number of times that given that string of bits.
+
+So even though we know that 42 random values have been generated, we cannot map each one to a particular NFT. But still, the numbers have been generated randomly with a quantum computer, and we can use classical randomness to map each of the values obtained to a specific NFT.
+
+In the end, we use the first method described, so that a single price is generated for each NFT, although it takes much longer. I made a live streaming on youtube to save the results of the execution of the algorithm, you can see it below.

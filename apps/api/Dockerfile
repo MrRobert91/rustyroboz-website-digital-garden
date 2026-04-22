@@ -6,6 +6,7 @@ ENV HOST=0.0.0.0
 ENV PORT=8000
 ENV SQLITE_PATH=/data/site.db
 ENV FAISS_INDEX_PATH=/data/faiss.index
+ENV FAISS_META_PATH=/data/index_meta.json
 
 WORKDIR /app
 
@@ -14,10 +15,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY apps/api/app ./app
 COPY apps/api/.env.example ./.env.example
+COPY content ./content
 
 RUN mkdir -p /data
 
 EXPOSE 8000
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-

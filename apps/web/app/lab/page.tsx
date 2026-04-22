@@ -13,10 +13,10 @@ export default async function LabPage() {
         interfaces conversacionales y pequeños experimentos de producto.
       </p>
       <div className="mt-10 rounded-[2rem] border border-border bg-card p-8 shadow-soft">
-        <p className="text-sm uppercase tracking-[0.22em] text-accent">Coming soon</p>
+        <p className="text-sm uppercase tracking-[0.22em] text-accent">MVP activo</p>
         <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">
-          La siguiente fase activará chat, retrieval y streaming sobre la misma arquitectura desacoplada que ya sostiene el
-          sitio público.
+          El chat personal ya funciona con retrieval local y streaming. La siguiente fase endurecerá la ingestión, el
+          reindexado y la trazabilidad del conocimiento.
         </p>
       </div>
       <div className="mt-8 flex flex-wrap gap-4">
@@ -24,10 +24,9 @@ export default async function LabPage() {
           Ver proyectos
         </Link>
         <Link className={cn(buttonVariants({ variant: "outline" }))} href="/chat">
-          Ver teaser del chat
+          Abrir el chat
         </Link>
       </div>
     </section>
   );
 }
-

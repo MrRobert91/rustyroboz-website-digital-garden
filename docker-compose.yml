@@ -9,7 +9,9 @@ services:
       ENVIRONMENT: development
       SQLITE_PATH: /data/site.db
       FAISS_INDEX_PATH: /data/faiss.index
+      FAISS_META_PATH: /data/index_meta.json
       CORS_ORIGINS: http://localhost:3000,http://web:3000
+      CONTENT_ROOT: /app/content
     ports:
       - "8000:8000"
     volumes:
@@ -30,4 +32,3 @@ services:
 
 volumes:
   api_data:
-

@@ -10,7 +10,12 @@ type ContentCardProps = {
 
 export function ContentCard({ item }: ContentCardProps) {
   return (
-    <Card className="group h-full transition-transform duration-200 hover:-translate-y-1">
+    <Card className="group h-full overflow-hidden transition-transform duration-200 hover:-translate-y-1">
+      {item.coverImage ? (
+        <Link className="block border-b border-border" href={getContentHref(item)}>
+          <img alt={item.title} className="aspect-[16/10] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" src={item.coverImage} />
+        </Link>
+      ) : null}
       <CardHeader>
         <div className="flex items-center justify-between gap-3">
           <Badge variant="muted">{item.collection}</Badge>
@@ -42,4 +47,3 @@ export function ContentCard({ item }: ContentCardProps) {
     </Card>
   );
 }
-

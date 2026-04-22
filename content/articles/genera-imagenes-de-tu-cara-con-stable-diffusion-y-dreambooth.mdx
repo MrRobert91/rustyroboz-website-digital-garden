@@ -1,0 +1,43 @@
+---
+title: "Genera im?genes de tu cara con Stable Diffusion y Dreambooth"
+description: "C?mo entrenar un modelo Dreambooth con tus fotos usando Google Colab y Stable Diffusion."
+slug: "genera-imagenes-de-tu-cara-con-stable-diffusion-y-dreambooth"
+publishedAt: "2022-12-03"
+updatedAt: "2022-12-03"
+tags: ["artificial-intelligence", "stable-diffusion"]
+draft: false
+featured: false
+coverImage: ""
+readingTime: "2 min"
+---
+
+Una de las capacidades que me parecen m?s impresionantes de la ?ltima oleada de modelos de im?genes generativas es la de crear variaciones de personas reales. Modelos como *Stable Diffusion* est?n entrenados en im?genes que incluyen a personas famosas y es incre?ble la calidad de algunas de estas creaciones.
+
+Desde hace unas semanas he estado experimentando con implementaciones de **Dreambooth**, que es una t?cnica de Google para hacer *finetuning*, es decir, reentrenar el modelo de *Stable Diffusion* con el objetivo de que aprenda nuevos conceptos, como estilos art?sticos, nuevos objetos o, por supuesto, caras de personas.
+
+Con este notebook puedes seguir los pasos y obtener tu propio modelo de Stable Diffusion con el que vas a poder generar todo tipo de im?genes en las que aparezcas.
+
+- [Notebook de entrenamiento en Google Colab](https://colab.research.google.com/)
+
+## Prepara tus fotos
+
+Para empezar necesitamos unas 10?20 fotos nuestras. Para evitar que se deformen y el modelo aprenda una versi?n distorsionada de nuestra cara, es importante que las im?genes sean cuadradas y que en conjunto tengan variedad de fondos, ropa y posiciones.
+
+## Hora de entrenar
+
+Para finetunear el modelo de Stable Diffusion vamos a usar Google Colab, que nos permite utilizar una tarjeta gr?fica en la nube de forma gratuita.
+
+1. Comprobar que el notebook tiene GPU activa.
+2. Dar permiso para conectar Google Drive y guardar el modelo entrenado.
+3. Descargar las librer?as necesarias.
+4. Descargar el modelo base desde Hugging Face usando un token propio.
+5. Configurar el finetuning: `Training_Subject`, `With_Prior_Preservation`, `SUBJECT_TYPE` e `INSTANCE_NAME`.
+6. Descargar im?genes de regularizaci?n.
+7. Entrenar el modelo y guardar el `.ckpt` resultante.
+8. Probar el modelo finetuneado desde el propio notebook.
+
+## Inferencia
+
+Una vez tenemos un modelo entrenado, no tenemos que pasar por todos los pasos anteriores cada vez que queramos generar nuevas im?genes. Para ello se puede utilizar otro notebook m?s sencillo, centrado solo en inferencia:
+
+- [Notebook de inferencia AUTOMATIC1111](https://colab.research.google.com/github/TheLastBen/fast-stable-diffusion/blob/main/fast_stable_diffusion_AUTOMATIC1111.ipynb)

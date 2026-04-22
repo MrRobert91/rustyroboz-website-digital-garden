@@ -1,4 +1,4 @@
-import type { AnchorHTMLAttributes, HTMLAttributes } from "react";
+import type { AnchorHTMLAttributes, HTMLAttributes, ImgHTMLAttributes } from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import Link from "next/link";
@@ -8,11 +8,22 @@ type MdxRendererProps = {
 };
 
 const components = {
-  a: (props: AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <Link className="font-medium text-accent underline-offset-4 hover:underline" href={props.href ?? "#"}>
-      {props.children}
-    </Link>
-  ),
+  a: (props: AnchorHTMLAttributes<HTMLAnchorElement>) => {
+    const href = props.href ?? "#";
+    if (href.startsWith("http")) {
+      return (
+        <a className="font-medium text-accent underline-offset-4 hover:underline" href={href} rel="noreferrer" target="_blank">
+          {props.children}
+        </a>
+      );
+    }
+
+    return (
+      <Link className="font-medium text-accent underline-offset-4 hover:underline" href={href}>
+        {props.children}
+      </Link>
+    );
+  },
   h2: (props: HTMLAttributes<HTMLHeadingElement>) => (
     <h2 className="mt-14 font-manrope text-3xl font-semibold tracking-tight text-foreground" {...props} />
   ),
@@ -20,6 +31,14 @@ const components = {
     <h3 className="mt-10 font-manrope text-2xl font-semibold tracking-tight text-foreground" {...props} />
   ),
   p: (props: HTMLAttributes<HTMLParagraphElement>) => <p className="mt-5 text-lg leading-8 text-foreground/88" {...props} />,
+  img: (props: ImgHTMLAttributes<HTMLImageElement>) => (
+    <img
+      alt={props.alt ?? ""}
+      className="mt-8 w-full rounded-[1.75rem] border border-border object-cover shadow-soft"
+      loading="lazy"
+      src={props.src}
+    />
+  ),
   ul: (props: HTMLAttributes<HTMLUListElement>) => <ul className="mt-5 list-disc space-y-3 pl-6 text-lg leading-8 text-foreground/88" {...props} />,
   ol: (props: HTMLAttributes<HTMLOListElement>) => <ol className="mt-5 list-decimal space-y-3 pl-6 text-lg leading-8 text-foreground/88" {...props} />,
   blockquote: (props: HTMLAttributes<HTMLElement>) => (

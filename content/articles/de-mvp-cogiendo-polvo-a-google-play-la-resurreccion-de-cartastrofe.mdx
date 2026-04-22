@@ -1,0 +1,88 @@
+---
+title: "De ?MVP cogiendo polvo? a Google Play: la resurrecci?n de Cartastrofe"
+description: "La historia de Cart?strofe: un juego de cartas para parejas, una waitlist con MailerLite, una landing page vibe-codeada y muchos formularios de Google."
+slug: "de-mvp-cogiendo-polvo-a-google-play-la-resurreccion-de-cartastrofe"
+publishedAt: "2026-03-01"
+updatedAt: "2026-03-01"
+tags: ["android-development", "waitlist", "google-play-store", "card-game", "generative-ai-tools"]
+draft: false
+featured: true
+coverImage: ""
+readingTime: "5 min"
+---
+
+*La historia de Cart?strofe: un juego de cartas para parejas, una waitlist con MailerLite, una landing page vibe-codeada y muchos formularios de Google.*
+
+## El proyecto que llevaba meses cogiendo polvo
+
+Hace unos meses, mi pareja y yo nos pusimos en modo ?vamos a hacer una app?. Yo quer?a aprender Flutter. Ella es una m?quina pensando en din?micas de juego. La combinaci?n era perfecta? sobre el papel.
+
+El resultado fue **Cart?strofe**: un juego de cartas digital para parejas. La mec?nica es sencilla: abres una baraja, la app te reparte 12 cartas aleatorias de un total de 40, y tienes 24 horas para usarlas. Hay cartas para mandar a tu pareja a hacer algo, cartas para decidir el plan del d?a, cartas de defensa para bloquear lo que te juegan, cartas que generan situaciones absurdas? el caos controlado de toda la vida pero en tu m?vil.
+
+Divisi?n del trabajo: ella dise?aba las cartas y pensaba en c?mo interactuaban entre s?. Yo peleaba con Flutter, VS Code y GitHub Copilot para que todo eso se convirtiera en una app que no petara al abrirla.
+
+Y entonces pas? lo que pasa con todos los proyectos personales: lo dejamos a medias.
+
+Un MVP funcional. Sin pulir. Con ideas pendientes de implementar. Y acumulando polvo digital en alg?n repositorio de GitHub.
+
+## La resurrecci?n: ?oye, esto no deber?a perderse?
+
+Meses despu?s, mirando el proyecto con perspectiva, pens?: *esto es una idea que mola. No hay muchos juegos as? (o al menos yo no los conozco, que tampoco he investigado demasiado, ser? honesto). Y estar?a bien que existiera en alg?n sitio en internet en lugar de morir en un disco duro.*
+
+As? que me propuse resucitarlo. Simplemente para que no se perdiera.
+
+Mi primer instinto fue [itch.io](https://rustyroboz.itch.io/cartastrofe), que ya conoc?a de otros prototipos de juegos que hab?a subido antes. Es c?modo, sencillo, hecho para creadores indie. El problema: Cart?strofe no es un juego que puedas jugar directamente en el navegador. Hay que bajarse la APK, permitir instalaci?n desde or?genes desconocidos, seguir pasos manuales? Y aunque para gente techie es normal, para parejas que solo quieren jugar? es demasiado ?tutorial de hackeo?.
+
+As? que pens?: vale, vamos a probar a subirla a Google Play.
+
+## El proceso de publicar en Google Play: m?s formularios de los que esperaba
+
+Investigu? c?mo funcionaba y resulta que es perfectamente factible para un desarrollador individual. Pero hay pasos.
+
+Primero, la cuenta de desarrollador. Necesitas crear una cuenta en Google Play Console y pagar una tasa ?nica de 25$. Una vez y para siempre.
+
+Segundo, firmar la app. Para publicar en Google Play no vale el APK de toda la vida. Necesitas generar un App Bundle (`.aab`) firmado con tu propio keystore.
+
+Tercero, los formularios. Google quiere saber mucho sobre tu app antes de dejarla entrar. ?Tiene publicidad? ?Tiene pagos in-app? ?Qu? datos recoge de los usuarios? ?A qu? p?blico va dirigida? ?Contiene contenido sensible? Cart?strofe no recoge ning?n dato, no tiene anuncios, no tiene compras. As? que las respuestas fueron bastante sencillas, pero los formularios est?n ah? igualmente.
+
+Cuarto, la ficha de la app. Descripci?n, capturas de pantalla, icono, categor?a, clasificaci?n de contenido? Todo tiene sus requisitos. Las capturas deben tener unas dimensiones m?nimas. El icono tiene que ser de 512?512. Y necesitas una pol?tica de privacidad alojada en alg?n sitio.
+
+## La landing page vibe-codeada en una tarde
+
+Necesitaba una web para alojar la pol?tica de privacidad y los t?rminos de uso. As? que vibe-code? una landing page para Cart?strofe. Con Google Antigravity para el c?digo de la p?gina en s? y ChatGPT para generar algunas im?genes de apoyo. No es perfecta. Pero cumple su funci?n y tiene buena pinta para lo que es.
+
+Para desplegarla us? Sliplane, una plataforma que llevo usando un tiempo y que me encanta por su simplicidad. Pagas 9? al mes por un servidor en el que puedes desplegar todos los contenedores Docker que quepan en los recursos disponibles. Para proyectos personales y side projects es una relaci?n calidad-precio brutal.
+
+El dominio ya lo ten?a comprado en Porkbun, que adem?s te da una direcci?n de correo con tu dominio. Eso ?ltimo iba a ser importante.
+
+## El giro argumental: los beta testers
+
+Aqu? viene la parte que no me esperaba.
+
+Google lleva un tiempo endureciendo los requisitos para publicar apps nuevas en la Play Store. Ahora no puedes simplemente subir tu app y publicarla directamente. Primero tienes que pasar por una fase de pruebas internas: como m?nimo 12 usuarios beta testers deben probar la app durante 14 d?as. Despu?s, hay que enviar un informe sobre c?mo han ido las pruebas.
+
+Tiene sentido que Google quiera evitar que la tienda se llene de apps de baja calidad sin que nadie las haya probado. Pero s? significa que necesitas movilizar a gente real para que descargue tu app, la use durante dos semanas y te d? feedback.
+
+La soluci?n: montar una waitlist.
+
+## MailerLite + la landing page = sistema de beta cerrada
+
+Investigu? varias herramientas de email marketing y me qued? con MailerLite. El flujo que mont? fue sencillo: formulario en la landing, automatizaci?n de bienvenida, email manual con acceso a la beta y otro email de feedback a los 14 d?as.
+
+?Por qu? no enviar el enlace directamente al apuntarse? Porque el proceso de Google Play no es instant?neo. Una vez que tienes los emails, tienes que subirlos manualmente a la consola y esperar a que se generen los accesos.
+
+## Por qu? me apetece resucitar Cartastrofe
+
+Porque es un proyecto peque?o, tonto y honesto. Un MVP lanzado vale m?s que un proyecto perfecto que nunca sale.
+
+Adem?s, publicar en Play Store es una experiencia curiosa: aprendes de golpe sobre releases, fichas, cumplimiento, privacidad y pruebas.
+
+## En qu? punto estamos
+
+La app est? lista. La landing est? en pie. El sistema de emails funciona.
+
+Si te apetece probar Cart?strofe con tu pareja, echaros unas risas y ayudarme a sacarlo de la cueva, puedes apuntarte aqu?:
+
+- [cartastrofe.com](https://www.cartastrofe.com/)
+
+El juego es gratis. No hay anuncios. No recoge ning?n dato. Todo funciona localmente en tu m?vil.

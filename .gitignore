@@ -16,3 +16,5 @@ __pycache__/
 apps/api/data/
 data/
 pytest-cache-files-*/
+.tmp/*
+!.tmp/.gitkeep

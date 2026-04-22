@@ -1,46 +1,46 @@
 export const siteConfig = {
   name: "rustyroboz",
-  title: "Rustyroboz | Personal web, digital garden y AI lab",
+  title: "Rustyroboz | Projects, articles and experiments by David Robert",
   description:
-    "Web personal en español sobre producto, ingeniería, sistemas complejos, IA aplicada y pensamiento público.",
-  location: "Madrid · remoto",
-  email: "hola@rustyroboz.dev",
+    "Personal site by David Robert, computer engineer based in Madrid, with projects in AI, VR, games, quantum computing and software experiments.",
+  location: "Madrid · Spain",
+  email: "",
   apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000",
   navigation: [
     { href: "/", label: "Inicio" },
     { href: "/about", label: "Sobre mí" },
     { href: "/projects", label: "Proyectos" },
     { href: "/articles", label: "Artículos" },
-    { href: "/notes", label: "Digital Garden" },
+    { href: "/contact", label: "Contacto" },
     { href: "/lab", label: "AI Lab" },
     { href: "/chat", label: "Chat" },
   ],
   socialLinks: [
-    { href: "https://github.com/rustyroboz", label: "GitHub" },
-    { href: "https://www.linkedin.com/in/rustyroboz", label: "LinkedIn" },
-    { href: "mailto:hola@rustyroboz.dev", label: "Email" },
+    { href: "https://www.instagram.com/rustyroboz/", label: "Instagram" },
+    { href: "https://github.com/MrRobert91", label: "GitHub" },
+    { href: "https://www.linkedin.com/in/david-robert/", label: "LinkedIn" },
+    { href: "https://medium.com/@rustyroboz", label: "Medium" },
   ],
   timeline: [
     {
-      period: "Hoy",
-      title: "Producto, ingeniería e investigación aplicada",
+      period: "Base",
+      title: "Computer engineer based in Madrid",
       description:
-        "Diseño productos y sistemas donde conviven contenido, experiencia de usuario y capacidades de IA.",
+        "Interested in Big Data, Robotics, Functional Programming, Machine Learning, Artificial Intelligence, Quantum Computing, Game Development and Technology in general.",
     },
     {
-      period: "Antes",
-      title: "Software con foco en sistemas complejos",
+      period: "Focus",
+      title: "Projects with real technical edges",
       description:
-        "He trabajado entre web, datos y automatización, intentando mantener el equilibrio entre rigor técnico y claridad de producto.",
+        "The archive spans VR prototypes, AI art, chatbots, game jams, embedded hardware and computer vision experiments.",
     },
     {
-      period: "Siempre",
-      title: "Pensamiento público",
+      period: "Public layer",
+      title: "Articles and experiments in public",
       description:
-        "Uso este sitio para publicar proyectos, notas y artículos donde conecto tecnología, ética, filosofía y diseño de sistemas.",
+        "The site now combines the previous Rustyroboz portfolio, Medium writing and the current AI chat layer in one place.",
     },
   ],
 };
 
 export type SiteConfig = typeof siteConfig;
-
