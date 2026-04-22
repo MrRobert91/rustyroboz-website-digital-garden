@@ -1,0 +1,13 @@
+{
+  "name": "rustyroboz-website-digital-garden",
+  "private": true,
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "test:web": "npm.cmd run test --workspace @rustyroboz/web",
+    "build:web": "npm.cmd run build --workspace @rustyroboz/web",
+    "test:e2e": "npm.cmd run test:e2e --workspace @rustyroboz/web"
+  }
+}
+

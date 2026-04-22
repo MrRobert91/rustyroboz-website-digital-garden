@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 35 43% 95%;
+  --foreground: 28 10% 10%;
+  --muted: 33 10% 39%;
+  --muted-foreground: 33 9% 39%;
+  --card: 40 45% 98%;
+  --border: 34 22% 82%;
+  --accent: 176 72% 28%;
+  --ring: 176 72% 28%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "liga", "kern";
+  }
+
+  a {
+    @apply transition-colors;
+  }
+}
+
+@layer utilities {
+  .font-manrope {
+    font-family: var(--font-manrope), sans-serif;
+  }
+
+  .font-newsreader {
+    font-family: var(--font-newsreader), serif;
+  }
+
+  .bg-hero-texture {
+    background-image:
+      radial-gradient(circle at top left, hsl(var(--accent) / 0.14), transparent 30%),
+      linear-gradient(to right, hsl(var(--foreground) / 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--foreground) / 0.04) 1px, transparent 1px);
+    background-size: auto, 32px 32px, 32px 32px;
+    background-position: center;
+  }
+
+  .shadow-soft {
+    box-shadow: 0 20px 60px -32px rgba(30, 31, 34, 0.25);
+  }
+}
+

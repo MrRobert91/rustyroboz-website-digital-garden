@@ -1,0 +1,35 @@
+---
+title: AI Safety Evals Workbench
+description: Plataforma para diseñar, ejecutar y auditar evaluaciones de seguridad sobre sistemas LLM.
+slug: ai-safety-evals-workbench
+publishedAt: 2026-03-08
+updatedAt: 2026-04-12
+tags:
+  - ai
+  - safety
+  - product
+draft: false
+featured: true
+coverImage: /images/project-evals.svg
+readingTime: 6 min
+status: active
+tech:
+  - Next.js
+  - FastAPI
+  - LangGraph
+links:
+  github: https://github.com/rustyroboz/ai-safety-evals-workbench
+  demo: https://demo.rustyroboz.dev/evals
+  article: /articles/spec-driven-delivery-for-ai-products
+---
+
+Un banco de trabajo para convertir evaluaciones de seguridad en algo operativo, trazable y compartible.
+
+## Qué resuelve
+
+El problema no era solo ejecutar prompts contra un modelo. Era poder registrar hipótesis, escenarios, métricas y resultados sin dispersar la evidencia entre notebooks, hojas de cálculo y dashboards aislados.
+
+## Decisión de diseño
+
+La interfaz estaba pensada para producto y research al mismo tiempo: secuencias de pruebas claras, estados auditables y un backend desacoplado para correr lotes de evaluación sin mezclar UI con lógica de scoring.
+

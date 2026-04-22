@@ -1,0 +1,33 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: rustyroboz-api
+    environment:
+      APP_NAME: rustyroboz-api
+      ENVIRONMENT: development
+      SQLITE_PATH: /data/site.db
+      FAISS_INDEX_PATH: /data/faiss.index
+      CORS_ORIGINS: http://localhost:3000,http://web:3000
+    ports:
+      - "8000:8000"
+    volumes:
+      - api_data:/data
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: rustyroboz-web
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://api:8000
+      CONTENT_ROOT: /app/content
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+
+volumes:
+  api_data:
+
