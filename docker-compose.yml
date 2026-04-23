@@ -23,6 +23,7 @@ services:
       dockerfile: apps/web/Dockerfile
     container_name: rustyroboz-web
     environment:
+      API_BASE_URL: http://api:8000
       NEXT_PUBLIC_API_BASE_URL: http://api:8000
       CONTENT_ROOT: /app/content
     depends_on:

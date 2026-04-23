@@ -2,15 +2,27 @@ const DEFAULT_API_BASE_URL = "http://localhost:8000";
 
 export const runtime = "nodejs";
 
-function getApiBaseUrl() {
+function getRawApiBaseUrl() {
   return process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL ?? DEFAULT_API_BASE_URL;
 }
 
-export async function POST(request: Request) {
-  const body = await request.text();
-  const upstreamUrl = new URL("/api/v1/chat/stream", getApiBaseUrl()).toString();
+function buildUpstreamUrl() {
+  const rawBaseUrl = getRawApiBaseUrl().trim();
 
   try {
+    return new URL("/api/v1/chat/stream", rawBaseUrl).toString();
+  } catch {
+    throw new Error(
+      `API_BASE_URL no es una URL válida: "${rawBaseUrl}". Configúrala con protocolo, por ejemplo https://tu-api.sliplane.app`,
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.text();
+    const upstreamUrl = buildUpstreamUrl();
+
     const upstream = await fetch(upstreamUrl, {
       method: "POST",
       headers: {
