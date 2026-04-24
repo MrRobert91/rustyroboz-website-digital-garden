@@ -125,3 +125,47 @@ async def test_chat_stream_emits_error_event_when_model_request_fails(monkeypatc
     assert response.status_code == 200
     assert "event: error" in body
     assert "rate limit" in body
+
+
+def test_openrouter_payload_includes_fallback_models():
+    _, settings = build_test_app()
+    service = object.__new__(ChatService)
+    service.settings = settings
+    payload = service._build_openrouter_payload(
+        message="Háblame del chatbot de entrevistas técnicas",
+        retrieved=[],
+        citations=[],
+    )
+
+    assert payload["model"] == settings.openrouter_model
+    assert payload["models"] == ["openrouter/free"]
+    assert payload["provider"]["allow_fallbacks"] is True
+
+
+def test_openrouter_payload_omits_duplicate_fallback_model():
+    root = Path(__file__).resolve().parents[3]
+    temp_dir = root / ".tmp" / "phase2-tests"
+    temp_dir.mkdir(parents=True, exist_ok=True)
+
+    settings = Settings(
+        APP_NAME="rustyroboz-api-test",
+        SQLITE_PATH=temp_dir / "chat-test.db",
+        FAISS_INDEX_PATH=temp_dir / "chat-test.index",
+        FAISS_META_PATH=temp_dir / "chat-test.meta.json",
+        CONTENT_ROOT=root / "content",
+        FAISS_DIMENSION=256,
+        OPENROUTER_API_KEY="test-key",
+        OPENROUTER_MODEL="openrouter/free",
+        OPENROUTER_FALLBACK_MODELS="openrouter/free",
+    )
+    service = object.__new__(ChatService)
+    service.settings = settings
+
+    payload = service._build_openrouter_payload(
+        message="Háblame del chatbot de entrevistas técnicas",
+        retrieved=[],
+        citations=[],
+    )
+
+    assert payload["model"] == "openrouter/free"
+    assert "models" not in payload

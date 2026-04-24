@@ -142,18 +142,7 @@ class ChatService:
         if self.settings.openrouter_site_name:
             headers["X-Title"] = self.settings.openrouter_site_name
 
-        payload = {
-            "model": self.settings.openrouter_model,
-            "temperature": 0.2,
-            "max_tokens": 700,
-            "messages": [
-                {"role": "system", "content": self._build_system_prompt()},
-                {
-                    "role": "user",
-                    "content": self._build_user_prompt(message=message, retrieved=retrieved, citations=citations),
-                },
-            ],
-        }
+        payload = self._build_openrouter_payload(message=message, retrieved=retrieved, citations=citations)
 
         response: httpx.Response | None = None
         retry_delays = (0.8, 1.6)
@@ -197,6 +186,38 @@ class ChatService:
             raise RuntimeError("OpenRouter no devolvió contenido en la respuesta.")
 
         return answer
+
+    def _build_openrouter_payload(
+        self,
+        message: str,
+        retrieved: list[SearchResult],
+        citations: list[dict[str, str]],
+    ) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "model": self.settings.openrouter_model,
+            "temperature": 0.2,
+            "max_tokens": 700,
+            "messages": [
+                {"role": "system", "content": self._build_system_prompt()},
+                {
+                    "role": "user",
+                    "content": self._build_user_prompt(message=message, retrieved=retrieved, citations=citations),
+                },
+            ],
+            "provider": {
+                "allow_fallbacks": True,
+            },
+        }
+
+        fallback_models = [
+            model
+            for model in self.settings.parsed_openrouter_fallback_models
+            if model != self.settings.openrouter_model
+        ]
+        if fallback_models:
+            payload["models"] = fallback_models
+
+        return payload
 
     def _build_system_prompt(self) -> str:
         return (

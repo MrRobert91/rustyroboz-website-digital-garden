@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     openrouter_api_key: str = Field(default="", alias="OPENROUTER_API_KEY")
     openrouter_base_url: str = Field(default="https://openrouter.ai/api/v1", alias="OPENROUTER_BASE_URL")
     openrouter_model: str = Field(default="google/gemma-4-31b-it:free", alias="OPENROUTER_MODEL")
+    openrouter_fallback_models: str = Field(default="openrouter/free", alias="OPENROUTER_FALLBACK_MODELS")
     openrouter_site_url: str = Field(default="", alias="OPENROUTER_SITE_URL")
     openrouter_site_name: str = Field(default="rustyroboz", alias="OPENROUTER_SITE_NAME")
 
@@ -35,6 +36,10 @@ class Settings(BaseSettings):
     @property
     def openrouter_chat_url(self) -> str:
         return f"{self.openrouter_base_url.rstrip('/')}/chat/completions"
+
+    @property
+    def parsed_openrouter_fallback_models(self) -> list[str]:
+        return [model.strip() for model in self.openrouter_fallback_models.split(",") if model.strip()]
 
 
 @lru_cache
