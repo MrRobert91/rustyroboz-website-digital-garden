@@ -105,7 +105,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
       }
 
       if (!response.body) {
-        throw new Error("No se recibió stream desde el backend.");
+        throw new Error("No stream was received from the backend.");
       }
 
       for await (const eventPayload of parseEventStream(response.body)) {
@@ -144,16 +144,16 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
         }
 
         if (eventPayload.event === "error") {
-          throw new Error(String(eventPayload.data.detail ?? "La API del chat devolvió un error."));
+          throw new Error(String(eventPayload.data.detail ?? "The chat API returned an error."));
         }
       }
     } catch (caughtError) {
       const message =
         caughtError instanceof Error && caughtError.message === "Failed to fetch"
-          ? "No se pudo conectar con el backend del chat. Revisa la URL de la API y el despliegue."
+          ? "Could not reach the chat backend. Check the API URL and deployment."
           : caughtError instanceof Error
             ? caughtError.message
-            : "No se pudo completar la solicitud.";
+            : "The request could not be completed.";
 
       setError(message);
       setMessages((current) => current.filter((item) => item.id !== assistantMessageId));
@@ -163,9 +163,9 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
   }
 
   const suggestions = [
-    "¿Qué proyectos de IA tienes publicados?",
-    "Háblame del chatbot de entrevistas técnicas.",
-    "¿Qué tipo de artículos escribes?",
+    "Which AI projects have you published?",
+    "Tell me about the technical interview chatbot.",
+    "What kind of articles do you write?",
   ];
 
   return (
@@ -175,14 +175,13 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
           <div>
             <Badge>Gemma 4 + RAG</Badge>
             <h2 className="mt-4 font-manrope text-3xl font-semibold tracking-tight text-foreground">
-              Pregunta sobre proyectos, artículos o trayectoria
+              Ask about projects, articles, or background
             </h2>
             <p className="mt-3 max-w-3xl text-base leading-7 text-muted-foreground">
-              El asistente recupera contexto del índice local de la web y genera la respuesta con Gemma 4 a través de
-              OpenRouter.
+              The assistant retrieves context from the local site index and generates answers with Gemma 4 through OpenRouter.
             </p>
           </div>
-          {sessionId ? <Badge variant="muted">Sesión {sessionId}</Badge> : null}
+          {sessionId ? <Badge variant="muted">Session {sessionId}</Badge> : null}
         </div>
       </div>
 
@@ -206,11 +205,10 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
           {messages.length === 0 ? (
             <div className="rounded-[1.5rem] border border-dashed border-border bg-background px-5 py-6">
               <p className="text-base leading-7 text-muted-foreground">
-                Todavía no hay mensajes. Haz una pregunta concreta sobre un proyecto, un artículo o una nota publicada en
-                la web.
+                There are no messages yet. Ask a concrete question about a project, article, or note published on the site.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
-                <Badge variant="outline">RAG local</Badge>
+                <Badge variant="outline">Local RAG</Badge>
                 <Badge variant="outline">SQLite</Badge>
                 <Badge variant="outline">FAISS</Badge>
                 <Badge variant="outline">Gemma 4</Badge>
@@ -229,9 +227,9 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                       : "text-xs font-semibold uppercase tracking-[0.2em] text-accent"
                   }
                 >
-                  {message.role === "user" ? "Tú" : "Asistente"}
+                  {message.role === "user" ? "You" : "Assistant"}
                 </p>
-                <p className="mt-3 whitespace-pre-wrap text-sm leading-7">{message.content || (loading ? "Pensando..." : "")}</p>
+                <p className="mt-3 whitespace-pre-wrap text-sm leading-7">{message.content || (loading ? "Thinking..." : "")}</p>
                 {message.citations?.length ? (
                   <div className="mt-4 flex flex-wrap gap-3">
                     {message.citations.map((citation) => (
@@ -257,20 +255,20 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <label className="text-sm font-medium text-foreground" htmlFor="chat-prompt">
-              Pregunta
+              Question
             </label>
             <textarea
               className="min-h-32 w-full rounded-[1.5rem] border border-border bg-background px-5 py-4 text-base text-foreground outline-none transition-colors focus:border-accent"
               id="chat-prompt"
               name="prompt"
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Ejemplo: ¿Qué es Personal RAG Observatory y por qué lo construiste?"
+              placeholder="Example: What is Personal RAG Observatory and why did you build it?"
               value={input}
             />
             <div className="flex items-center justify-between gap-4">
-              <p className="text-sm text-muted-foreground">Responderá solo con contenido indexado de la web.</p>
+              <p className="text-sm text-muted-foreground">It will answer only with content indexed from the site.</p>
               <Button disabled={loading || !input.trim()} type="submit">
-                {loading ? "Preguntando..." : "Enviar"}
+                {loading ? "Asking..." : "Send"}
               </Button>
             </div>
           </form>

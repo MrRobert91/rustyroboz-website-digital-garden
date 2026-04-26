@@ -39,9 +39,9 @@ export function ContentCard({ item }: ContentCardProps) {
         </div>
       </CardContent>
       <CardFooter>
-        <span className="text-sm text-muted-foreground">{new Date(item.publishedAt).toLocaleDateString("es-ES")}</span>
+        <span className="text-sm text-muted-foreground">{new Date(item.publishedAt).toLocaleDateString("en-US")}</span>
         <Link className="text-sm font-medium text-accent" href={getContentHref(item)}>
-          Ver detalle
+          View details
         </Link>
       </CardFooter>
     </Card>

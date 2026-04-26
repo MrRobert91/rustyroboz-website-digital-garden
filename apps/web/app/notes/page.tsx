@@ -6,11 +6,10 @@ export default async function NotesPage() {
 
   return (
     <ContentListPage
-      description="Notas cortas y conectadas para capturar ideas, intuiciones y relaciones entre temas."
-      eyebrow="Notas"
+      description="Short linked notes for capturing ideas, intuitions, and relationships between topics."
+      eyebrow="Notes"
       items={items}
       title="Digital Garden"
     />
   );
 }
-

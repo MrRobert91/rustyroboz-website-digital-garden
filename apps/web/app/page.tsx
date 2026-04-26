@@ -15,18 +15,25 @@ export default async function HomePage() {
   return (
     <>
       <ContentHero
-        description="My name is David Robert. This site brings together the projects, articles and experiments from the previous Rustyroboz web and Medium archive."
-        eyebrow="Rustyroboz Archive"
-        primaryLink={{ href: "/projects", label: "Ver proyectos" }}
-        secondaryLink={{ href: "/articles", label: "Leer artículos" }}
-        title="AI, VR, games, software and strange prototypes."
+        bioDescription="I work across software, AI systems, robotics, quantum computing, and game development, with a preference for practical builds that ship."
+        bioFacts={[
+          { label: "Base", value: "Madrid, Spain" },
+          { label: "Focus", value: "AI systems, games, product engineering" },
+          { label: "Formats", value: "Projects, articles, notes, experiments" },
+        ]}
+        bioTitle="Computer engineer based in Madrid"
+        description="A personal site for projects, writing, experiments, and small AI-driven tools."
+        eyebrow="David Robert"
+        primaryLink={{ href: "/projects", label: "View Projects" }}
+        secondaryLink={{ href: "/articles", label: "Read Articles" }}
+        title="AI, games, software, and strange prototypes."
       />
 
       <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
         <SectionHeading
-          description="A selection from the legacy portfolio, now migrated into MDX with the original project copy and images."
-          eyebrow="Trabajo seleccionado"
-          title="Projects from the previous Rustyroboz site"
+          description="A cross-section of software, AI, VR, and game experiments."
+          eyebrow="Selected Work"
+          title="Projects"
         />
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           {projects.map((project) => (
@@ -40,9 +47,9 @@ export default async function HomePage() {
       <section className="border-y border-border/80 bg-card/50">
         <div className="mx-auto grid max-w-6xl gap-14 px-6 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:px-10 lg:py-20">
           <SectionHeading
-            description="Articles migrated from Medium, covering Android publishing, data careers, generative AI, Python and game experiments."
-            eyebrow="Medium Archive"
-            title="Writing that now lives locally"
+            description="Long-form writing on applied AI, software delivery, product decisions, and experiments."
+            eyebrow="Writing"
+            title="Articles"
           />
           <div className="grid gap-6">
             {articles.map((item, index) => (
@@ -57,9 +64,9 @@ export default async function HomePage() {
       <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <SectionHeading
-            description="The original home page described a broad technical curiosity. This section keeps that spirit and turns it into a cleaner overview."
-            eyebrow="Sobre mí"
-            title="A personal archive with a clearer structure"
+            description="A broad technical curiosity organized into clearer themes."
+            eyebrow="About"
+            title="Engineering across software, AI, and experimental products"
           />
           <div className="grid gap-5">
             {siteConfig.timeline.map((entry) => (
@@ -80,22 +87,22 @@ export default async function HomePage() {
               AI Lab
             </Badge>
             <h2 className="mt-5 max-w-3xl font-manrope text-4xl font-semibold tracking-tight">
-              The old portfolio now sits on top of a real content system, with a separate API and a personal chat layer.
+              An evolving AI layer for retrieval, conversational interfaces, and small product experiments.
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-background/72">
-              Frontend and backend deploy independently, content lives in MDX, and the retrieval layer is ready to keep growing
-              from the migrated archive.
+              The frontend and backend deploy independently, the content lives in MDX, and the retrieval pipeline is ready to
+              grow with the site.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-4">
             <Link className={cn(buttonVariants({ variant: "outline" }), "border-background/30 text-background hover:border-background")} href="/contact">
-              Contacto
+              Contact
             </Link>
             <Link className={cn(buttonVariants({ variant: "outline" }), "border-background/30 text-background hover:border-background")} href="/lab">
-              Explorar el Lab
+              Explore the Lab
             </Link>
             <Link className={cn(buttonVariants({ variant: "outline" }), "border-background/30 text-background hover:border-background")} href="/chat">
-              Abrir el chat
+              Open Chat
             </Link>
           </div>
         </div>

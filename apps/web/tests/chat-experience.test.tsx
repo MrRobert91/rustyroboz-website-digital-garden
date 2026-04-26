@@ -21,8 +21,8 @@ afterEach(() => {
 describe("ChatExperience", () => {
   it("renders an interactive chat form", () => {
     render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
-    expect(screen.getByLabelText(/pregunta/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /enviar/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/question/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /send/i })).toBeInTheDocument();
   });
 
   it("handles a successful streaming response", async () => {
@@ -31,20 +31,20 @@ describe("ChatExperience", () => {
       vi.fn().mockResolvedValue({
         ok: true,
         body: buildStreamResponse([
-          'event: chunk\ndata: {"delta":"Technical Interview Chatbot es un asistente para practicar entrevistas.","session_id":1}\n\n',
-          'event: done\ndata: {"answer":"Technical Interview Chatbot es un asistente para practicar entrevistas.","citations":[{"slug":"technical-interview-chatbot","href":"/projects/technical-interview-chatbot","title":"Technical Interview Chatbot"}],"session_id":1}\n\n',
+          'event: chunk\ndata: {"delta":"Technical Interview Chatbot is an assistant for practicing interviews.","session_id":1}\n\n',
+          'event: done\ndata: {"answer":"Technical Interview Chatbot is an assistant for practicing interviews.","citations":[{"slug":"technical-interview-chatbot","href":"/projects/technical-interview-chatbot","title":"Technical Interview Chatbot"}],"session_id":1}\n\n',
         ]),
       }),
     );
 
     render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
-    fireEvent.change(screen.getByLabelText(/pregunta/i), { target: { value: "¿Qué es el Technical Interview Chatbot?" } });
-    fireEvent.click(screen.getByRole("button", { name: /enviar/i }));
+    fireEvent.change(screen.getByLabelText(/question/i), { target: { value: "What is the Technical Interview Chatbot?" } });
+    fireEvent.click(screen.getByRole("button", { name: /send/i }));
 
-    expect(screen.getByRole("button", { name: /preguntando/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /asking/i })).toBeDisabled();
 
     await waitFor(() => {
-      expect(screen.getByText(/practicar entrevistas/i)).toBeInTheDocument();
+      expect(screen.getByText(/practicing interviews/i)).toBeInTheDocument();
     });
 
     expect(screen.getByRole("link", { name: /technical interview chatbot/i })).toHaveAttribute(
@@ -64,8 +64,8 @@ describe("ChatExperience", () => {
     );
 
     render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
-    fireEvent.change(screen.getByLabelText(/pregunta/i), { target: { value: "hola" } });
-    fireEvent.click(screen.getByRole("button", { name: /enviar/i }));
+    fireEvent.change(screen.getByLabelText(/question/i), { target: { value: "hello" } });
+    fireEvent.click(screen.getByRole("button", { name: /send/i }));
 
     await waitFor(() => {
       expect(screen.getByText(/backend failure/i)).toBeInTheDocument();
@@ -77,13 +77,13 @@ describe("ChatExperience", () => {
       "fetch",
       vi.fn().mockResolvedValue({
         ok: true,
-        body: buildStreamResponse(['event: error\ndata: {"detail":"OpenRouter devolvió 429: rate limit"}\n\n']),
+        body: buildStreamResponse(['event: error\ndata: {"detail":"OpenRouter returned 429: rate limit"}\n\n']),
       }),
     );
 
     render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
-    fireEvent.change(screen.getByLabelText(/pregunta/i), { target: { value: "hola" } });
-    fireEvent.click(screen.getByRole("button", { name: /enviar/i }));
+    fireEvent.change(screen.getByLabelText(/question/i), { target: { value: "hello" } });
+    fireEvent.click(screen.getByRole("button", { name: /send/i }));
 
     await waitFor(() => {
       expect(screen.getByText(/rate limit/i)).toBeInTheDocument();

@@ -1,9 +1,9 @@
 ---
-title: "De ?MVP cogiendo polvo? a Google Play: la resurrecci?n de Cartastrofe"
-description: "La historia de Cart?strofe: un juego de cartas para parejas, una waitlist con MailerLite, una landing page vibe-codeada y muchos formularios de Google."
+title: "From Dusty MVP to Google Play: Bringing Cartastrofe Back"
+description: "How Cartastrofe went from an abandoned couple card game MVP to a live Google Play release pipeline."
 slug: "de-mvp-cogiendo-polvo-a-google-play-la-resurreccion-de-cartastrofe"
 publishedAt: "2026-03-01"
-updatedAt: "2026-03-01"
+updatedAt: "2026-04-25"
 tags: ["android-development", "waitlist", "google-play-store", "card-game", "generative-ai-tools"]
 draft: false
 featured: true
@@ -11,78 +11,78 @@ coverImage: ""
 readingTime: "5 min"
 ---
 
-*La historia de Cart?strofe: un juego de cartas para parejas, una waitlist con MailerLite, una landing page vibe-codeada y muchos formularios de Google.*
+*The story of Cartastrofe: a card game for couples, a MailerLite waitlist, a vibe-coded landing page, and more Google forms than expected.*
 
-## El proyecto que llevaba meses cogiendo polvo
+## The project that had been gathering dust
 
-Hace unos meses, mi pareja y yo nos pusimos en modo ?vamos a hacer una app?. Yo quer?a aprender Flutter. Ella es una m?quina pensando en din?micas de juego. La combinaci?n era perfecta? sobre el papel.
+A few months ago, my partner and I went into "let's build an app" mode. I wanted to learn Flutter. She is extremely good at inventing game dynamics. On paper, it was a perfect combination.
 
-El resultado fue **Cart?strofe**: un juego de cartas digital para parejas. La mec?nica es sencilla: abres una baraja, la app te reparte 12 cartas aleatorias de un total de 40, y tienes 24 horas para usarlas. Hay cartas para mandar a tu pareja a hacer algo, cartas para decidir el plan del d?a, cartas de defensa para bloquear lo que te juegan, cartas que generan situaciones absurdas? el caos controlado de toda la vida pero en tu m?vil.
+The result was **Cartastrofe**: a digital card game for couples. The mechanic is simple. You open a deck, the app deals 12 random cards out of a total of 40, and you have 24 hours to use them. Some cards tell your partner to do something, some decide the plan for the day, some are defensive cards that block whatever gets played against you, and some just create absurd situations. Controlled chaos, now on a phone.
 
-Divisi?n del trabajo: ella dise?aba las cartas y pensaba en c?mo interactuaban entre s?. Yo peleaba con Flutter, VS Code y GitHub Copilot para que todo eso se convirtiera en una app que no petara al abrirla.
+We split the work cleanly. She designed the cards and thought through how they interacted. I wrestled with Flutter, VS Code, and GitHub Copilot so the whole thing would become an app that did not explode on launch.
 
-Y entonces pas? lo que pasa con todos los proyectos personales: lo dejamos a medias.
+Then the usual thing happened with personal projects: we left it half-finished.
 
-Un MVP funcional. Sin pulir. Con ideas pendientes de implementar. Y acumulando polvo digital en alg?n repositorio de GitHub.
+A functional MVP. Not polished. Several ideas still missing. Slowly collecting digital dust somewhere in GitHub.
 
-## La resurrecci?n: ?oye, esto no deber?a perderse?
+## The revival
 
-Meses despu?s, mirando el proyecto con perspectiva, pens?: *esto es una idea que mola. No hay muchos juegos as? (o al menos yo no los conozco, que tampoco he investigado demasiado, ser? honesto). Y estar?a bien que existiera en alg?n sitio en internet en lugar de morir en un disco duro.*
+Months later I looked at the project again and thought: *this is actually fun. There are not many games like this, at least not that I know of, and it would be better if it existed somewhere on the internet instead of dying on a hard drive.*
 
-As? que me propuse resucitarlo. Simplemente para que no se perdiera.
+So I decided to revive it. Mostly so it would not disappear.
 
-Mi primer instinto fue [itch.io](https://rustyroboz.itch.io/cartastrofe), que ya conoc?a de otros prototipos de juegos que hab?a subido antes. Es c?modo, sencillo, hecho para creadores indie. El problema: Cart?strofe no es un juego que puedas jugar directamente en el navegador. Hay que bajarse la APK, permitir instalaci?n desde or?genes desconocidos, seguir pasos manuales? Y aunque para gente techie es normal, para parejas que solo quieren jugar? es demasiado ?tutorial de hackeo?.
+My first instinct was [itch.io](https://rustyroboz.itch.io/cartastrofe), because I already knew it from other prototypes. It is simple, creator-friendly, and easy to ship on. The problem is that Cartastrofe is not a browser game. You need to download an APK, enable installs from unknown sources, and follow manual steps. That is normal for technical users, but for couples who just want to play, it is too much friction.
 
-As? que pens?: vale, vamos a probar a subirla a Google Play.
+So the next step became obvious: try to publish it on Google Play.
 
-## El proceso de publicar en Google Play: m?s formularios de los que esperaba
+## Publishing on Google Play means more forms than expected
 
-Investigu? c?mo funcionaba y resulta que es perfectamente factible para un desarrollador individual. Pero hay pasos.
+I looked into the process and it is perfectly feasible for an individual developer, but there are several steps.
 
-Primero, la cuenta de desarrollador. Necesitas crear una cuenta en Google Play Console y pagar una tasa ?nica de 25$. Una vez y para siempre.
+First, the developer account. You need a Google Play Console account and a one-time fee of 25 USD.
 
-Segundo, firmar la app. Para publicar en Google Play no vale el APK de toda la vida. Necesitas generar un App Bundle (`.aab`) firmado con tu propio keystore.
+Second, signing the app. A regular APK is not enough. To publish on Google Play you need a signed App Bundle (`.aab`) built with your own keystore.
 
-Tercero, los formularios. Google quiere saber mucho sobre tu app antes de dejarla entrar. ?Tiene publicidad? ?Tiene pagos in-app? ?Qu? datos recoge de los usuarios? ?A qu? p?blico va dirigida? ?Contiene contenido sensible? Cart?strofe no recoge ning?n dato, no tiene anuncios, no tiene compras. As? que las respuestas fueron bastante sencillas, pero los formularios est?n ah? igualmente.
+Third, the forms. Google wants to know a lot about the app before it lets it in. Does it show ads? Does it offer in-app purchases? What user data does it collect? Who is the target audience? Does it contain sensitive content? Cartastrofe collects no data, has no ads, and has no purchases, so the answers were straightforward, but the paperwork is still there.
 
-Cuarto, la ficha de la app. Descripci?n, capturas de pantalla, icono, categor?a, clasificaci?n de contenido? Todo tiene sus requisitos. Las capturas deben tener unas dimensiones m?nimas. El icono tiene que ser de 512?512. Y necesitas una pol?tica de privacidad alojada en alg?n sitio.
+Fourth, the store listing. Description, screenshots, icon, category, content rating. Each one has its own requirements. Screenshots need minimum dimensions. The icon must be 512x512. You also need a privacy policy hosted somewhere public.
 
-## La landing page vibe-codeada en una tarde
+## A vibe-coded landing page in one afternoon
 
-Necesitaba una web para alojar la pol?tica de privacidad y los t?rminos de uso. As? que vibe-code? una landing page para Cart?strofe. Con Google Antigravity para el c?digo de la p?gina en s? y ChatGPT para generar algunas im?genes de apoyo. No es perfecta. Pero cumple su funci?n y tiene buena pinta para lo que es.
+I needed a small website to host the privacy policy and terms of use, so I vibe-coded a landing page for Cartastrofe. I used Google Antigravity for the page code itself and ChatGPT to generate some supporting images. It is not perfect, but it does the job and looks good enough for what it needs to be.
 
-Para desplegarla us? Sliplane, una plataforma que llevo usando un tiempo y que me encanta por su simplicidad. Pagas 9? al mes por un servidor en el que puedes desplegar todos los contenedores Docker que quepan en los recursos disponibles. Para proyectos personales y side projects es una relaci?n calidad-precio brutal.
+For deployment I used Sliplane, a platform I like a lot because it stays simple. You pay 9 EUR per month for a server where you can deploy as many Docker containers as fit in the available resources. For personal work and side projects, the price-to-value ratio is hard to beat.
 
-El dominio ya lo ten?a comprado en Porkbun, que adem?s te da una direcci?n de correo con tu dominio. Eso ?ltimo iba a ser importante.
+The domain was already registered through Porkbun, which also gives you an email address on your own domain. That turned out to matter later.
 
-## El giro argumental: los beta testers
+## The plot twist: beta testers
 
-Aqu? viene la parte que no me esperaba.
+This was the part I did not expect.
 
-Google lleva un tiempo endureciendo los requisitos para publicar apps nuevas en la Play Store. Ahora no puedes simplemente subir tu app y publicarla directamente. Primero tienes que pasar por una fase de pruebas internas: como m?nimo 12 usuarios beta testers deben probar la app durante 14 d?as. Despu?s, hay que enviar un informe sobre c?mo han ido las pruebas.
+Google has tightened the rules for new Play Store apps. You can no longer just upload an app and publish it immediately. First you need to go through a closed testing phase: at least 12 beta testers must use the app for 14 days. After that, you submit a report on how the test period went.
 
-Tiene sentido que Google quiera evitar que la tienda se llene de apps de baja calidad sin que nadie las haya probado. Pero s? significa que necesitas movilizar a gente real para que descargue tu app, la use durante dos semanas y te d? feedback.
+It makes sense. Google wants to avoid a flood of low-quality apps that nobody has tested. But it also means you need real people to download the app, use it for two weeks, and give you feedback.
 
-La soluci?n: montar una waitlist.
+So the real solution became: build a waitlist.
 
-## MailerLite + la landing page = sistema de beta cerrada
+## MailerLite plus the landing page
 
-Investigu? varias herramientas de email marketing y me qued? con MailerLite. El flujo que mont? fue sencillo: formulario en la landing, automatizaci?n de bienvenida, email manual con acceso a la beta y otro email de feedback a los 14 d?as.
+I compared a few email marketing tools and settled on MailerLite. The flow was simple: a signup form on the landing page, a welcome automation, a manual email with beta access, and another feedback email 14 days later.
 
-?Por qu? no enviar el enlace directamente al apuntarse? Porque el proceso de Google Play no es instant?neo. Una vez que tienes los emails, tienes que subirlos manualmente a la consola y esperar a que se generen los accesos.
+Why not send the access link immediately when someone signs up? Because the Google Play process is not instant. Once you collect the emails, you still have to upload them manually to the console and wait for access to be generated.
 
-## Por qu? me apetece resucitar Cartastrofe
+## Why I wanted to bring Cartastrofe back
 
-Porque es un proyecto peque?o, tonto y honesto. Un MVP lanzado vale m?s que un proyecto perfecto que nunca sale.
+Because it is a small, slightly ridiculous, honest project. A shipped MVP is worth more than a perfect project that never gets released.
 
-Adem?s, publicar en Play Store es una experiencia curiosa: aprendes de golpe sobre releases, fichas, cumplimiento, privacidad y pruebas.
+Publishing on the Play Store is also educational. You learn very quickly about releases, store listings, compliance, privacy, and testing.
 
-## En qu? punto estamos
+## Current status
 
-La app est? lista. La landing est? en pie. El sistema de emails funciona.
+The app is ready. The landing page is live. The email system works.
 
-Si te apetece probar Cart?strofe con tu pareja, echaros unas risas y ayudarme a sacarlo de la cueva, puedes apuntarte aqu?:
+If you want to try Cartastrofe with your partner, have a laugh, and help me bring it out into the open, you can sign up here:
 
 - [cartastrofe.com](https://www.cartastrofe.com/)
 
-El juego es gratis. No hay anuncios. No recoge ning?n dato. Todo funciona localmente en tu m?vil.
+The game is free. There are no ads. It collects no personal data. Everything runs locally on your phone.

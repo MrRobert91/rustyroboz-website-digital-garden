@@ -29,7 +29,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
         <h1 className="mt-6 font-manrope text-4xl font-semibold tracking-tight text-foreground md:text-6xl">{item.title}</h1>
         <p className="mt-5 text-lg leading-8 text-muted-foreground">{item.description}</p>
         <div className="mt-8 flex flex-wrap items-center gap-4 text-sm uppercase tracking-[0.16em] text-muted-foreground">
-          <span>{new Date(item.publishedAt).toLocaleDateString("es-ES")}</span>
+          <span>{new Date(item.publishedAt).toLocaleDateString("en-US")}</span>
           <span>{item.readingTime}</span>
         </div>
       </div>
@@ -42,10 +42,10 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
         </div>
         <aside className="space-y-6">
           <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Metadatos</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Metadata</p>
             <dl className="mt-5 grid gap-3 text-sm text-muted-foreground">
               <div className="grid gap-1">
-                <dt className="font-medium text-foreground">Colección</dt>
+                <dt className="font-medium text-foreground">Collection</dt>
                 <dd>{item.collection}</dd>
               </div>
               <div className="grid gap-1">
@@ -53,12 +53,12 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
                 <dd>{item.slug}</dd>
               </div>
               <div className="grid gap-1">
-                <dt className="font-medium text-foreground">Ruta</dt>
+                <dt className="font-medium text-foreground">Path</dt>
                 <dd>{getContentHref(item)}</dd>
               </div>
               {isProjectItem(item) && item.tech?.length ? (
                 <div className="grid gap-1">
-                  <dt className="font-medium text-foreground">Tecnologías</dt>
+                  <dt className="font-medium text-foreground">Technologies</dt>
                   <dd>{item.tech.join(", ")}</dd>
                 </div>
               ) : null}
@@ -66,7 +66,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
           </div>
           {isProjectItem(item) && item.links && Object.keys(item.links).length ? (
             <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Enlaces</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Links</p>
               <div className="mt-5 flex flex-col gap-3 text-sm">
                 {Object.entries(item.links).map(([label, href]) => (
                   <Link className="text-accent underline-offset-4 hover:underline" href={href} key={href} rel="noreferrer" target="_blank">
@@ -78,7 +78,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
           ) : null}
           {related.length ? (
             <div className="space-y-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Relacionado</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Related</p>
               {related.map((entry) => (
                 <ContentCard item={entry} key={`${entry.collection}-${entry.slug}`} />
               ))}

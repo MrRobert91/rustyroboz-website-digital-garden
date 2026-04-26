@@ -13,7 +13,7 @@ export function SiteHeader({ currentPath }: SiteHeaderProps) {
         <Link className="font-manrope text-sm font-semibold uppercase tracking-[0.22em] text-foreground" href="/">
           {siteConfig.name}
         </Link>
-        <nav aria-label="Navegación principal" className="hidden items-center gap-1 md:flex">
+        <nav aria-label="Primary navigation" className="hidden items-center gap-1 md:flex">
           {siteConfig.navigation.map((item) => {
             const isActive = currentPath === item.href;
             return (
@@ -34,4 +34,3 @@ export function SiteHeader({ currentPath }: SiteHeaderProps) {
     </header>
   );
 }
-

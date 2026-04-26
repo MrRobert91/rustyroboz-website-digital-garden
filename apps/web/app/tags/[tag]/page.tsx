@@ -18,7 +18,7 @@ export default async function TagPage({ params }: TagPageProps) {
   return (
     <div className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
       <SectionHeading
-        description="Cruce de proyectos, artículos y notas relacionadas por tema."
+        description="A cross-section of projects, articles, and notes related by topic."
         eyebrow="Tags"
         title={`Tag: ${tag}`}
       />
@@ -30,4 +30,3 @@ export default async function TagPage({ params }: TagPageProps) {
     </div>
   );
 }
-

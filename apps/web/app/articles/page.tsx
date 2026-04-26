@@ -6,11 +6,10 @@ export default async function ArticlesPage() {
 
   return (
     <ContentListPage
-      description="Ensayos y textos largos sobre entrega de software, IA aplicada, ética y diseño de sistemas."
+      description="Essays and long-form writing on software delivery, applied AI, ethics, and system design."
       eyebrow="Blog"
       items={items}
-      title="Artículos"
+      title="Articles"
     />
   );
 }
-

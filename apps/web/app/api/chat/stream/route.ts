@@ -12,9 +12,7 @@ function buildUpstreamUrl() {
   try {
     return new URL("/api/v1/chat/stream", rawBaseUrl).toString();
   } catch {
-    throw new Error(
-      `API_BASE_URL no es una URL válida: "${rawBaseUrl}". Configúrala con protocolo, por ejemplo https://tu-api.sliplane.app`,
-    );
+    throw new Error(`API_BASE_URL is not a valid URL: "${rawBaseUrl}". Include the protocol, for example https://your-api.sliplane.app`);
   }
 }
 
@@ -34,7 +32,7 @@ export async function POST(request: Request) {
 
     if (!upstream.ok) {
       const payload = await upstream.text();
-      return new Response(payload || JSON.stringify({ detail: "El backend del chat devolvió un error." }), {
+      return new Response(payload || JSON.stringify({ detail: "The chat backend returned an error." }), {
         status: upstream.status,
         headers: {
           "Content-Type": upstream.headers.get("content-type") ?? "application/json",
@@ -43,7 +41,7 @@ export async function POST(request: Request) {
     }
 
     if (!upstream.body) {
-      return Response.json({ detail: "El backend del chat no devolvió stream." }, { status: 502 });
+      return Response.json({ detail: "The chat backend did not return a stream." }, { status: 502 });
     }
 
     return new Response(upstream.body, {
@@ -55,7 +53,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    const detail = error instanceof Error ? error.message : "No se pudo contactar con el backend del chat.";
+    const detail = error instanceof Error ? error.message : "Could not contact the chat backend.";
     return Response.json({ detail }, { status: 502 });
   }
 }

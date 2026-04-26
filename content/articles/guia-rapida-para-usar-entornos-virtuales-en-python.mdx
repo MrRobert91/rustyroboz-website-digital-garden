@@ -1,9 +1,9 @@
 ---
-title: "Gu?a r?pida para usar entornos virtuales en Python"
-description: "Un recordatorio corto para aislar dependencias de Python con virtualenv y virtualenvwrapper."
+title: "Quick Guide to Python Virtual Environments"
+description: "A short reminder for isolating Python dependencies with virtualenv and virtualenvwrapper."
 slug: "guia-rapida-para-usar-entornos-virtuales-en-python"
 publishedAt: "2022-11-10"
-updatedAt: "2022-11-10"
+updatedAt: "2026-04-25"
 tags: ["virtualenv", "python", "programming", "dependency-management", "data-science"]
 draft: false
 featured: false
@@ -11,57 +11,57 @@ coverImage: ""
 readingTime: "1 min"
 ---
 
-Los robots tambi?n usan entornos virtuales.
+Robots use virtual environments too.
 
-Cuando programamos en Python, una buena pr?ctica es crear entornos virtuales para cada proyecto. No es m?s que una forma de aislar una instalaci?n de Python con una versi?n concreta y unas librer?as espec?ficas, con el objetivo de evitar conflictos con versiones ya instaladas.
+When we write Python, a good practice is to create a virtual environment for each project. It is simply a way to isolate one Python installation, a specific version, and a set of libraries so they do not conflict with anything already installed on your machine.
 
-Aunque se pueden crear con `venv` o utilizando `conda`, mi forma preferida de hacerlo es utilizando **virtualenv** y **virtualenvwrapper**.
+You can create them with `venv` or `conda`, but my preferred setup is still **virtualenv** plus **virtualenvwrapper**.
 
-## Instalaci?n
+## Installation
 
-### En Windows
+### On Windows
 
 ```bash
 pip install virtualenv virtualenvwrapper
 pip install virtualenvwrapper-win
 ```
 
-### En Linux
+### On Linux
 
 ```bash
 pip3 install virtualenv virtualenvwrapper
 ```
 
-## Comandos b?sicos
+## Basic commands
 
-Creamos un nuevo entorno virtual llamado `f5`:
+Create a new virtual environment called `f5`:
 
 ```bash
 mkvirtualenv f5 -p python3
 ```
 
-Para activarlo o cambiar de entorno:
+Activate it or switch to it:
 
 ```bash
 workon f5
 ```
 
-Para desactivarlo:
+Deactivate it:
 
 ```bash
 deactivate f5
 ```
 
-Para listar todos los entornos virtuales:
+List all virtual environments:
 
 ```bash
 lsvirtualenv
 ```
 
-Y para eliminar uno que no est? en uso:
+Delete one that is not in use:
 
 ```bash
 rmvirtualenv f5
 ```
 
-Dentro del entorno virtual puedes instalar las librer?as que quieras de forma normal utilizando `pip`, incluso fijando versiones concretas.
+Inside the environment you can install whatever libraries you need with `pip`, including pinned versions when necessary.

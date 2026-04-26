@@ -6,11 +6,10 @@ export default async function ProjectsPage() {
 
   return (
     <ContentListPage
-      description="Piezas donde combino backend, frontend, producto y sistemas de IA con foco en claridad operativa."
+      description="Projects that combine backend, frontend, product thinking, and AI systems with an operational bias."
       eyebrow="Portfolio"
       items={items}
-      title="Proyectos"
+      title="Projects"
     />
   );
 }
-

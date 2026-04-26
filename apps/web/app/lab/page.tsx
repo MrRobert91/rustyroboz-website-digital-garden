@@ -9,22 +9,22 @@ export default async function LabPage() {
       <Badge>AI Lab</Badge>
       <h1 className="mt-6 font-manrope text-5xl font-semibold tracking-tight text-foreground">AI Lab</h1>
       <p className="mt-5 max-w-3xl text-lg leading-8 text-muted-foreground">
-        Esta ruta queda visible desde la primera versión para reservar el espacio del laboratorio: demos, evaluaciones,
-        interfaces conversacionales y pequeños experimentos de producto.
+        This route stays visible from the first version to reserve space for demos, evaluations, conversational interfaces,
+        and small product experiments.
       </p>
       <div className="mt-10 rounded-[2rem] border border-border bg-card p-8 shadow-soft">
-        <p className="text-sm uppercase tracking-[0.22em] text-accent">MVP activo</p>
+        <p className="text-sm uppercase tracking-[0.22em] text-accent">Active MVP</p>
         <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">
-          El chat personal ya funciona con retrieval local y streaming. La siguiente fase endurecerá la ingestión, el
-          reindexado y la trazabilidad del conocimiento.
+          The personal chat already works with local retrieval and streaming. The next phase will harden ingestion,
+          reindexing, and knowledge traceability.
         </p>
       </div>
       <div className="mt-8 flex flex-wrap gap-4">
         <Link className={cn(buttonVariants({ variant: "default" }))} href="/projects">
-          Ver proyectos
+          View Projects
         </Link>
         <Link className={cn(buttonVariants({ variant: "outline" }))} href="/chat">
-          Abrir el chat
+          Open Chat
         </Link>
       </div>
     </section>

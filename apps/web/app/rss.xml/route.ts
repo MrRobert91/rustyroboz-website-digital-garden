@@ -20,8 +20,8 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8" ?>
     <rss version="2.0">
       <channel>
-        <title>rustyroboz</title>
-        <description>Artículos sobre sistemas, IA y producto.</description>
+        <title>David Robert</title>
+        <description>Articles about systems, AI, and product work.</description>
         <link>https://rustyroboz.dev</link>
         ${items}
       </channel>
@@ -33,4 +33,3 @@ export async function GET() {
     },
   });
 }
-
