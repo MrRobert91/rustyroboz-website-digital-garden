@@ -119,8 +119,11 @@ export const timeline: TimelineEntry[] = [
     title: "SharedBrain",
     start: "2026-06",
     description:
-      "A collaborative “shared brain” web app — a space to capture, organize and connect knowledge together. (Live app, sign-in required.)",
-    links: [{ label: "Live app", href: "https://sharedbrain.sliplane.app/" }],
+      "A personal context layer for AI agents that turns scattered notes (Obsidian vaults, project repos) into actionable context. Read-only over your notes with AI output isolated in an `_ai/` folder, an MCP server for agent queries, CLI pipelines and a React dashboard. FastAPI + FastMCP + pydantic-ai backend.",
+    links: [
+      { label: "Live app", href: "https://sharedbrain.sliplane.app/" },
+      { label: "GitHub", href: "https://github.com/MrRobert91/SharedBrain" },
+    ],
   },
   {
     id: "topokarts",
@@ -139,8 +142,12 @@ export const timeline: TimelineEntry[] = [
     kind: "project",
     title: "Mira Link",
     start: "2026-05",
-    description: "A product experiment live at miralink.app.",
-    links: [{ label: "Website", href: "https://miralink.app/" }],
+    description:
+      "An accessibility web app that lets people with severe mobility impairments fill in Google Forms and Microsoft Forms using only eye-gaze control — webcam eye tracking with MediaPipe, guided calibration, dwell-based Yes/No selection and text-to-speech. React + Vite frontend, FastAPI + SQLite + Piper backend.",
+    links: [
+      { label: "Website", href: "https://miralink.app/" },
+      { label: "GitHub", href: "https://github.com/MrRobert91/MiraLink" },
+    ],
   },
   {
     id: "socratic-gemma",
@@ -149,7 +156,12 @@ export const timeline: TimelineEntry[] = [
     start: "2026-05",
     description:
       "Hackathon submission: a Socratic tutoring assistant built on Google's Gemma models, entered in the Kaggle “Gemma 4 Good” hackathon.",
-    links: [{ label: "Kaggle", href: "https://www.kaggle.com/competitions/gemma-4-good-hackathon" }],
+    links: [
+      {
+        label: "Writeup",
+        href: "https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779100810809",
+      },
+    ],
   },
   {
     id: "apolo-vs-zeus",
@@ -358,7 +370,7 @@ export const timeline: TimelineEntry[] = [
     id: "rpi-console",
     kind: "project",
     title: "RPI Console",
-    start: "2021-02",
+    start: "2020-10",
     description:
       "A portable retro console built on a Raspberry Pi 3 with RetroPie and a 3.5-inch screen — emulating NES, SNES, Mega Drive, GBA and more on the go.",
     links: [{ label: "Case study", href: "/projects/rpi-console" }],
