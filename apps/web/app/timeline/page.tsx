@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { InkStamp, Sticky } from "@/components/notebook";
 import { Timeline } from "@/components/timeline";
 import { timeline } from "@/lib/timeline";
 
@@ -10,21 +11,33 @@ export const metadata: Metadata = {
 
 export default function TimelinePage() {
   return (
-    <div className="mx-auto max-w-5xl px-6 py-16 lg:px-10 lg:py-20">
-      <header className="max-w-3xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">Journey</p>
-        <h1 className="mt-6 font-manrope text-4xl font-semibold tracking-tight text-foreground md:text-6xl">
-          Timeline
-        </h1>
-        <p className="mt-5 text-lg leading-8 text-muted-foreground">
-          A chronological view of my work — roles, certifications, studies, and personal projects, most recent first.
-          Longer roles take up more space, so you can see at a glance how the years line up.
-        </p>
-      </header>
+    <section className="ruled-paper-plain relative overflow-hidden">
+      <div className="mx-auto max-w-5xl px-6 py-16 lg:px-16 lg:py-24">
+        <div className="flex flex-wrap items-start justify-between gap-6">
+          <div className="max-w-2xl">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">§05 — Logbook</p>
+            <h1 className="mt-2 font-display text-6xl font-bold tracking-tight text-foreground lg:text-8xl">Timeline</h1>
+            <p className="mt-4 font-hand text-2xl text-accent-deep -rotate-1">the whole thing, most recent first ↓</p>
+            <p className="mt-5 font-serif text-lg leading-relaxed text-foreground/80">
+              Roles, certifications, studies and personal projects. Longer roles take up more space, so you can see at a
+              glance how the years line up.
+            </p>
+          </div>
+          <Sticky angle={-4} className="hidden sm:block" color="#fcd9c8" style={{ width: 190 }}>
+            ↓ time goes <span className="font-bold text-accent-deep">down</span> the page
+          </Sticky>
+        </div>
 
-      <div className="mt-14">
-        <Timeline entries={timeline} />
+        <div className="mt-10 flex">
+          <InkStamp angle={-5} label="9 YRS IN TECH" />
+        </div>
+
+        <div className="mt-12">
+          <Timeline entries={timeline} />
+        </div>
+
+        <p className="mt-6 pl-8 font-hand text-xl text-accent-deep -rotate-1 sm:pl-12">↓ to be continued</p>
       </div>
-    </div>
+    </section>
   );
 }

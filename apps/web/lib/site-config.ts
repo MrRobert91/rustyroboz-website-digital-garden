@@ -20,25 +20,6 @@ export const siteConfig = {
     { href: "https://www.linkedin.com/in/david-robert/", label: "LinkedIn" },
     { href: "https://medium.com/@rustyroboz", label: "Medium" },
   ],
-  timeline: [
-    {
-      period: "Base",
-      title: "Computer engineer based in Madrid",
-      description:
-        "Interested in robotics, machine learning, artificial intelligence, quantum computing, game development, and technology in general.",
-    },
-    {
-      period: "Focus",
-      title: "Projects with real technical edges",
-      description:
-        "The work spans VR prototypes, AI art, chatbots, game jams, embedded hardware, and computer vision experiments.",
-    },
-    {
-      period: "Public work",
-      title: "Writing and experiments in public",
-      description: "The site combines project work, articles, notes, and a small AI chat layer in one place.",
-    },
-  ],
   // Toolbox — grouped tech, drawn as handwritten chips.
   stack: [
     { title: "AI / ML", items: ["PyTorch", "LangChain", "OpenAI", "HF", "FAISS", "vLLM", "Ollama", "Pinecone"] },
