@@ -3,14 +3,33 @@
 @tailwind utilities;
 
 :root {
-  --background: 35 43% 95%;
-  --foreground: 28 10% 10%;
-  --muted: 33 10% 39%;
-  --muted-foreground: 33 9% 39%;
-  --card: 40 45% 98%;
-  --border: 34 22% 82%;
-  --accent: 176 72% 28%;
-  --ring: 176 72% 28%;
+  /* Warm notebook paper + rust ink palette */
+  --background: 39 60% 95%; /* #fbf6ec paper */
+  --paper-2: 41 56% 96%; /* #fbf7ee card paper */
+  --foreground: 30 17% 14%; /* #2a241e ink */
+  --muted: 33 11% 33%;
+  --muted-foreground: 33 11% 33%; /* #5c544a */
+  --card: 41 56% 96%;
+  --border: 35 28% 80%; /* warm pencil line */
+  --line-rule: 210 28% 55%; /* ruled blue line */
+  --accent: 12 58% 45%; /* #b34a30 rust */
+  --accent-deep: 11 62% 33%; /* #8a3320 */
+  --ring: 12 58% 45%;
+}
+
+.dark {
+  /* Workshop at night — dark parchment */
+  --background: 30 22% 11%;
+  --paper-2: 30 16% 16%;
+  --foreground: 40 30% 88%;
+  --muted: 38 15% 64%;
+  --muted-foreground: 38 15% 64%;
+  --card: 30 16% 16%;
+  --border: 34 14% 28%;
+  --line-rule: 210 14% 42%;
+  --accent: 13 64% 56%;
+  --accent-deep: 13 60% 46%;
+  --ring: 13 64% 56%;
 }
 
 @layer base {
@@ -30,28 +49,89 @@
   a {
     @apply transition-colors;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
 }
 
 @layer utilities {
+  /* Semantic font families */
+  .font-display {
+    font-family: var(--font-display), "Helvetica Neue", sans-serif;
+  }
+  .font-serif {
+    font-family: var(--font-serif), Georgia, serif;
+  }
+  .font-hand {
+    font-family: var(--font-hand), "Segoe Print", cursive;
+  }
+  .font-mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
+  }
+  /* Back-compat aliases so existing component classNames adopt the new fonts */
   .font-manrope {
-    font-family: var(--font-manrope), sans-serif;
+    font-family: var(--font-display), "Helvetica Neue", sans-serif;
+  }
+  .font-newsreader {
+    font-family: var(--font-serif), Georgia, serif;
   }
 
-  .font-newsreader {
-    font-family: var(--font-newsreader), serif;
+  /* Ruled school-notebook paper with a red margin */
+  .ruled-paper {
+    background-color: hsl(var(--card));
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 27px,
+        hsl(var(--line-rule) / 0.35) 27px 28px
+      ),
+      linear-gradient(
+        to right,
+        transparent 63px,
+        hsl(var(--accent) / 0.45) 63px 65px,
+        transparent 65px
+      );
+  }
+  .ruled-paper-plain {
+    background-color: hsl(var(--card));
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0 27px,
+      hsl(var(--line-rule) / 0.32) 27px 28px
+    );
+  }
+  /* Dotted grid (graph-paper) variant */
+  .dotted-paper {
+    background-color: hsl(var(--card));
+    background-image: radial-gradient(hsl(var(--line-rule) / 0.5) 1px, transparent 1.4px);
+    background-size: 22px 22px;
+  }
+
+  /* Subtle canvas grid behind the whole site */
+  .bg-paper-grid {
+    background-image:
+      radial-gradient(hsl(var(--foreground) / 0.035) 1px, transparent 1.3px);
+    background-size: 26px 26px;
   }
 
   .bg-hero-texture {
     background-image:
-      radial-gradient(circle at top left, hsl(var(--accent) / 0.14), transparent 30%),
-      linear-gradient(to right, hsl(var(--foreground) / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(var(--foreground) / 0.04) 1px, transparent 1px);
-    background-size: auto, 32px 32px, 32px 32px;
+      radial-gradient(circle at top left, hsl(var(--accent) / 0.1), transparent 32%),
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 27px,
+        hsl(var(--line-rule) / 0.28) 27px 28px
+      );
     background-position: center;
   }
 
   .shadow-soft {
-    box-shadow: 0 20px 60px -32px rgba(30, 31, 34, 0.25);
+    box-shadow: 0 24px 60px -36px rgba(60, 40, 20, 0.45);
+  }
+  .shadow-paper {
+    box-shadow: 0 12px 24px -18px rgba(60, 40, 20, 0.4), 0 1px 0 rgba(0, 0, 0, 0.04);
   }
 }
-

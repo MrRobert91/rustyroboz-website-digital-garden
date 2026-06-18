@@ -1,120 +1,25 @@
-import Link from "next/link";
-import { ContentCard } from "@/components/content-card";
-import { ContentHero } from "@/components/content-hero";
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { Hero } from "@/components/sections/hero";
+import { ProjectsPrototypes } from "@/components/sections/projects-prototypes";
+import { Bitacora } from "@/components/sections/bitacora";
+import { LogbookTimeline } from "@/components/sections/logbook-timeline";
+import { StackToolbox } from "@/components/sections/stack-toolbox";
+import { AiLabCta } from "@/components/sections/ai-lab-cta";
 import { getFeaturedItems } from "@/lib/content";
-import { formatRange, getRecentTimeline, kindLabel } from "@/lib/timeline";
-import { cn } from "@/lib/utils";
 
 export default async function HomePage() {
-  const [projects, articles] = await Promise.all([getFeaturedItems("projects", 2), getFeaturedItems("articles", 2)]);
-  const recent = getRecentTimeline(4);
+  const [projects, articles] = await Promise.all([
+    getFeaturedItems("projects", 4),
+    getFeaturedItems("articles", 4),
+  ]);
 
   return (
     <>
-      <ContentHero
-        bioDescription="AI Engineer with 9 years in tech and 3.5+ years training AI engineers. Azure AI Engineer Associate, working across the full AI lifecycle — and building strange prototypes on the side."
-        bioFacts={[
-          { label: "Base", value: "Madrid, Spain" },
-          { label: "Focus", value: "Agentic AI, LLMs, RAG, Computer Vision" },
-          { label: "Also", value: "VR, games, quantum, hardware experiments" },
-        ]}
-        bioTitle="AI Engineer · Computer Engineer"
-        description="A personal site and portfolio for AI work, writing, experiments, and small AI-driven tools."
-        eyebrow="David Robert"
-        primaryLink={{ href: "/projects", label: "View Projects" }}
-        secondaryLink={{ href: "/about", label: "About & CV" }}
-        title="AI systems, software, and strange prototypes."
-      />
-
-      <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
-        <SectionHeading
-          description="A cross-section of software, AI, VR, and game experiments."
-          eyebrow="Selected Work"
-          title="Projects"
-        />
-        <div className="mt-12 grid gap-6 lg:grid-cols-2">
-          {projects.map((project) => (
-            <Reveal key={project.slug}>
-              <ContentCard item={project} />
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      <section className="border-y border-border/80 bg-card/50">
-        <div className="mx-auto grid max-w-6xl gap-14 px-6 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:px-10 lg:py-20">
-          <SectionHeading
-            description="Long-form writing on applied AI, software delivery, product decisions, and experiments."
-            eyebrow="Writing"
-            title="Articles"
-          />
-          <div className="grid gap-6">
-            {articles.map((item, index) => (
-              <Reveal delay={index * 0.06} key={`${item.collection}-${item.slug}`}>
-                <ContentCard item={item} />
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeading
-            description="Roles, certifications, and recent projects — most recent first."
-            eyebrow="Timeline"
-            title="What I've been building"
-          />
-          <Link className={cn(buttonVariants({ variant: "outline" }))} href="/timeline">
-            View full timeline
-          </Link>
-        </div>
-        <div className="mt-12 grid gap-5 md:grid-cols-2">
-          {recent.map((entry, index) => (
-            <Reveal className="rounded-[1.75rem] border border-border bg-card p-6 shadow-soft" delay={index * 0.05} key={entry.id}>
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="muted">{kindLabel(entry.kind)}</Badge>
-                <Badge variant="outline">{formatRange(entry)}</Badge>
-              </div>
-              <h3 className="mt-4 text-xl font-semibold text-foreground">{entry.title}</h3>
-              {entry.org ? <p className="mt-1 text-sm font-medium text-accent">{entry.org}</p> : null}
-              <p className="mt-3 text-sm leading-7 text-muted-foreground">{entry.description}</p>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      <section className="border-t border-border/80 bg-foreground text-background">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 lg:grid-cols-[1fr_auto] lg:px-10 lg:py-20">
-          <div>
-            <Badge className="bg-background/10 text-background" variant="default">
-              AI Lab
-            </Badge>
-            <h2 className="mt-5 max-w-3xl font-manrope text-4xl font-semibold tracking-tight">
-              An evolving AI layer for retrieval, conversational interfaces, and small product experiments.
-            </h2>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-background/72">
-              The frontend and backend deploy independently, the content lives in MDX, and the retrieval pipeline is ready to
-              grow with the site.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-4">
-            <Link className={cn(buttonVariants({ variant: "outline" }), "border-background/30 text-background hover:border-background")} href="/contact">
-              Contact
-            </Link>
-            <Link className={cn(buttonVariants({ variant: "outline" }), "border-background/30 text-background hover:border-background")} href="/lab">
-              Explore the Lab
-            </Link>
-            <Link className={cn(buttonVariants({ variant: "outline" }), "border-background/30 text-background hover:border-background")} href="/chat">
-              Open Chat
-            </Link>
-          </div>
-        </div>
-      </section>
+      <Hero />
+      <ProjectsPrototypes items={projects} withHeader={false} />
+      <Bitacora items={articles} />
+      <LogbookTimeline />
+      <StackToolbox compact />
+      <AiLabCta />
     </>
   );
 }

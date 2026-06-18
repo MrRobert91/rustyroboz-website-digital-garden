@@ -16,8 +16,8 @@ describe("public routes", () => {
   it("renders the home page hero with english navigation and a bio panel", async () => {
     render(await HomePage());
     expect(screen.getByRole("link", { name: /view projects/i })).toHaveAttribute("href", "/projects");
-    expect(screen.getByRole("heading", { name: /ai systems, software, and strange prototypes/i })).toBeInTheDocument();
-    expect(screen.getAllByText(/ai engineer · computer engineer/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
+    expect(screen.getAllByText(/computer engineer based in madrid/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/^signal$/i)).not.toBeInTheDocument();
   });
 
@@ -27,7 +27,7 @@ describe("public routes", () => {
     expect(screen.getAllByText(/ai engineer and computer engineer based in madrid/i).length).toBeGreaterThan(0);
 
     render(await ContactPage());
-    expect(screen.getByRole("heading", { name: /contact/i })).toBeInTheDocument();
+    expect(screen.getByText(/quick brief/i)).toBeInTheDocument();
     expect(screen.getByText(/instagram/i)).toBeInTheDocument();
   });
 
