@@ -15,6 +15,12 @@ export function AboutFieldNotes({ paragraphs }: AboutFieldNotesProps) {
     ["formats", "projects · articles · notes · experiments"],
     ["fuel", "coffee + solder fumes"],
     ["status", <span className="font-semibold text-accent" key="s">● available — Q3 2026</span>],
+    [
+      "cv",
+      <a className="text-accent-deep underline-offset-4 hover:text-accent hover:underline" href="/cv-david-robert.pdf" key="cv" rel="noreferrer" target="_blank">
+        download PDF ↗
+      </a>,
+    ],
   ];
 
   return (
