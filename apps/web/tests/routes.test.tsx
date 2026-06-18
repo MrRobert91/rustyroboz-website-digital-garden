@@ -10,6 +10,7 @@ import HomePage from "@/app/page";
 import ProjectDetailPage from "@/app/projects/[slug]/page";
 import ProjectsPage from "@/app/projects/page";
 import TagPage from "@/app/tags/[tag]/page";
+import TimelinePage from "@/app/timeline/page";
 
 describe("public routes", () => {
   it("renders the home page hero with english navigation and a bio panel", async () => {
@@ -28,6 +29,14 @@ describe("public routes", () => {
     render(await ContactPage());
     expect(screen.getByRole("heading", { name: /contact/i })).toBeInTheDocument();
     expect(screen.getByText(/instagram/i)).toBeInTheDocument();
+  });
+
+  it("renders the timeline page with ranged experience and recent projects", () => {
+    render(<TimelinePage />);
+    expect(screen.getByRole("heading", { name: /^timeline$/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /lead ai instructor/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /ml engineer \/ data scientist/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/factoría f5/i).length).toBeGreaterThan(0);
   });
 
   it("renders projects, articles and notes indexes in english", async () => {

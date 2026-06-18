@@ -8,6 +8,7 @@ export const siteConfig = {
   navigation: [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
+    { href: "/timeline", label: "Timeline" },
     { href: "/projects", label: "Projects" },
     { href: "/articles", label: "Articles" },
     { href: "/contact", label: "Contact" },
@@ -19,26 +20,6 @@ export const siteConfig = {
     { href: "https://github.com/MrRobert91", label: "GitHub" },
     { href: "https://www.linkedin.com/in/david-robert/", label: "LinkedIn" },
     { href: "https://medium.com/@rustyroboz", label: "Medium" },
-  ],
-  timeline: [
-    {
-      period: "Now",
-      title: "AI Engineer & Lead AI Instructor",
-      description:
-        "9 years in tech and 3.5+ years designing and delivering AI bootcamps. Focused on Agentic AI, LLM fine-tuning, RAG architectures, and LLM observability and evaluation.",
-    },
-    {
-      period: "Track record",
-      title: "From proof of concept to production",
-      description:
-        "Built AI solutions across R&D, AutoML, and advanced analytics in Big Data and Cloud environments, and trained several hundred students across all levels.",
-    },
-    {
-      period: "Maker side",
-      title: "Projects with real technical edges",
-      description:
-        "Beyond work, the site spans VR prototypes, AI art, chatbots, game jams, embedded hardware, and computer vision experiments — built and shared in public.",
-    },
   ],
 };
 

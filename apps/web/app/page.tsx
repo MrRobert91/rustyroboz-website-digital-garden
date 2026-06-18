@@ -6,11 +6,12 @@ import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { getFeaturedItems } from "@/lib/content";
-import { siteConfig } from "@/lib/site-config";
+import { formatRange, getRecentTimeline, kindLabel } from "@/lib/timeline";
 import { cn } from "@/lib/utils";
 
 export default async function HomePage() {
   const [projects, articles] = await Promise.all([getFeaturedItems("projects", 2), getFeaturedItems("articles", 2)]);
+  const recent = getRecentTimeline(4);
 
   return (
     <>
@@ -62,21 +63,28 @@ export default async function HomePage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
-        <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeading
-            description="A broad technical curiosity organized into clearer themes."
-            eyebrow="About"
-            title="Engineering across software, AI, and experimental products"
+            description="Roles, certifications, and recent projects — most recent first."
+            eyebrow="Timeline"
+            title="What I've been building"
           />
-          <div className="grid gap-5">
-            {siteConfig.timeline.map((entry) => (
-              <Reveal className="rounded-[1.75rem] border border-border bg-card p-6 shadow-soft" key={entry.title}>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">{entry.period}</p>
-                <h3 className="mt-3 text-xl font-semibold text-foreground">{entry.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-muted-foreground">{entry.description}</p>
-              </Reveal>
-            ))}
-          </div>
+          <Link className={cn(buttonVariants({ variant: "outline" }))} href="/timeline">
+            View full timeline
+          </Link>
+        </div>
+        <div className="mt-12 grid gap-5 md:grid-cols-2">
+          {recent.map((entry, index) => (
+            <Reveal className="rounded-[1.75rem] border border-border bg-card p-6 shadow-soft" delay={index * 0.05} key={entry.id}>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="muted">{kindLabel(entry.kind)}</Badge>
+                <Badge variant="outline">{formatRange(entry)}</Badge>
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-foreground">{entry.title}</h3>
+              {entry.org ? <p className="mt-1 text-sm font-medium text-accent">{entry.org}</p> : null}
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">{entry.description}</p>
+            </Reveal>
+          ))}
         </div>
       </section>
 
