@@ -1,10 +1,10 @@
 export const siteConfig = {
   name: "David Robert",
-  title: "David Robert | Projects, articles, and experiments",
+  title: "David Robert | AI Engineer · Computer Engineer",
   description:
-    "Personal site by David Robert, a computer engineer based in Madrid, with projects in AI, VR, games, quantum computing, and software experiments.",
+    "Personal site and portfolio of David Robert, an AI Engineer and Computer Engineer based in Madrid, with work across AI systems, training, VR, games, quantum computing, and software experiments.",
   location: "Madrid, Spain",
-  email: "",
+  email: "davidrobertnunez@gmail.com",
   navigation: [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
@@ -22,21 +22,22 @@ export const siteConfig = {
   ],
   timeline: [
     {
-      period: "Base",
-      title: "Computer engineer based in Madrid",
+      period: "Now",
+      title: "AI Engineer & Lead AI Instructor",
       description:
-        "Interested in robotics, machine learning, artificial intelligence, quantum computing, game development, and technology in general.",
+        "9 years in tech and 3.5+ years designing and delivering AI bootcamps. Focused on Agentic AI, LLM fine-tuning, RAG architectures, and LLM observability and evaluation.",
     },
     {
-      period: "Focus",
+      period: "Track record",
+      title: "From proof of concept to production",
+      description:
+        "Built AI solutions across R&D, AutoML, and advanced analytics in Big Data and Cloud environments, and trained several hundred students across all levels.",
+    },
+    {
+      period: "Maker side",
       title: "Projects with real technical edges",
       description:
-        "The work spans VR prototypes, AI art, chatbots, game jams, embedded hardware, and computer vision experiments.",
-    },
-    {
-      period: "Public work",
-      title: "Writing and experiments in public",
-      description: "The site combines project work, articles, notes, and a small AI chat layer in one place.",
+        "Beyond work, the site spans VR prototypes, AI art, chatbots, game jams, embedded hardware, and computer vision experiments — built and shared in public.",
     },
   ],
 };

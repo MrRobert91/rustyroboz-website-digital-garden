@@ -15,18 +15,18 @@ export default async function HomePage() {
   return (
     <>
       <ContentHero
-        bioDescription="I work across software, AI systems, robotics, quantum computing, and game development, with a preference for practical builds that ship."
+        bioDescription="AI Engineer with 9 years in tech and 3.5+ years training AI engineers. Azure AI Engineer Associate, working across the full AI lifecycle — and building strange prototypes on the side."
         bioFacts={[
           { label: "Base", value: "Madrid, Spain" },
-          { label: "Focus", value: "AI systems, games, product engineering" },
-          { label: "Formats", value: "Projects, articles, notes, experiments" },
+          { label: "Focus", value: "Agentic AI, LLMs, RAG, Computer Vision" },
+          { label: "Also", value: "VR, games, quantum, hardware experiments" },
         ]}
-        bioTitle="Computer engineer based in Madrid"
-        description="A personal site for projects, writing, experiments, and small AI-driven tools."
+        bioTitle="AI Engineer · Computer Engineer"
+        description="A personal site and portfolio for AI work, writing, experiments, and small AI-driven tools."
         eyebrow="David Robert"
         primaryLink={{ href: "/projects", label: "View Projects" }}
-        secondaryLink={{ href: "/articles", label: "Read Articles" }}
-        title="AI, games, software, and strange prototypes."
+        secondaryLink={{ href: "/about", label: "About & CV" }}
+        title="AI systems, software, and strange prototypes."
       />
 
       <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">

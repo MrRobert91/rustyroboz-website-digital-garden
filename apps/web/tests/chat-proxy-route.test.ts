@@ -15,7 +15,7 @@ describe("chat stream proxy route", () => {
     const payload = await response.json();
 
     expect(response.status).toBe(502);
-    expect(payload.detail).toMatch(/API_BASE_URL no es una URL válida/i);
+    expect(payload.detail).toMatch(/API_BASE_URL is not a valid URL/i);
   });
 
   it("proxies the request to the configured backend", async () => {
