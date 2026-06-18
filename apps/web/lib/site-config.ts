@@ -12,7 +12,6 @@ export const siteConfig = {
     { href: "/articles", label: "Articles" },
     { href: "/contact", label: "Contact" },
     { href: "/lab", label: "AI Lab" },
-    { href: "/chat", label: "Chat" },
   ],
   socialLinks: [
     { href: "https://www.instagram.com/rustyroboz/", label: "Instagram" },
