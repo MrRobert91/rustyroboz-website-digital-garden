@@ -1,18 +1,18 @@
 export const siteConfig = {
   name: "David Robert",
-  title: "David Robert | Projects, articles, and experiments",
+  title: "David Robert | AI Engineer · Computer Engineer",
   description:
-    "Personal site by David Robert, a computer engineer based in Madrid, with projects in AI, VR, games, quantum computing, and software experiments.",
+    "Personal site and portfolio of David Robert, an AI Engineer and Computer Engineer based in Madrid, with work across AI systems, training, VR, games, quantum computing, and software experiments.",
   location: "Madrid, Spain",
-  email: "",
+  email: "davidrobertnunez@gmail.com",
   navigation: [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
+    { href: "/timeline", label: "Timeline" },
     { href: "/projects", label: "Projects" },
     { href: "/articles", label: "Articles" },
     { href: "/contact", label: "Contact" },
     { href: "/lab", label: "AI Lab" },
-    { href: "/chat", label: "Chat" },
   ],
   socialLinks: [
     { href: "https://www.instagram.com/rustyroboz/", label: "Instagram" },
@@ -20,67 +20,36 @@ export const siteConfig = {
     { href: "https://www.linkedin.com/in/david-robert/", label: "LinkedIn" },
     { href: "https://medium.com/@rustyroboz", label: "Medium" },
   ],
-  // Work experience — rendered on the LEFT of the timeline. Each entry's height
-  // is proportional to its duration (start/end are decimal years, e.g. Oct = 2022.75).
-  // Use end: "present" for the current role.
-  experience: [
-    {
-      role: "Lead AI Instructor",
-      company: "Factoría F5",
-      start: 2022.75,
-      end: "present" as const,
-      startLabel: "Oct 2022",
-      endLabel: "Present",
-      description:
-        "Leading AI/ML training: agentic AI, LLM fine-tuning, RAG, LLM observability and evaluation, NLP, and computer vision.",
-    },
-    {
-      role: "ML Engineer / Data Scientist",
-      company: "Stratio",
-      start: 2018,
-      end: 2022,
-      startLabel: "2018",
-      endLabel: "2022",
-      description: "Machine learning models and data pipelines on a big-data platform.",
-    },
-    {
-      role: "Software Developer",
-      company: "Future Space",
-      start: 2015,
-      end: 2016,
-      startLabel: "2015",
-      endLabel: "2016",
-      description: "Backend services and internal tooling across software projects.",
-    },
+  // Toolbox — grouped tech, drawn as handwritten chips.
+  stack: [
+    { title: "AI / ML", items: ["PyTorch", "LangChain", "OpenAI", "HF", "FAISS", "vLLM", "Ollama", "Pinecone"] },
+    { title: "Software", items: ["TypeScript", "Python", "Next.js", "FastAPI", "Postgres", "Docker", "Vercel"] },
+    { title: "Hardware", items: ["ESP32", "Arduino", "ROS", "RPi", "Solder", "PCB", "3D-print"] },
+    { title: "Games / XR", items: ["Unity", "C#", "Unreal", "Blender", "OpenXR"] },
   ],
-  // Projects, courses, certifications, milestones — rendered on the RIGHT of the
-  // timeline, anchored to the year they happened. Edit / add freely.
-  milestones: [
-    {
-      year: 2026,
-      type: "Certification",
-      title: "Azure AI Engineer (AI-103)",
-      detail: "In progress — exam scheduled July 2026.",
-    },
-    {
-      year: 2026,
-      type: "Certification",
-      title: "Qiskit certification",
-      detail: "In progress — AI × quantum computing.",
-    },
-    {
-      year: 2024,
-      type: "Certification",
-      title: "Azure AI Engineer Associate (AI-102)",
-      detail: "Microsoft Certified — issued Apr 2024.",
-    },
-    {
-      year: 2015,
-      type: "Education",
-      title: "BSc Computer Engineering",
-      detail: "Universidad Rey Juan Carlos.",
-    },
+  // Working principles, nailed to the workshop wall.
+  principles: [
+    { title: "Ship rusty", description: "Imperfect & on the bench beats perfect & in the head." },
+    { title: "Read the source", description: "If it has weights, read the loss curve before the README." },
+    { title: "Write things down", description: "Notebook is a tool. So is the soldering iron." },
   ],
+  // Things I can build — hand-drawn checklist on the About page.
+  capabilities: [
+    "RAG / retrieval pipelines",
+    "Small LLM agents",
+    "Computer vision modules",
+    "ROS robots & embedded fw",
+    "VR / Unity prototypes",
+    "Quantum algorithm sketches",
+  ],
+};
+
+// Map a project's lifecycle status to a rubber-stamp label.
+export const projectStatusStamp: Record<string, string> = {
+  completed: "SHIPPED",
+  active: "BENCH",
+  planned: "BETA",
+  archived: "EXPERIMENT",
 };
 
 export type SiteConfig = typeof siteConfig;

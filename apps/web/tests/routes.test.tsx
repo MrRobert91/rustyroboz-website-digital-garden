@@ -10,12 +10,13 @@ import HomePage from "@/app/page";
 import ProjectDetailPage from "@/app/projects/[slug]/page";
 import ProjectsPage from "@/app/projects/page";
 import TagPage from "@/app/tags/[tag]/page";
+import TimelinePage from "@/app/timeline/page";
 
 describe("public routes", () => {
   it("renders the home page hero with english navigation and a bio panel", async () => {
     render(await HomePage());
     expect(screen.getByRole("link", { name: /view projects/i })).toHaveAttribute("href", "/projects");
-    expect(screen.getByRole("heading", { name: /ai, games, software, and strange prototypes/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
     expect(screen.getAllByText(/computer engineer based in madrid/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/^signal$/i)).not.toBeInTheDocument();
   });
@@ -23,11 +24,19 @@ describe("public routes", () => {
   it("renders the about and contact pages in english", async () => {
     render(await AboutPage());
     expect(screen.getByRole("heading", { name: /about/i })).toBeInTheDocument();
-    expect(screen.getAllByText(/computer engineer based in madrid/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/ai engineer and computer engineer based in madrid/i).length).toBeGreaterThan(0);
 
     render(await ContactPage());
-    expect(screen.getByRole("heading", { name: /contact/i })).toBeInTheDocument();
+    expect(screen.getByText(/quick brief/i)).toBeInTheDocument();
     expect(screen.getByText(/instagram/i)).toBeInTheDocument();
+  });
+
+  it("renders the timeline page with ranged experience and recent projects", () => {
+    render(<TimelinePage />);
+    expect(screen.getByRole("heading", { name: /^timeline$/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /lead ai instructor/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /ml engineer \/ data scientist/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/factoría f5/i).length).toBeGreaterThan(0);
   });
 
   it("renders projects, articles and notes indexes in english", async () => {

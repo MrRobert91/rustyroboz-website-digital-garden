@@ -1,19 +1,33 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Manrope, Newsreader } from "next/font/google";
+import { Space_Grotesk, IBM_Plex_Serif, Caveat, JetBrains_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
-const manrope = Manrope({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-manrope",
+  variable: "--font-display",
 });
 
-const newsreader = Newsreader({
+const plexSerif = IBM_Plex_Serif({
   subsets: ["latin"],
-  variable: "--font-newsreader",
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-hand",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -24,8 +38,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} ${newsreader.variable} font-manrope`}>
-        <div className="min-h-screen bg-background">
+      <body
+        className={`${spaceGrotesk.variable} ${plexSerif.variable} ${caveat.variable} ${jetbrainsMono.variable} font-display`}
+      >
+        <div className="min-h-screen bg-background bg-paper-grid">
           <SiteHeader />
           <main>{children}</main>
           <SiteFooter />
