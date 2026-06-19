@@ -20,23 +20,65 @@ export const siteConfig = {
     { href: "https://www.linkedin.com/in/david-robert/", label: "LinkedIn" },
     { href: "https://medium.com/@rustyroboz", label: "Medium" },
   ],
-  timeline: [
+  // Work experience — rendered on the LEFT of the timeline. Each entry's height
+  // is proportional to its duration (start/end are decimal years, e.g. Oct = 2022.75).
+  // Use end: "present" for the current role.
+  experience: [
     {
-      period: "Base",
-      title: "Computer engineer based in Madrid",
+      role: "Lead AI Instructor",
+      company: "Factoría F5",
+      start: 2022.75,
+      end: "present" as const,
+      startLabel: "Oct 2022",
+      endLabel: "Present",
       description:
-        "Interested in robotics, machine learning, artificial intelligence, quantum computing, game development, and technology in general.",
+        "Leading AI/ML training: agentic AI, LLM fine-tuning, RAG, LLM observability and evaluation, NLP, and computer vision.",
     },
     {
-      period: "Focus",
-      title: "Projects with real technical edges",
-      description:
-        "The work spans VR prototypes, AI art, chatbots, game jams, embedded hardware, and computer vision experiments.",
+      role: "ML Engineer / Data Scientist",
+      company: "Stratio",
+      start: 2018,
+      end: 2022,
+      startLabel: "2018",
+      endLabel: "2022",
+      description: "Machine learning models and data pipelines on a big-data platform.",
     },
     {
-      period: "Public work",
-      title: "Writing and experiments in public",
-      description: "The site combines project work, articles, notes, and a small AI chat layer in one place.",
+      role: "Software Developer",
+      company: "Future Space",
+      start: 2015,
+      end: 2016,
+      startLabel: "2015",
+      endLabel: "2016",
+      description: "Backend services and internal tooling across software projects.",
+    },
+  ],
+  // Projects, courses, certifications, milestones — rendered on the RIGHT of the
+  // timeline, anchored to the year they happened. Edit / add freely.
+  milestones: [
+    {
+      year: 2026,
+      type: "Certification",
+      title: "Azure AI Engineer (AI-103)",
+      detail: "In progress — exam scheduled July 2026.",
+    },
+    {
+      year: 2026,
+      type: "Certification",
+      title: "Qiskit certification",
+      detail: "In progress — AI × quantum computing.",
+    },
+    {
+      year: 2024,
+      type: "Certification",
+      title: "Azure AI Engineer Associate (AI-102)",
+      detail: "Microsoft Certified — issued Apr 2024.",
+    },
+    {
+      year: 2015,
+      type: "Education",
+      title: "BSc Computer Engineering",
+      detail: "Universidad Rey Juan Carlos.",
     },
   ],
 };

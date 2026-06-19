@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { ContentCard } from "@/components/content-card";
 import { ContentHero } from "@/components/content-hero";
+import { ExperienceTimeline } from "@/components/experience-timeline";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { getFeaturedItems } from "@/lib/content";
-import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 export default async function HomePage() {
@@ -62,22 +62,24 @@ export default async function HomePage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
-        <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
-          <SectionHeading
-            description="A broad technical curiosity organized into clearer themes."
-            eyebrow="About"
-            title="Engineering across software, AI, and experimental products"
-          />
-          <div className="grid gap-5">
-            {siteConfig.timeline.map((entry) => (
-              <Reveal className="rounded-[1.75rem] border border-border bg-card p-6 shadow-soft" key={entry.title}>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">{entry.period}</p>
-                <h3 className="mt-3 text-xl font-semibold text-foreground">{entry.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-muted-foreground">{entry.description}</p>
-              </Reveal>
-            ))}
-          </div>
+        <SectionHeading
+          description="Work experience runs down the left, anchored to the years; projects, courses, and certifications sit on the right."
+          eyebrow="About"
+          title="A timeline of experience and milestones"
+        />
+        <div className="mt-12 flex items-center justify-center gap-6 text-xs font-medium text-muted-foreground">
+          <span className="flex items-center gap-2">
+            <span className="size-3 rounded-sm border border-accent/30 bg-accent/10" aria-hidden />
+            Experience
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="size-3 rounded-full border border-border bg-accent" aria-hidden />
+            Projects · courses · certifications
+          </span>
         </div>
+        <Reveal className="mt-10">
+          <ExperienceTimeline />
+        </Reveal>
       </section>
 
       <section className="border-t border-border/80 bg-foreground text-background">
