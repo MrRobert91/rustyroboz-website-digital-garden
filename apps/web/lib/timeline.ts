@@ -236,6 +236,7 @@ export const timeline: TimelineEntry[] = [
     start: "2026-05",
     description:
       "An accessibility web app that lets people with severe mobility impairments fill in Google Forms and Microsoft Forms using only eye-gaze control — webcam eye tracking with MediaPipe, guided calibration, dwell-based Yes/No selection and text-to-speech. React + Vite frontend, FastAPI + SQLite + Piper backend.",
+    media: [{ type: "image", src: "/images/projects/mira-link/image-01.png", alt: "Mira Link" }],
     links: [{ label: "Website", href: "https://miralink.app/" }],
   },
   {
@@ -245,6 +246,7 @@ export const timeline: TimelineEntry[] = [
     start: "2026-05",
     description:
       "Hackathon submission: a Socratic tutoring assistant built on Google's Gemma models, entered in the Kaggle “Gemma 4 Good” hackathon.",
+    media: [{ type: "youtube", id: "X25VUBpFyp8", title: "Socratic Gemma" }],
     links: [
       {
         label: "Writeup",
@@ -259,6 +261,7 @@ export const timeline: TimelineEntry[] = [
     start: "2026-05",
     description:
       "A browser arcade game: play as Apollo dodging Zeus's lightning bolts, scoring a point for every dodge. Keyboard or touch controls.",
+    media: [{ type: "image", src: "/images/projects/apolo-vs-zeus/image-01.png", alt: "Apolo vs Zeus" }],
     links: [{ label: "Play", href: "https://juego-zeus-y-apolo.sliplane.app/" }],
   },
   {
@@ -267,7 +270,8 @@ export const timeline: TimelineEntry[] = [
     title: "AccessDoc",
     start: "2026-04",
     description:
-      "A web app focused on document accessibility, deployed on Sliplane.",
+      "A web app that converts any PDF into an accessible document compliant with PDF/UA-1 and WCAG 2.1 AA — automatic structure tagging, alt-text generation, logical reading order and validation with veraPDF.",
+    media: [{ type: "image", src: "/images/projects/accessdoc/image-01.png", alt: "AccessDoc" }],
     links: [
       { label: "Live app", href: "https://accessdoc-mx5p1m.sliplane.app/" },
       { label: "GitHub", href: "https://github.com/MrRobert91/AccessDoc" },
@@ -290,6 +294,7 @@ export const timeline: TimelineEntry[] = [
     end: "2026-05",
     description:
       "Custom illustrated children's stories, generated on demand and ready to download. React / StoryBook UI.",
+    media: [{ type: "image", src: "/images/projects/cuentee/image-01.png", alt: "Cuentee" }],
     links: [
       { label: "Website", href: "https://www.cuentee.com/" },
       { label: "GitHub", href: "https://github.com/MrRobert91/StoryBookUI" },
@@ -307,6 +312,7 @@ export const timeline: TimelineEntry[] = [
     end: "2026-02",
     description:
       "A card game for couples built in Flutter, revived from a dusty MVP and taken through the full Google Play release pipeline — signed App Bundle, store listing, privacy policy and a closed-beta waitlist with MailerLite.",
+    media: [{ type: "image", src: "/images/projects/cartastrofe/image-01.png", alt: "Cartastrofe" }],
     links: [
       { label: "Google Play", href: "https://play.google.com/store/apps/details?id=com.susbeerginman.cartastrofe&hl=es" },
       { label: "Website", href: "https://www.cartastrofe.com/" },
@@ -340,6 +346,7 @@ export const timeline: TimelineEntry[] = [
     start: "2024-04",
     description:
       "Cloud certification for designing and deploying AI solutions on Azure. Valid through Apr 2027. Credential ID B14F86A8D09444D3.",
+    media: [{ type: "image", src: "/images/projects/azure-ai-engineer/image-01.png", alt: "Azure AI Engineer Associate credential" }],
     links: [
       {
         label: "Credential",
@@ -536,9 +543,16 @@ export const timeline: TimelineEntry[] = [
   {
     id: "huawei-ai-hackathon",
     kind: "project",
-    title: "Huawei AI Hackathon",
+    title: "Huawei AI Hackathon — DemocrAI",
     start: "2021-09",
-    description: "Participated in an AI hackathon organized by Huawei.",
+    description:
+      "“DemocrAI”: a proof of concept for democratizing AI on mobile devices — running Tensorflow models on-device, with an app-plus-SDK flow connecting users and developers. Built for the Huawei AI hackathon.",
+    media: [
+      { type: "image", src: "/images/projects/huawei-ai-hackathon/image-01.png", alt: "DemocrAI — title" },
+      { type: "image", src: "/images/projects/huawei-ai-hackathon/image-02.png", alt: "DemocrAI — how it works" },
+      { type: "image", src: "/images/projects/huawei-ai-hackathon/image-03.png", alt: "DemocrAI — AI in your pocket" },
+      { type: "image", src: "/images/projects/huawei-ai-hackathon/image-04.png", alt: "DemocrAI — demo" },
+    ],
   },
   {
     id: "structuring-ml-coursera",
@@ -641,6 +655,11 @@ export const timeline: TimelineEntry[] = [
     org: "Universidad Rey Juan Carlos",
     start: "2018-02",
     description: "University extension course on programming and controlling drones.",
+    media: [
+      { type: "youtube", id: "qGxOLXtzfNc", title: "Drone programming 1" },
+      { type: "youtube", id: "6Uuh7DfmfPw", title: "Drone programming 2" },
+      { type: "youtube", id: "cAgejgrsRuM", title: "Drone programming 3" },
+    ],
   },
   {
     id: "drone-contest",
