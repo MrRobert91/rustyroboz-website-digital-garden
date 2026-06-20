@@ -35,14 +35,24 @@ function PrototypeCard({ item, index }: { item: ContentItem & { tech?: string[];
         </Link>
       </h3>
 
-      {/* technical-drawing placeholder */}
+      {/* cover image, with a technical-drawing placeholder fallback */}
       <Link
         aria-label={`Open ${item.title}`}
-        className="relative mt-4 grid h-32 place-items-center border border-dashed border-[rgba(150,110,70,0.5)] bg-[#f3ecde] dark:bg-foreground/5"
+        className="relative mt-4 grid h-32 place-items-center overflow-hidden border border-dashed border-[rgba(150,110,70,0.5)] bg-[#f3ecde] dark:bg-foreground/5"
         href={href}
         style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent 0 8px, rgba(150,110,70,0.12) 8px 9px)" }}
       >
-        <Doodle color="hsl(var(--accent-deep))" kind={DOODLE_KINDS[index % DOODLE_KINDS.length]} size={56} />
+        {item.coverImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            alt={item.title}
+            className="absolute inset-0 size-full object-cover"
+            loading="lazy"
+            src={item.coverImage}
+          />
+        ) : (
+          <Doodle color="hsl(var(--accent-deep))" kind={DOODLE_KINDS[index % DOODLE_KINDS.length]} size={56} />
+        )}
         <span className="absolute bottom-1.5 right-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[rgba(60,40,20,0.5)]">
           FIG.{num}
         </span>
