@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { InkCircle, Tape } from "@/components/notebook";
+import { TimelineMedia } from "@/components/timeline-media";
 import {
   formatDuration,
   formatRange,
@@ -108,6 +109,7 @@ function TimelineCard({
         </h3>
         {entry.org ? <p className="mt-1 font-hand text-xl text-accent-deep">{entry.org}</p> : null}
         <p className="mt-2 font-serif text-base leading-relaxed text-foreground/75">{entry.description}</p>
+        {entry.media?.length ? <TimelineMedia items={entry.media} title={entry.title} /> : null}
       </div>
       {entry.links?.length ? (
         <div className="mt-5 flex flex-wrap gap-2">
