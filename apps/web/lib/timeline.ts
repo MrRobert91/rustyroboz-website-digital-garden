@@ -96,6 +96,91 @@ export function isOngoing(entry: TimelineEntry) {
   return entry.end === "present";
 }
 
+/** Absolute month index (year * 12 + month), for date comparisons. */
+function monthIndex(value: string) {
+  const { year, month } = parseYearMonth(value);
+  return year * 12 + (month - 1);
+}
+
+function startIndex(entry: TimelineEntry) {
+  return monthIndex(entry.start);
+}
+
+function endIndex(entry: TimelineEntry) {
+  if (!entry.end) {
+    return monthIndex(entry.start);
+  }
+  if (entry.end === "present") {
+    const now = new Date();
+    return now.getUTCFullYear() * 12 + now.getUTCMonth();
+  }
+  return monthIndex(entry.end);
+}
+
+export type TimelineEra = {
+  /** The ranged work-experience entry that defines this era, if any. */
+  experience?: TimelineEntry;
+  /** Projects, courses, certifications, etc. that fall within this era's dates. */
+  events: TimelineEntry[];
+};
+
+/**
+ * Group the timeline into eras anchored to ranged work-experience entries.
+ * Each non-experience event is attached to the experience whose date range
+ * contains its start date; events outside any range form experience-less
+ * "gap" eras. Eras (and the events inside them) are returned newest-first.
+ */
+export function groupTimelineByEra(entries: TimelineEntry[]): TimelineEra[] {
+  const experiences = entries
+    .filter((entry) => entry.kind === "experience" && entry.end)
+    .map((entry) => ({ entry, start: startIndex(entry), end: endIndex(entry) }))
+    .sort((a, b) => b.end - a.end);
+
+  const eraByExp = new Map<string, TimelineEra>(
+    experiences.map((exp) => [exp.entry.id, { experience: exp.entry, events: [] as TimelineEntry[] }]),
+  );
+
+  const gapEvents: TimelineEntry[] = [];
+  for (const entry of entries) {
+    if (entry.kind === "experience" && entry.end) {
+      continue;
+    }
+    const at = startIndex(entry);
+    const owner = experiences.find((exp) => at >= exp.start && at <= exp.end);
+    if (owner) {
+      eraByExp.get(owner.entry.id)!.events.push(entry);
+    } else {
+      gapEvents.push(entry);
+    }
+  }
+
+  type Row = { top: number; era: TimelineEra };
+  const rows: Row[] = [];
+
+  for (const exp of experiences) {
+    const era = eraByExp.get(exp.entry.id)!;
+    era.events.sort((a, b) => startIndex(b) - startIndex(a));
+    rows.push({ top: exp.end, era });
+  }
+
+  // Cluster gap events that sit in the same slot between two experiences.
+  const clusters = new Map<number, TimelineEntry[]>();
+  for (const entry of gapEvents) {
+    const at = startIndex(entry);
+    const key = experiences.filter((exp) => exp.start > at).length;
+    const bucket = clusters.get(key) ?? [];
+    bucket.push(entry);
+    clusters.set(key, bucket);
+  }
+  for (const bucket of clusters.values()) {
+    bucket.sort((a, b) => startIndex(b) - startIndex(a));
+    rows.push({ top: startIndex(bucket[0]), era: { events: bucket } });
+  }
+
+  rows.sort((a, b) => b.top - a.top);
+  return rows.map((row) => row.era);
+}
+
 /**
  * Career and project timeline, authored newest-first.
  * Long-running roles (Stratio, Factoría F5) keep their full date range so the
