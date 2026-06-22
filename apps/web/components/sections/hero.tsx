@@ -69,12 +69,12 @@ export function Hero() {
             I make applied AI tools, retrieval pipelines, robotic prototypes and the occasional weird game. Computer
             engineer based in Madrid — half lab, half workshop, all notebooks.
           </p>
-          <div className="flex flex-wrap gap-4 lg:justify-end">
-            <Link className={cn(buttonVariants({ variant: "default" }))} href="/projects">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 lg:justify-end">
+            <Link className={cn(buttonVariants({ variant: "default" }), "w-full justify-center sm:w-auto")} href="/projects">
               View Projects
               <ArrowRight className="ml-2 size-4" />
             </Link>
-            <Link className={cn(buttonVariants({ variant: "outline" }))} href="/articles">
+            <Link className={cn(buttonVariants({ variant: "outline" }), "w-full justify-center sm:w-auto")} href="/articles">
               Read Articles
             </Link>
           </div>

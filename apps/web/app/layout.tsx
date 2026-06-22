@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Space_Grotesk, IBM_Plex_Serif, Caveat, JetBrains_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
@@ -33,6 +33,15 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: siteConfig.title,
   description: siteConfig.description,
+};
+
+// Explicitly emit the responsive viewport meta so real mobile devices use the
+// device width (instead of falling back to a ~980px desktop layout). Next adds
+// a default, but declaring it here guarantees it across runtimes and builds.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

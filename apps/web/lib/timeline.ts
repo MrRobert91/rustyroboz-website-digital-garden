@@ -477,7 +477,6 @@ export const timeline: TimelineEntry[] = [
       "An action VR game made in 9 days for VRJam 2022: defeat rogue robots aboard a self-aware spaceship with only 13 bullets. Playable on Oculus Quest.",
     media: [
       { type: "youtube", id: "ZpoGPf9XQ4Q", title: "13 Bullets in Hyperspace" },
-      { type: "youtube", id: "ubpXxSRDCY0", title: "13 Bullets in Hyperspace — gameplay" },
       { type: "image", src: "/images/projects/virtual-reality-game/image-01.png", alt: "13 Bullets 1" },
       { type: "image", src: "/images/projects/virtual-reality-game/image-02.png", alt: "13 Bullets 2" },
       { type: "image", src: "/images/projects/virtual-reality-game/image-03.png", alt: "13 Bullets 3" },
@@ -498,6 +497,7 @@ export const timeline: TimelineEntry[] = [
       "A Saturdays.AI capstone: piloting a drone with eye winks and bites read from a 16-channel EEG headset and classified in real time by ML models.",
     media: [
       { type: "youtube", id: "RVfkDpz1krE", title: "Brain-Computer Interface" },
+      { type: "youtube", id: "ubpXxSRDCY0", title: "Brain-Computer Interface — demo" },
       { type: "image", src: "/images/projects/brain-computer-interface-project/image-01.jpg", alt: "BCI 1" },
       { type: "image", src: "/images/projects/brain-computer-interface-project/image-02.jpg", alt: "BCI 2" },
       { type: "image", src: "/images/projects/brain-computer-interface-project/image-03.jpg", alt: "BCI 3" },
