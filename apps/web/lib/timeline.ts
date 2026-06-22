@@ -296,6 +296,7 @@ export const timeline: TimelineEntry[] = [
     start: "2026-04",
     description:
       "An endless-runner / action platformer where you play Thor, battling enemies and obstacles from Norse mythology. Playable in the browser.",
+    media: [{ type: "youtube", id: "FoWHzUhiJ2Y", title: "Thor Runner" }],
     links: [
       { label: "Play", href: "https://rustyroboz.itch.io/thor-runner" },
       { label: "Case study", href: "/projects/thor-runner" },
