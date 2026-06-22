@@ -5,10 +5,12 @@ describe("content loader", () => {
   it("loads published projects from MDX", async () => {
     const projects = await getCollection("projects");
     expect(projects.length).toBeGreaterThan(0);
-    expect(projects[0]).toMatchObject({
-      slug: "susbeer-vr-experience",
-      collection: "projects",
-    });
+    expect(projects[0].collection).toBe("projects");
+    expect(projects.some((project) => project.slug === "susbeer-vr-experience")).toBe(true);
+    // Projects are sorted newest-first by publishedAt.
+    expect(new Date(projects[0].publishedAt).getTime()).toBeGreaterThanOrEqual(
+      new Date(projects[projects.length - 1].publishedAt).getTime(),
+    );
   });
 
   it("resolves content by slug", async () => {

@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ContentCard } from "@/components/content-card";
 import { MdxRenderer } from "@/components/mdx-renderer";
+import { TimelineMedia } from "@/components/timeline-media";
 import { getContentHref, type ContentItem } from "@/lib/content";
 
 type ContentDetailPageProps = {
@@ -15,6 +16,10 @@ function isProjectItem(item: ContentItem): item is ContentItem & { links?: Recor
 }
 
 export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
+  const media = item.media ?? [];
+  const videos = media.filter((entry) => entry.type === "youtube");
+  const images = media.filter((entry) => entry.type === "image");
+
   return (
     <article className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
       <div className="max-w-3xl">
@@ -34,11 +39,23 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
         </div>
       </div>
 
+      {videos.length ? (
+        <div className="mt-10 max-w-3xl">
+          <TimelineMedia items={videos} title={item.title} />
+        </div>
+      ) : null}
+
       <Separator className="my-12" />
 
       <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="max-w-3xl">
           <MdxRenderer source={item.body} />
+          {images.length ? (
+            <div className="mt-14">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Gallery</p>
+              <TimelineMedia items={images} title={item.title} />
+            </div>
+          ) : null}
         </div>
         <aside className="space-y-6">
           <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
