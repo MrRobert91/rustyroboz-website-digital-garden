@@ -2,8 +2,8 @@ import { Reveal } from "@/components/reveal";
 import { Doodle } from "@/components/notebook";
 import { siteConfig } from "@/lib/site-config";
 
-/** Screen 04 — Stack / Toolbox. Handwritten chips + working principles. */
-export function StackToolbox({ compact = false }: { compact?: boolean }) {
+/** Screen 04 — Stack / Toolbox. Handwritten chips of the working tech. */
+export function StackToolbox() {
   return (
     <section className="ruled-paper relative overflow-hidden border-b border-border/70">
       <div className="mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
@@ -42,25 +42,6 @@ export function StackToolbox({ compact = false }: { compact?: boolean }) {
             </Reveal>
           ))}
         </div>
-
-        {!compact ? (
-          <div className="relative mt-14 border-2 border-dashed border-border/70 bg-paper-2/50 p-8">
-            <span className="absolute -top-3.5 left-8 bg-background px-2.5 font-hand text-2xl text-accent-deep">
-              principles I keep nailed to the wall ✱
-            </span>
-            <div className="grid gap-8 pt-2 md:grid-cols-3">
-              {siteConfig.principles.map((p, i) => (
-                <div key={p.title}>
-                  <h3 className="font-display text-xl font-bold text-foreground">
-                    <span className="mr-2 text-accent">{String(i + 1).padStart(2, "0")}.</span>
-                    {p.title}
-                  </h3>
-                  <p className="mt-1.5 font-serif text-base leading-relaxed text-foreground/75">{p.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
       </div>
     </section>
   );

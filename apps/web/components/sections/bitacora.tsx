@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
-import { Squiggle, Tape } from "@/components/notebook";
+import { Doodle, Squiggle, Tape } from "@/components/notebook";
 import { getContentHref, type ContentItem } from "@/lib/content";
+
+const DOODLE_KINDS = ["gear", "bolt", "spark", "star"] as const;
 
 /** Articles as a maker's logbook (bitácora). */
 export function Bitacora({ items }: { items: ContentItem[] }) {
@@ -40,7 +42,26 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
                   {item.title}
                   <ArrowUpRight className="ml-1 inline size-5 align-text-top" />
                 </h3>
-                <p className="mt-2 line-clamp-2 font-serif text-base leading-relaxed text-foreground/75">
+
+                {/* cover image, with a technical-drawing placeholder fallback */}
+                <div
+                  className="relative mt-4 grid h-36 place-items-center overflow-hidden border border-dashed border-[rgba(150,110,70,0.5)] bg-[#f3ecde] dark:bg-foreground/5"
+                  style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent 0 8px, rgba(150,110,70,0.12) 8px 9px)" }}
+                >
+                  {item.coverImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      alt={item.title}
+                      className="absolute inset-0 size-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      loading="lazy"
+                      src={item.coverImage}
+                    />
+                  ) : (
+                    <Doodle color="hsl(var(--accent-deep))" kind={DOODLE_KINDS[index % DOODLE_KINDS.length]} size={56} />
+                  )}
+                </div>
+
+                <p className="mt-4 line-clamp-2 font-serif text-base leading-relaxed text-foreground/75">
                   {item.description}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">

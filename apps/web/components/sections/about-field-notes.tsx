@@ -13,8 +13,6 @@ export function AboutFieldNotes({ paragraphs }: AboutFieldNotesProps) {
     ["base", siteConfig.location],
     ["focus", "AI systems · games · product eng."],
     ["formats", "projects · articles · notes · experiments"],
-    ["fuel", "coffee + solder fumes"],
-    ["status", <span className="font-semibold text-accent" key="s">● available — Q3 2026</span>],
     [
       "cv",
       <a className="text-accent-deep underline-offset-4 hover:text-accent hover:underline" href="/cv-david-robert.pdf" key="cv" rel="noreferrer" target="_blank">
@@ -91,7 +89,7 @@ export function AboutFieldNotes({ paragraphs }: AboutFieldNotesProps) {
 
             {/* capabilities checklist */}
             <div className="mt-8">
-              <p className="mb-3 inline-block font-hand text-2xl text-accent-deep -rotate-1">things I can build →</p>
+              <p className="mb-3 inline-block font-hand text-2xl text-accent-deep -rotate-1">things I can do →</p>
               <div className="grid gap-x-6 gap-y-2.5 sm:grid-cols-2">
                 {siteConfig.capabilities.map((label) => (
                   <div className="flex items-center gap-3" key={label}>
