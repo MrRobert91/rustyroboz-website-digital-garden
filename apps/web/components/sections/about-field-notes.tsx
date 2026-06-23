@@ -22,7 +22,7 @@ export function AboutFieldNotes({ paragraphs }: AboutFieldNotesProps) {
   ];
 
   return (
-    <section className="ruled-paper relative overflow-hidden border-b border-border/70">
+    <section className="dotted-paper relative overflow-hidden border-b border-border/70">
       <div className="mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>

@@ -5,7 +5,9 @@ import { getContentHref, type ContentItem } from "@/lib/content";
 import { projectStatusStamp } from "@/lib/site-config";
 
 const DOODLE_KINDS = ["gear", "bolt", "spark", "star"] as const;
-const CARD_ROTATE = ["-rotate-1", "rotate-1", "-rotate-[0.5deg]", "rotate-[0.75deg]"];
+// Slight wobble only from `sm` up — on mobile cards stay straight so they keep
+// equal left/right margins (the rotation otherwise nudges them off-center).
+const CARD_ROTATE = ["sm:-rotate-1", "sm:rotate-1", "sm:-rotate-[0.5deg]", "sm:rotate-[0.75deg]"];
 
 type ProjectsPrototypesProps = {
   items: ContentItem[];
@@ -13,8 +15,18 @@ type ProjectsPrototypesProps = {
   withHeader?: boolean;
 };
 
-function PrototypeCard({ item, index }: { item: ContentItem & { tech?: string[]; status?: string }; index: number }) {
-  const num = String(index + 1).padStart(2, "0");
+function PrototypeCard({
+  item,
+  index,
+  total,
+}: {
+  item: ContentItem & { tech?: string[]; status?: string };
+  index: number;
+  total: number;
+}) {
+  // Items arrive newest-first; number them so the oldest project is 01 and the
+  // newest is the highest number.
+  const num = String(total - index).padStart(2, "0");
   const stamp = (item.status && projectStatusStamp[item.status]) || "EXPERIMENT";
   const tags = item.tech?.length ? item.tech : item.tags;
   const href = getContentHref(item);
@@ -110,7 +122,7 @@ export function ProjectsPrototypes({ items, withHeader = true }: ProjectsPrototy
         <div className="mt-12 grid gap-7 md:grid-cols-2">
           {items.map((item, index) => (
             <Reveal delay={(index % 2) * 0.06} key={`${item.collection}-${item.slug}`}>
-              <PrototypeCard index={index} item={item} />
+              <PrototypeCard index={index} item={item} total={items.length} />
             </Reveal>
           ))}
         </div>

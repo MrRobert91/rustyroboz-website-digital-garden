@@ -79,42 +79,17 @@
     font-family: var(--font-serif), Georgia, serif;
   }
 
-  /* Ruled school-notebook paper with a red margin */
-  .ruled-paper {
-    background-color: hsl(var(--card));
-    background-image:
-      repeating-linear-gradient(
-        to bottom,
-        transparent 0 27px,
-        hsl(var(--line-rule) / 0.35) 27px 28px
-      ),
-      linear-gradient(
-        to right,
-        transparent 63px,
-        hsl(var(--accent) / 0.45) 63px 65px,
-        transparent 65px
-      );
-  }
-  .ruled-paper-plain {
-    background-color: hsl(var(--card));
-    background-image: repeating-linear-gradient(
-      to bottom,
-      transparent 0 27px,
-      hsl(var(--line-rule) / 0.32) 27px 28px
-    );
-  }
-  /* Dotted grid (graph-paper) variant */
+  /* Dotted grid (graph-paper) — the site-wide paper texture */
   .dotted-paper {
     background-color: hsl(var(--card));
     background-image: radial-gradient(hsl(var(--line-rule) / 0.5) 1px, transparent 1.4px);
     background-size: 22px 22px;
   }
 
-  /* Subtle canvas grid behind the whole site */
+  /* Dotted canvas behind the whole site — matches the .dotted-paper sections */
   .bg-paper-grid {
-    background-image:
-      radial-gradient(hsl(var(--foreground) / 0.035) 1px, transparent 1.3px);
-    background-size: 26px 26px;
+    background-image: radial-gradient(hsl(var(--line-rule) / 0.5) 1px, transparent 1.4px);
+    background-size: 22px 22px;
   }
 
   .bg-hero-texture {

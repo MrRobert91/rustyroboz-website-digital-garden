@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/site-config";
 /** Screen 04 — Stack / Toolbox. Handwritten chips of the working tech. */
 export function StackToolbox() {
   return (
-    <section className="ruled-paper relative overflow-hidden border-b border-border/70">
+    <section className="dotted-paper relative overflow-hidden border-b border-border/70">
       <div className="mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>

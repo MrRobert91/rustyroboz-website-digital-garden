@@ -50,7 +50,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       <body
         className={`${spaceGrotesk.variable} ${plexSerif.variable} ${caveat.variable} ${jetbrainsMono.variable} font-display`}
       >
-        <div className="min-h-screen bg-background bg-paper-grid">
+        <div className="min-h-screen overflow-x-hidden bg-background bg-paper-grid">
           <SiteHeader />
           <main>{children}</main>
           <SiteFooter />

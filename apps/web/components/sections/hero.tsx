@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 /** Screen 01 — Cover / Hero. Notebook front page. */
 export function Hero() {
   return (
-    <section className="ruled-paper relative overflow-hidden border-b border-border/80">
+    <section className="dotted-paper relative overflow-hidden border-b border-border/80">
       {/* taped corners */}
       <Tape angle={-4} className="hidden sm:block" height={24} style={{ top: -6, left: 80 }} width={120} />
       <Tape angle={3} className="hidden sm:block" height={24} style={{ top: -6, right: 80 }} width={120} />
