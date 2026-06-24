@@ -16,14 +16,13 @@ export function Hero() {
       <div className="mx-auto max-w-6xl px-6 pb-20 pt-16 lg:px-16 lg:pb-28 lg:pt-24">
         {/* headline */}
         <Reveal className="relative">
-          <p className="font-hand text-3xl text-accent -rotate-1 sm:text-4xl">Hi, I&apos;m David,</p>
-          <h1 className="mt-1 font-display text-6xl font-bold leading-[0.92] tracking-[-0.04em] text-foreground sm:text-7xl lg:text-[9rem]">
-            an AI
-            <br />
+          <p className="font-hand text-5xl text-accent -rotate-1 sm:text-6xl lg:text-7xl">Hi, I&apos;m David,</p>
+          <h1 className="mt-3 font-display text-4xl font-bold leading-[0.95] tracking-[-0.03em] text-foreground sm:text-5xl lg:text-6xl">
+            an AI{" "}
             <span className="relative inline-block">
               <span className="font-serif italic font-normal text-accent">engineer</span>
               <span className="absolute -bottom-3 left-0 hidden sm:block">
-                <Squiggle color="hsl(var(--accent))" height={14} seed={3} strokeWidth={3} width={420} />
+                <Squiggle color="hsl(var(--accent))" height={14} seed={3} strokeWidth={3} width={260} />
               </span>
             </span>
           </h1>
