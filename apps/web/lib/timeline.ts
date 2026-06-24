@@ -214,6 +214,15 @@ export const timeline: TimelineEntry[] = [
     start: "2026-06",
     description:
       "A personal context layer for AI agents that turns scattered notes (Obsidian vaults, project repos) into actionable context. Read-only over your notes with AI output isolated in an `_ai/` folder, an MCP server for agent queries, CLI pipelines and a React dashboard. FastAPI + FastMCP + pydantic-ai backend.",
+    media: [
+      { type: "image", src: "/images/projects/sharedbrain/image-01.png", alt: "SharedBrain 1" },
+      { type: "image", src: "/images/projects/sharedbrain/image-02.png", alt: "SharedBrain 2" },
+      { type: "image", src: "/images/projects/sharedbrain/image-03.png", alt: "SharedBrain 3" },
+      { type: "image", src: "/images/projects/sharedbrain/image-04.png", alt: "SharedBrain 4" },
+      { type: "image", src: "/images/projects/sharedbrain/image-05.png", alt: "SharedBrain 5" },
+      { type: "image", src: "/images/projects/sharedbrain/image-06.png", alt: "SharedBrain 6" },
+      { type: "image", src: "/images/projects/sharedbrain/image-07.png", alt: "SharedBrain 7" },
+    ],
     links: [
       { label: "Live app", href: "https://sharedbrain.sliplane.app/" },
       { label: "GitHub", href: "https://github.com/MrRobert91/SharedBrain" },
