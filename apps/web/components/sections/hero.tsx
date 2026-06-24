@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
-import { CoffeeRing, Doodle, InkStamp, Squiggle, Sticky, Tape } from "@/components/notebook";
+import { CoffeeRing, Doodle, Squiggle, Sticky, Tape } from "@/components/notebook";
 import { buttonVariants } from "@/components/ui/button";
-import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 /** Screen 01 — Cover / Hero. Notebook front page. */
@@ -14,47 +13,25 @@ export function Hero() {
       <Tape angle={-4} className="hidden sm:block" height={24} style={{ top: -6, left: 80 }} width={120} />
       <Tape angle={3} className="hidden sm:block" height={24} style={{ top: -6, right: 80 }} width={120} />
 
-      <div className="mx-auto max-w-6xl px-6 pb-20 pt-12 lg:px-16 lg:pb-28 lg:pt-16">
-        {/* masthead */}
-        <div className="flex flex-wrap items-start justify-between gap-6">
-          <div>
-            <p className="font-hand text-3xl text-accent-deep -rotate-1">Rusty Roboz Labs</p>
-            <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-              Notebook Nº 04 · 2026
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="font-hand text-xl text-foreground/80 rotate-2">{siteConfig.name} · Madrid</p>
-            <div className="mt-2 inline-block">
-              <InkStamp angle={-6} label="VOL.04" />
-            </div>
-          </div>
-        </div>
-
+      <div className="mx-auto max-w-6xl px-6 pb-20 pt-16 lg:px-16 lg:pb-28 lg:pt-24">
         {/* headline */}
-        <Reveal className="relative mt-16 lg:mt-24">
-          <p className="font-hand text-3xl text-accent -rotate-1 sm:text-4xl">Hi, I&apos;m an</p>
+        <Reveal className="relative">
+          <p className="font-hand text-3xl text-accent -rotate-1 sm:text-4xl">Hi, I&apos;m David,</p>
           <h1 className="mt-1 font-display text-6xl font-bold leading-[0.92] tracking-[-0.04em] text-foreground sm:text-7xl lg:text-[9rem]">
-            AI
-            <br />
-            engineer
+            an AI
             <br />
             <span className="relative inline-block">
-              <span className="font-serif italic font-normal text-accent">building</span>
+              <span className="font-serif italic font-normal text-accent">engineer</span>
               <span className="absolute -bottom-3 left-0 hidden sm:block">
                 <Squiggle color="hsl(var(--accent))" height={14} seed={3} strokeWidth={3} width={420} />
               </span>
             </span>
-            <br />
-            applied AI.
           </h1>
 
           {/* annotations (desktop only) */}
           <div className="absolute right-0 top-8 hidden rotate-3 lg:block">
-            <Sticky angle={6} color="#fde58a">
-              ↳ &quot;shipped
-              <br />
-              &gt;<br /> perfect&quot;
+            <Sticky angle={6} color="#fde58a" style={{ whiteSpace: "nowrap" }}>
+              <span className="text-2xl">↳ &quot;shipped &gt; perfect&quot;</span>
             </Sticky>
           </div>
         </Reveal>
@@ -62,8 +39,8 @@ export function Hero() {
         {/* subhead + CTAs */}
         <div className="mt-14 grid items-end gap-10 lg:grid-cols-[1.2fr_1fr]">
           <p className="max-w-xl font-serif text-xl leading-relaxed text-foreground/80">
-            I build applied AI tools, retrieval pipelines and prototypes — RAG systems, LLM agents, computer vision and
-            the occasional game. Computer engineer based in Madrid.
+            Currently interested in Machine Learning, Computer Vision, Agentic AI, Quantum Computing, Robotics, Game
+            Development and Technology in general.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 lg:justify-end">
             <Link className={cn(buttonVariants({ variant: "default" }), "w-full justify-center sm:w-auto")} href="/projects">

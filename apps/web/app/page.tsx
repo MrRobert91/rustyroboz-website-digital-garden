@@ -1,7 +1,6 @@
 import { Hero } from "@/components/sections/hero";
 import { ProjectsPrototypes } from "@/components/sections/projects-prototypes";
 import { Bitacora } from "@/components/sections/bitacora";
-import { LogbookTimeline } from "@/components/sections/logbook-timeline";
 import { StackToolbox } from "@/components/sections/stack-toolbox";
 import { getFeaturedItems } from "@/lib/content";
 
@@ -16,7 +15,6 @@ export default async function HomePage() {
       <Hero />
       <ProjectsPrototypes items={projects} withHeader={false} />
       <Bitacora items={articles} />
-      <LogbookTimeline />
       <StackToolbox />
     </>
   );

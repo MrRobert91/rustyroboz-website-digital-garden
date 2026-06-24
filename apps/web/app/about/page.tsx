@@ -1,5 +1,4 @@
 import { AboutFieldNotes } from "@/components/sections/about-field-notes";
-import { LogbookTimeline } from "@/components/sections/logbook-timeline";
 import { StackToolbox } from "@/components/sections/stack-toolbox";
 import { getItemBySlug } from "@/lib/content";
 
@@ -20,13 +19,12 @@ function toParagraphs(body: string): string[] {
 
 export default async function AboutPage() {
   const aboutPage = await getItemBySlug("pages", "about");
-  const paragraphs = toParagraphs(aboutPage.body).slice(0, 4);
+  const paragraphs = toParagraphs(aboutPage.body).slice(0, 5);
 
   return (
     <>
       <AboutFieldNotes paragraphs={paragraphs} />
       <StackToolbox />
-      <LogbookTimeline />
     </>
   );
 }
