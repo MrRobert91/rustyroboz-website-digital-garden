@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ContentCard } from "@/components/content-card";
 import { MdxRenderer } from "@/components/mdx-renderer";
+import { TimelineMedia } from "@/components/timeline-media";
 import { getContentHref, type ContentItem } from "@/lib/content";
 
 type ContentDetailPageProps = {
@@ -14,7 +15,35 @@ function isProjectItem(item: ContentItem): item is ContentItem & { links?: Recor
   return item.collection === "projects";
 }
 
+/**
+ * Internal cross-links between a project and its write-up. Detected by internal
+ * path (not the link key, since labels vary): a project surfaces its `/articles/…`
+ * links as write-ups, an article surfaces its `/projects/…` links as the project.
+ */
+function getCrossLinks(item: ContentItem): { href: string; label: string }[] {
+  const links = (item as { links?: Record<string, string> }).links;
+  if (!links) {
+    return [];
+  }
+  const wantPrefix = item.collection === "projects" ? "/articles/" : item.collection === "articles" ? "/projects/" : null;
+  if (!wantPrefix) {
+    return [];
+  }
+  return Object.entries(links)
+    .filter(([, href]) => href.startsWith(wantPrefix))
+    .map(([label, href]) => ({ href, label }));
+}
+
+function isInternalCrossHref(href: string) {
+  return href.startsWith("/articles/") || href.startsWith("/projects/");
+}
+
 export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
+  const media = item.media ?? [];
+  const videos = media.filter((entry) => entry.type === "youtube");
+  const images = media.filter((entry) => entry.type === "image");
+  const crossLinks = getCrossLinks(item);
+
   return (
     <article className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
       <div className="max-w-3xl">
@@ -34,13 +63,39 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
         </div>
       </div>
 
+      {videos.length ? (
+        <div className="mt-10 max-w-3xl">
+          <TimelineMedia items={videos} title={item.title} />
+        </div>
+      ) : null}
+
       <Separator className="my-12" />
 
       <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="max-w-3xl">
           <MdxRenderer source={item.body} />
+          {images.length ? (
+            <div className="mt-14">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Gallery</p>
+              <TimelineMedia items={images} title={item.title} />
+            </div>
+          ) : null}
         </div>
         <aside className="space-y-6">
+          {crossLinks.length ? (
+            <div className="rounded-[2rem] border-[1.5px] border-accent/40 bg-accent/5 p-6 shadow-soft">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">
+                {item.collection === "projects" ? "Write-up" : "Project"}
+              </p>
+              <div className="mt-4 flex flex-col gap-3 text-sm">
+                {crossLinks.map((link) => (
+                  <Link className="font-medium text-foreground hover:text-accent" href={link.href} key={link.href}>
+                    {link.label} →
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
           <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Metadata</p>
             <dl className="mt-5 grid gap-3 text-sm text-muted-foreground">
@@ -64,15 +119,17 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
               ) : null}
             </dl>
           </div>
-          {isProjectItem(item) && item.links && Object.keys(item.links).length ? (
+          {isProjectItem(item) && item.links && Object.entries(item.links).filter(([, href]) => !isInternalCrossHref(href)).length ? (
             <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Links</p>
               <div className="mt-5 flex flex-col gap-3 text-sm">
-                {Object.entries(item.links).map(([label, href]) => (
-                  <Link className="text-accent underline-offset-4 hover:underline" href={href} key={href} rel="noreferrer" target="_blank">
-                    {label}
-                  </Link>
-                ))}
+                {Object.entries(item.links)
+                  .filter(([, href]) => !isInternalCrossHref(href))
+                  .map(([label, href]) => (
+                    <Link className="text-accent underline-offset-4 hover:underline" href={href} key={href} rel="noreferrer" target="_blank">
+                      {label}
+                    </Link>
+                  ))}
               </div>
             </div>
           ) : null}

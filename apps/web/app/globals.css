@@ -3,33 +3,33 @@
 @tailwind utilities;
 
 :root {
-  /* Warm notebook paper + rust ink palette */
-  --background: 39 60% 95%; /* #fbf6ec paper */
-  --paper-2: 41 56% 96%; /* #fbf7ee card paper */
+  /* Light notebook paper + rust ink palette */
+  --background: 40 38% 97%; /* #fbf9f3 near-white paper */
+  --paper-2: 44 30% 98%; /* whiter card paper */
   --foreground: 30 17% 14%; /* #2a241e ink */
   --muted: 33 11% 33%;
   --muted-foreground: 33 11% 33%; /* #5c544a */
-  --card: 41 56% 96%;
-  --border: 35 28% 80%; /* warm pencil line */
+  --card: 44 30% 98%;
+  --border: 38 18% 84%; /* neutral pencil line */
   --line-rule: 210 28% 55%; /* ruled blue line */
-  --accent: 12 58% 45%; /* #b34a30 rust */
-  --accent-deep: 11 62% 33%; /* #8a3320 */
-  --ring: 12 58% 45%;
+  --accent: 12 50% 42%; /* rust, a touch deeper/less bright */
+  --accent-deep: 11 56% 29%;
+  --ring: 12 50% 42%;
 }
 
 .dark {
   /* Workshop at night — dark parchment */
-  --background: 30 22% 11%;
-  --paper-2: 30 16% 16%;
+  --background: 28 12% 11%;
+  --paper-2: 28 9% 16%;
   --foreground: 40 30% 88%;
   --muted: 38 15% 64%;
   --muted-foreground: 38 15% 64%;
-  --card: 30 16% 16%;
-  --border: 34 14% 28%;
+  --card: 28 9% 16%;
+  --border: 34 12% 28%;
   --line-rule: 210 14% 42%;
-  --accent: 13 64% 56%;
-  --accent-deep: 13 60% 46%;
-  --ring: 13 64% 56%;
+  --accent: 13 58% 52%;
+  --accent-deep: 13 56% 44%;
+  --ring: 13 58% 52%;
 }
 
 @layer base {
@@ -79,42 +79,17 @@
     font-family: var(--font-serif), Georgia, serif;
   }
 
-  /* Ruled school-notebook paper with a red margin */
-  .ruled-paper {
-    background-color: hsl(var(--card));
-    background-image:
-      repeating-linear-gradient(
-        to bottom,
-        transparent 0 27px,
-        hsl(var(--line-rule) / 0.35) 27px 28px
-      ),
-      linear-gradient(
-        to right,
-        transparent 63px,
-        hsl(var(--accent) / 0.45) 63px 65px,
-        transparent 65px
-      );
-  }
-  .ruled-paper-plain {
-    background-color: hsl(var(--card));
-    background-image: repeating-linear-gradient(
-      to bottom,
-      transparent 0 27px,
-      hsl(var(--line-rule) / 0.32) 27px 28px
-    );
-  }
-  /* Dotted grid (graph-paper) variant */
+  /* Dotted grid (graph-paper) — the site-wide paper texture */
   .dotted-paper {
     background-color: hsl(var(--card));
     background-image: radial-gradient(hsl(var(--line-rule) / 0.5) 1px, transparent 1.4px);
     background-size: 22px 22px;
   }
 
-  /* Subtle canvas grid behind the whole site */
+  /* Dotted canvas behind the whole site — matches the .dotted-paper sections */
   .bg-paper-grid {
-    background-image:
-      radial-gradient(hsl(var(--foreground) / 0.035) 1px, transparent 1.3px);
-    background-size: 26px 26px;
+    background-image: radial-gradient(hsl(var(--line-rule) / 0.5) 1px, transparent 1.4px);
+    background-size: 22px 22px;
   }
 
   .bg-hero-texture {
@@ -144,9 +119,9 @@
   }
 
   .shadow-soft {
-    box-shadow: 0 24px 60px -36px rgba(60, 40, 20, 0.45);
+    box-shadow: 0 24px 60px -36px rgba(40, 40, 50, 0.4);
   }
   .shadow-paper {
-    box-shadow: 0 12px 24px -18px rgba(60, 40, 20, 0.4), 0 1px 0 rgba(0, 0, 0, 0.04);
+    box-shadow: 0 12px 24px -18px rgba(40, 40, 50, 0.34), 0 1px 0 rgba(0, 0, 0, 0.04);
   }
 }

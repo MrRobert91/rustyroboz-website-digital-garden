@@ -3,7 +3,6 @@ import { ProjectsPrototypes } from "@/components/sections/projects-prototypes";
 import { Bitacora } from "@/components/sections/bitacora";
 import { LogbookTimeline } from "@/components/sections/logbook-timeline";
 import { StackToolbox } from "@/components/sections/stack-toolbox";
-import { AiLabCta } from "@/components/sections/ai-lab-cta";
 import { getFeaturedItems } from "@/lib/content";
 
 export default async function HomePage() {
@@ -18,8 +17,7 @@ export default async function HomePage() {
       <ProjectsPrototypes items={projects} withHeader={false} />
       <Bitacora items={articles} />
       <LogbookTimeline />
-      <StackToolbox compact />
-      <AiLabCta />
+      <StackToolbox />
     </>
   );
 }

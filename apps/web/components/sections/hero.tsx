@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
-import { CoffeeRing, Doodle, HandArrow, InkStamp, Squiggle, Sticky, Tape } from "@/components/notebook";
+import { CoffeeRing, Doodle, InkStamp, Squiggle, Sticky, Tape } from "@/components/notebook";
 import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 /** Screen 01 — Cover / Hero. Notebook front page. */
 export function Hero() {
   return (
-    <section className="ruled-paper relative overflow-hidden border-b border-border/80">
+    <section className="dotted-paper relative overflow-hidden border-b border-border/80">
       {/* taped corners */}
       <Tape angle={-4} className="hidden sm:block" height={24} style={{ top: -6, left: 80 }} width={120} />
       <Tape angle={3} className="hidden sm:block" height={24} style={{ top: -6, right: 80 }} width={120} />
@@ -33,9 +33,9 @@ export function Hero() {
 
         {/* headline */}
         <Reveal className="relative mt-16 lg:mt-24">
-          <p className="font-hand text-3xl text-accent -rotate-1 sm:text-4xl">Hello, I&apos;m a</p>
+          <p className="font-hand text-3xl text-accent -rotate-1 sm:text-4xl">Hi, I&apos;m an</p>
           <h1 className="mt-1 font-display text-6xl font-bold leading-[0.92] tracking-[-0.04em] text-foreground sm:text-7xl lg:text-[9rem]">
-            rusty AI
+            AI
             <br />
             engineer
             <br />
@@ -46,28 +46,24 @@ export function Hero() {
               </span>
             </span>
             <br />
-            small things.
+            applied AI.
           </h1>
 
           {/* annotations (desktop only) */}
           <div className="absolute right-0 top-8 hidden rotate-3 lg:block">
             <Sticky angle={6} color="#fde58a">
-              ↳ &quot;small &amp;
+              ↳ &quot;shipped
               <br />
-              shipped &gt;<br /> big &amp; planned&quot;
+              &gt;<br /> perfect&quot;
             </Sticky>
-          </div>
-          <div className="absolute right-10 top-72 hidden -rotate-3 font-hand text-xl text-accent-deep xl:block">
-            ← (literally rusty)
-            <HandArrow color="hsl(var(--accent-deep))" direction="left" height={30} seed={2} width={80} />
           </div>
         </Reveal>
 
         {/* subhead + CTAs */}
         <div className="mt-14 grid items-end gap-10 lg:grid-cols-[1.2fr_1fr]">
           <p className="max-w-xl font-serif text-xl leading-relaxed text-foreground/80">
-            I make applied AI tools, retrieval pipelines, robotic prototypes and the occasional weird game. Computer
-            engineer based in Madrid — half lab, half workshop, all notebooks.
+            I build applied AI tools, retrieval pipelines and prototypes — RAG systems, LLM agents, computer vision and
+            the occasional game. Computer engineer based in Madrid.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 lg:justify-end">
             <Link className={cn(buttonVariants({ variant: "default" }), "w-full justify-center sm:w-auto")} href="/projects">

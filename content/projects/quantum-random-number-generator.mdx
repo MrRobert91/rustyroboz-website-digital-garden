@@ -1,21 +1,33 @@
 ---
-title: "Quantum Random Number Generator"
-description: "The goal is to generate random prices for [Rusty Roboz's collection of NFTs](/projects/nft-collection-ai-art-quantum). The idea is simple, we initialize a series of qubits, in this case 5 which is a common number of q..."
-slug: "quantum-random-number-generator"
-publishedAt: "2021-08-01"
-updatedAt: "2021-08-01"
-tags: ["quantum-computing", "randomness", "ibm-quantum"]
+title: Quantum Random Number Generator
+description: >-
+  The goal is to generate random prices for [Rusty Roboz's collection of
+  NFTs](/projects/nft-collection-ai-art-quantum). The idea is simple, we
+  initialize a series of qubits, in this case 5 which is a common number of q...
+slug: quantum-random-number-generator
+publishedAt: '2021-08-01'
+updatedAt: '2021-08-01'
+tags:
+  - quantum-computing
+  - randomness
+  - ibm-quantum
 draft: false
 featured: false
-coverImage: "/images/projects/quantum-random-number-generator/image-01.png"
-readingTime: "4 min"
-status: "completed"
-tech: ["IBM Quantum", "Python"]
+coverImage: 'https://i.ytimg.com/vi/q_oOZxcR1NA/hqdefault.jpg'
+readingTime: 4 min
+status: completed
+tech:
+  - IBM Quantum
+  - Python
 links: {}
+media:
+  - type: youtube
+    id: q_oOZxcR1NA
+    title: Quantum Random Number Generator
+  - type: image
+    src: /images/projects/quantum-random-number-generator/image-01.png
+    alt: Quantum Random Number Generator image 1
 ---
-
-![Quantum Random Number Generator image 1](/images/projects/quantum-random-number-generator/image-01.png)
-
 The goal is to generate random prices for [Rusty Roboz's collection of NFTs](/projects/nft-collection-ai-art-quantum). The idea is simple, we initialize a series of qubits, in this case 5 which is a common number of qubits in IBM computers, and we apply a Hadamard gate to each one, to put them in a state of superposition in which the possibilities of each cubit being 0 or 1 is 50% each. Once we perform the measurement and collapse the wave function of the qubits, they go from being in a superposition state to being a 0 or a 1. So we finally have a chain of 5 bits, in which each one of those bits have been produced by a quantum event, so it is one of the most random ways of generating numbers that we know of.
 
 By having only 5 qubits, we only have a 5-bit chain, which allows us to obtain a number between 0 and 32, since 2^5 = 32. Therefore, the random numbers that we generate will be limited to 32 different values, we could say that they are random but quantized since they cannot take all the values ​​of a continuum, only 32 fixed values.

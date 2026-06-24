@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
-import { Squiggle, Tape } from "@/components/notebook";
+import { Doodle, Squiggle, Tape } from "@/components/notebook";
 import { getContentHref, type ContentItem } from "@/lib/content";
+
+const DOODLE_KINDS = ["gear", "bolt", "spark", "star"] as const;
 
 /** Articles as a maker's logbook (bitácora). */
 export function Bitacora({ items }: { items: ContentItem[] }) {
@@ -12,11 +14,11 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
         <div className="max-w-2xl">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Writing</p>
           <h2 className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-6xl">
-            Bitácora <span className="font-hand font-normal text-accent">(logbook)</span>
+            Writing <span className="font-hand font-normal text-accent">(notes)</span>
           </h2>
           <Squiggle className="mt-3" color="hsl(var(--accent))" height={12} seed={7} strokeWidth={2.5} width={280} />
           <p className="mt-4 font-serif text-lg leading-relaxed text-foreground/75">
-            Notes from the bench: applied AI, software delivery, and experiments written up as I go.
+            Write-ups on applied AI, ML systems and lessons from shipping real projects.
           </p>
         </div>
 
@@ -40,7 +42,26 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
                   {item.title}
                   <ArrowUpRight className="ml-1 inline size-5 align-text-top" />
                 </h3>
-                <p className="mt-2 line-clamp-2 font-serif text-base leading-relaxed text-foreground/75">
+
+                {/* cover image, with a technical-drawing placeholder fallback */}
+                <div
+                  className="relative mt-4 grid h-36 place-items-center overflow-hidden border border-dashed border-[rgba(120,120,130,0.4)] bg-[#f4f1ea] dark:bg-foreground/5"
+                  style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent 0 8px, rgba(120,120,130,0.1) 8px 9px)" }}
+                >
+                  {item.coverImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      alt={item.title}
+                      className="absolute inset-0 size-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      loading="lazy"
+                      src={item.coverImage}
+                    />
+                  ) : (
+                    <Doodle color="hsl(var(--accent-deep))" kind={DOODLE_KINDS[index % DOODLE_KINDS.length]} size={56} />
+                  )}
+                </div>
+
+                <p className="mt-4 line-clamp-2 font-serif text-base leading-relaxed text-foreground/75">
                   {item.description}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -60,7 +81,7 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
 
         <div className="mt-10">
           <Link className="font-hand text-2xl text-accent-deep hover:text-accent" href="/articles">
-            read the whole logbook →
+            Read all articles →
           </Link>
         </div>
       </div>

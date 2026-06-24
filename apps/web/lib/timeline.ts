@@ -217,6 +217,7 @@ export const timeline: TimelineEntry[] = [
     links: [
       { label: "Live app", href: "https://sharedbrain.sliplane.app/" },
       { label: "GitHub", href: "https://github.com/MrRobert91/SharedBrain" },
+      { label: "Case study", href: "/projects/sharedbrain" },
     ],
   },
   {
@@ -227,7 +228,10 @@ export const timeline: TimelineEntry[] = [
     description:
       "A 3D arcade racer in the browser where geometric creatures race on topological surfaces — Möbius strips, tori and hyperbolic planes. 100% procedural geometry, textures and audio with Three.js. Trailer made with Fable 5.",
     media: [{ type: "youtube", id: "1PtB9z2Beow", title: "TopoKarts trailer" }],
-    links: [{ label: "GitHub", href: "https://github.com/MrRobert91/TopoKarts" }],
+    links: [
+      { label: "GitHub", href: "https://github.com/MrRobert91/TopoKarts" },
+      { label: "Case study", href: "/projects/topokarts" },
+    ],
   },
   {
     id: "mira-link",
@@ -237,7 +241,10 @@ export const timeline: TimelineEntry[] = [
     description:
       "An accessibility web app that lets people with severe mobility impairments fill in Google Forms and Microsoft Forms using only eye-gaze control — webcam eye tracking with MediaPipe, guided calibration, dwell-based Yes/No selection and text-to-speech. React + Vite frontend, FastAPI + SQLite + Piper backend.",
     media: [{ type: "image", src: "/images/projects/mira-link/image-01.png", alt: "Mira Link" }],
-    links: [{ label: "Website", href: "https://miralink.app/" }],
+    links: [
+      { label: "Website", href: "https://miralink.app/" },
+      { label: "Case study", href: "/projects/mira-link" },
+    ],
   },
   {
     id: "socratic-gemma",
@@ -252,6 +259,7 @@ export const timeline: TimelineEntry[] = [
         label: "Writeup",
         href: "https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779100810809",
       },
+      { label: "Case study", href: "/projects/socratic-gemma" },
     ],
   },
   {
@@ -262,7 +270,10 @@ export const timeline: TimelineEntry[] = [
     description:
       "A browser arcade game: play as Apollo dodging Zeus's lightning bolts, scoring a point for every dodge. Keyboard or touch controls.",
     media: [{ type: "image", src: "/images/projects/apolo-vs-zeus/image-01.png", alt: "Apolo vs Zeus" }],
-    links: [{ label: "Play", href: "https://juego-zeus-y-apolo.sliplane.app/" }],
+    links: [
+      { label: "Play", href: "https://juego-zeus-y-apolo.sliplane.app/" },
+      { label: "Case study", href: "/projects/apolo-vs-zeus" },
+    ],
   },
   {
     id: "accessdoc",
@@ -275,6 +286,7 @@ export const timeline: TimelineEntry[] = [
     links: [
       { label: "Live app", href: "https://accessdoc-mx5p1m.sliplane.app/" },
       { label: "GitHub", href: "https://github.com/MrRobert91/AccessDoc" },
+      { label: "Case study", href: "/projects/accessdoc" },
     ],
   },
   {
@@ -284,7 +296,11 @@ export const timeline: TimelineEntry[] = [
     start: "2026-04",
     description:
       "An endless-runner / action platformer where you play Thor, battling enemies and obstacles from Norse mythology. Playable in the browser.",
-    links: [{ label: "Play", href: "https://rustyroboz.itch.io/thor-runner" }],
+    media: [{ type: "youtube", id: "FoWHzUhiJ2Y", title: "Thor Runner" }],
+    links: [
+      { label: "Play", href: "https://rustyroboz.itch.io/thor-runner" },
+      { label: "Case study", href: "/projects/thor-runner" },
+    ],
   },
   {
     id: "cuentee",
@@ -302,6 +318,7 @@ export const timeline: TimelineEntry[] = [
         label: "Article",
         href: "https://medium.com/@rustyroboz/cuentee-cuentos-infantiles-a-medida-ilustrados-y-listos-para-descargar-318399fb6e03",
       },
+      { label: "Case study", href: "/projects/cuentee" },
     ],
   },
   {
@@ -322,6 +339,7 @@ export const timeline: TimelineEntry[] = [
         label: "Article",
         href: "https://medium.com/@rustyroboz/12-testers-14-d%C3%ADas-y-un-subreddit-as%C3%AD-publiqu%C3%A9-mi-primera-app-en-google-play-79cece838e02",
       },
+      { label: "Case study", href: "/projects/cartastrofe" },
     ],
   },
   {

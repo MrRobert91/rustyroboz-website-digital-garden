@@ -1,6 +1,7 @@
 import { existsSync, promises as fs } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import type { TimelineMediaItem } from "@/lib/timeline";
 
 export const collections = [
   "articles",
@@ -25,10 +26,14 @@ type CommonFrontmatter = {
   featured: boolean;
   coverImage: string;
   readingTime: string;
+  /** Optional videos + images. Videos render above the article, images as a gallery below it. */
+  media?: TimelineMediaItem[];
 };
 
 type ProjectFrontmatter = CommonFrontmatter & {
   status?: "planned" | "active" | "completed" | "archived";
+  /** "project" = polished work; "experiment" = short build. Defaults to experiment. */
+  type: "project" | "experiment";
   tech?: string[];
   links?: {
     github?: string;
@@ -43,9 +48,14 @@ type NoteFrontmatter = CommonFrontmatter & {
   related?: string[];
 };
 
+type ArticleFrontmatter = CommonFrontmatter & {
+  /** Optional internal cross-link to the project this article writes up. */
+  links?: { project?: string };
+};
+
 type PageFrontmatter = CommonFrontmatter;
 
-export type ContentFrontmatter = ProjectFrontmatter | NoteFrontmatter | PageFrontmatter;
+export type ContentFrontmatter = ProjectFrontmatter | NoteFrontmatter | ArticleFrontmatter | PageFrontmatter;
 
 export type ContentItem = ContentFrontmatter & {
   body: string;
@@ -125,12 +135,14 @@ function normalizeFrontmatter(
     featured: Boolean(frontmatter.featured),
     coverImage: String(frontmatter.coverImage),
     readingTime: String(frontmatter.readingTime),
+    media: normalizeMedia(frontmatter["media"]),
   };
 
   if (collection === "projects") {
     return {
       ...base,
       status: frontmatter["status"] as ProjectFrontmatter["status"],
+      type: frontmatter["type"] === "project" ? "project" : "experiment",
       tech: Array.isArray(frontmatter["tech"]) ? frontmatter["tech"].map((value) => String(value)) : [],
       links:
         typeof frontmatter["links"] === "object" && frontmatter["links"] !== null
@@ -147,7 +159,38 @@ function normalizeFrontmatter(
     };
   }
 
+  if (collection === "articles") {
+    return {
+      ...base,
+      links:
+        typeof frontmatter["links"] === "object" && frontmatter["links"] !== null
+          ? (frontmatter["links"] as ArticleFrontmatter["links"])
+          : {},
+    };
+  }
+
   return base;
+}
+
+/** Coerce a raw frontmatter `media` value into a clean TimelineMediaItem[]. */
+function normalizeMedia(raw: unknown): TimelineMediaItem[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  return raw.flatMap((entry): TimelineMediaItem[] => {
+    if (typeof entry !== "object" || entry === null) {
+      return [];
+    }
+    const value = entry as Record<string, unknown>;
+    if (value.type === "youtube" && value.id) {
+      return [{ type: "youtube", id: String(value.id), title: value.title ? String(value.title) : undefined }];
+    }
+    if (value.type === "image" && value.src) {
+      return [{ type: "image", src: String(value.src), alt: value.alt ? String(value.alt) : undefined }];
+    }
+    return [];
+  });
 }
 
 function buildExcerpt(body: string) {
