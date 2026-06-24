@@ -17,7 +17,7 @@ describe("public routes", () => {
     render(await HomePage());
     expect(screen.getByRole("link", { name: /view projects/i })).toHaveAttribute("href", "/projects");
     expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
-    expect(screen.getAllByText(/computer engineer based in madrid/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/currently interested in/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/^signal$/i)).not.toBeInTheDocument();
   });
 
