@@ -14,11 +14,11 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
         <div className="max-w-2xl">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Writing</p>
           <h2 className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-6xl">
-            Bitácora <span className="font-hand font-normal text-accent">(logbook)</span>
+            Writing <span className="font-hand font-normal text-accent">(notes)</span>
           </h2>
           <Squiggle className="mt-3" color="hsl(var(--accent))" height={12} seed={7} strokeWidth={2.5} width={280} />
           <p className="mt-4 font-serif text-lg leading-relaxed text-foreground/75">
-            Notes from the bench: applied AI, software delivery, and experiments written up as I go.
+            Write-ups on applied AI, ML systems and lessons from shipping real projects.
           </p>
         </div>
 
@@ -45,8 +45,8 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
 
                 {/* cover image, with a technical-drawing placeholder fallback */}
                 <div
-                  className="relative mt-4 grid h-36 place-items-center overflow-hidden border border-dashed border-[rgba(150,110,70,0.5)] bg-[#f3ecde] dark:bg-foreground/5"
-                  style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent 0 8px, rgba(150,110,70,0.12) 8px 9px)" }}
+                  className="relative mt-4 grid h-36 place-items-center overflow-hidden border border-dashed border-[rgba(120,120,130,0.4)] bg-[#f4f1ea] dark:bg-foreground/5"
+                  style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent 0 8px, rgba(120,120,130,0.1) 8px 9px)" }}
                 >
                   {item.coverImage ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -81,7 +81,7 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
 
         <div className="mt-10">
           <Link className="font-hand text-2xl text-accent-deep hover:text-accent" href="/articles">
-            read the whole logbook →
+            Read all articles →
           </Link>
         </div>
       </div>

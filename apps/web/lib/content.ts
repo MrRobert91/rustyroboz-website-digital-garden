@@ -32,6 +32,8 @@ type CommonFrontmatter = {
 
 type ProjectFrontmatter = CommonFrontmatter & {
   status?: "planned" | "active" | "completed" | "archived";
+  /** "project" = polished work; "experiment" = short build. Defaults to experiment. */
+  type: "project" | "experiment";
   tech?: string[];
   links?: {
     github?: string;
@@ -46,9 +48,14 @@ type NoteFrontmatter = CommonFrontmatter & {
   related?: string[];
 };
 
+type ArticleFrontmatter = CommonFrontmatter & {
+  /** Optional internal cross-link to the project this article writes up. */
+  links?: { project?: string };
+};
+
 type PageFrontmatter = CommonFrontmatter;
 
-export type ContentFrontmatter = ProjectFrontmatter | NoteFrontmatter | PageFrontmatter;
+export type ContentFrontmatter = ProjectFrontmatter | NoteFrontmatter | ArticleFrontmatter | PageFrontmatter;
 
 export type ContentItem = ContentFrontmatter & {
   body: string;
@@ -135,6 +142,7 @@ function normalizeFrontmatter(
     return {
       ...base,
       status: frontmatter["status"] as ProjectFrontmatter["status"],
+      type: frontmatter["type"] === "project" ? "project" : "experiment",
       tech: Array.isArray(frontmatter["tech"]) ? frontmatter["tech"].map((value) => String(value)) : [],
       links:
         typeof frontmatter["links"] === "object" && frontmatter["links"] !== null
@@ -148,6 +156,16 @@ function normalizeFrontmatter(
       ...base,
       series: frontmatter["series"] ? String(frontmatter["series"]) : undefined,
       related: Array.isArray(frontmatter["related"]) ? frontmatter["related"].map((value) => String(value)) : [],
+    };
+  }
+
+  if (collection === "articles") {
+    return {
+      ...base,
+      links:
+        typeof frontmatter["links"] === "object" && frontmatter["links"] !== null
+          ? (frontmatter["links"] as ArticleFrontmatter["links"])
+          : {},
     };
   }
 

@@ -79,9 +79,9 @@ export const siteConfig = {
 // Map a project's lifecycle status to a rubber-stamp label.
 export const projectStatusStamp: Record<string, string> = {
   completed: "SHIPPED",
-  active: "BENCH",
-  planned: "BETA",
-  archived: "EXPERIMENT",
+  active: "WORK IN PROGRESS",
+  planned: "IDEA",
+  archived: "ARCHIVED",
 };
 
 export type SiteConfig = typeof siteConfig;
