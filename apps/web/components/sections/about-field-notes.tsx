@@ -5,10 +5,12 @@ import { siteConfig } from "@/lib/site-config";
 type AboutFieldNotesProps = {
   /** Bio prose paragraphs (real content, e.g. from the about MDX page). */
   paragraphs: string[];
+  /** Optional real photos for the two polaroids. Fall back to drawn placeholders when missing. */
+  photos?: { first?: string; second?: string };
 };
 
 /** Screen 02 — About / Field notes. */
-export function AboutFieldNotes({ paragraphs }: AboutFieldNotesProps) {
+export function AboutFieldNotes({ paragraphs, photos }: AboutFieldNotesProps) {
   const specs: [string, React.ReactNode][] = [
     ["base", siteConfig.location],
     ["focus", "AI systems · games · product eng."],
@@ -39,16 +41,16 @@ export function AboutFieldNotes({ paragraphs }: AboutFieldNotesProps) {
           <div>
             {/* mobile/tablet: simple stack */}
             <div className="flex flex-wrap items-start gap-6 lg:hidden">
-              <Polaroid angle={-4} height={300} label="WORKSHOP" width={260} />
-              <Polaroid angle={5} height={280} label="ROBOT-04" width={230} />
+              <Polaroid angle={-4} height={300} label="WORKSHOP" src={photos?.first} width={260} />
+              <Polaroid angle={5} height={280} label="ROBOT-04" src={photos?.second} width={230} />
               <Sticky angle={-3} color="#ffd9c4" style={{ width: 240 }}>
                 remember: <span className="font-semibold text-accent-deep">&quot;ship the rusty thing,</span> polish later&quot;
               </Sticky>
             </div>
             {/* desktop: scrapbook collage */}
             <div className="relative hidden h-[680px] lg:block">
-              <Polaroid angle={-5} height={330} label="WORKSHOP" style={{ position: "absolute", top: 20, left: 0 }} width={300} />
-              <Polaroid angle={6} height={290} label="ROBOT-04" style={{ position: "absolute", top: 270, left: 140 }} width={250} />
+              <Polaroid angle={-5} height={330} label="WORKSHOP" src={photos?.first} style={{ position: "absolute", top: 20, left: 0 }} width={300} />
+              <Polaroid angle={6} height={290} label="ROBOT-04" src={photos?.second} style={{ position: "absolute", top: 270, left: 140 }} width={250} />
               <Sticky angle={-4} color="#ffd9c4" style={{ position: "absolute", top: 560, left: 20, width: 240 }}>
                 remember: <br />
                 <span className="font-semibold text-accent-deep">&quot;ship the rusty thing,</span>

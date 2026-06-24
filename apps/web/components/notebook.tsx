@@ -193,15 +193,16 @@ export function InkStamp({
   );
 }
 
-// ---- Polaroid placeholder ----
+// ---- Polaroid (real photo when `src` is given, otherwise a placeholder) ----
 export function Polaroid({
   label = "PHOTO",
+  src,
   angle = -3,
   width = 200,
   height = 220,
   className,
   style,
-}: Common & { label?: string; angle?: number; width?: number; height?: number }) {
+}: Common & { label?: string; src?: string; angle?: number; width?: number; height?: number }) {
   return (
     <div
       className={className}
@@ -223,25 +224,31 @@ export function Polaroid({
         style={{
           width: "100%",
           height: height - 60,
-          background: "repeating-linear-gradient(135deg, #d8cdb8 0 8px, #c8bca6 8px 16px)",
+          background: src ? undefined : "repeating-linear-gradient(135deg, #d8cdb8 0 8px, #c8bca6 8px 16px)",
           position: "relative",
           display: "grid",
           placeItems: "center",
+          overflow: "hidden",
         }}
       >
-        <span
-          className="font-mono"
-          style={{
-            fontSize: 10,
-            letterSpacing: "0.18em",
-            color: "rgba(50,30,15,0.55)",
-            textTransform: "uppercase",
-            background: "rgba(251,247,238,0.85)",
-            padding: "4px 8px",
-          }}
-        >
-          {label}
-        </span>
+        {src ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img alt={label} src={src} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        ) : (
+          <span
+            className="font-mono"
+            style={{
+              fontSize: 10,
+              letterSpacing: "0.18em",
+              color: "rgba(50,30,15,0.55)",
+              textTransform: "uppercase",
+              background: "rgba(251,247,238,0.85)",
+              padding: "4px 8px",
+            }}
+          >
+            {label}
+          </span>
+        )}
       </div>
       <span className="font-hand" style={{ position: "absolute", bottom: 8, left: 14, fontSize: 16, color: "#5a4426" }}>
         {label.toLowerCase()}

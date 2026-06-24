@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CoffeeRing, InkStamp, Squiggle, Tape } from "@/components/notebook";
+import { CoffeeRing, InkStamp, Polaroid, Squiggle, Tape } from "@/components/notebook";
 import { siteConfig } from "@/lib/site-config";
 
 const BRIEF_LINES = [
@@ -22,7 +22,7 @@ function handleFor(href: string, label: string) {
 }
 
 /** Screen 06 — Contact / Signal. */
-export function ContactSignal() {
+export function ContactSignal({ photo }: { photo?: string }) {
   const email = siteConfig.email || "hello@rustyroboz.com";
 
   return (
@@ -45,7 +45,8 @@ export function ContactSignal() {
               together.
             </h2>
           </div>
-          <div className="mt-4">
+          <div className="mt-4 flex items-start gap-5">
+            {photo ? <Polaroid angle={4} height={150} label="DAVID" src={photo} width={130} /> : null}
             <InkStamp angle={6} label="OPEN FOR WORK" style={{ fontSize: 13, padding: "8px 14px" }} />
           </div>
         </div>

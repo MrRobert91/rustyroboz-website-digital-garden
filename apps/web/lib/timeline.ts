@@ -364,7 +364,7 @@ export const timeline: TimelineEntry[] = [
     start: "2024-04",
     description:
       "Cloud certification for designing and deploying AI solutions on Azure. Valid through Apr 2027. Credential ID B14F86A8D09444D3.",
-    media: [{ type: "image", src: "/images/projects/azure-ai-engineer/image-01.png", alt: "Azure AI Engineer Associate credential" }],
+    media: [{ type: "image", src: "/images/timeline/azure-ai-engineer/image-01.png", alt: "Azure AI Engineer Associate credential" }],
     links: [
       {
         label: "Credential",
@@ -380,6 +380,7 @@ export const timeline: TimelineEntry[] = [
     start: "2024-03",
     end: "2024-06",
     description: "Mentoring the Computer Vision and Reinforcement Learning tracks of the 7th-edition AI bootcamp.",
+    media: [{ type: "youtube", id: "Y18CuynoBUA", title: "AI Saturdays 7th edition" }],
     links: [{ label: "Saturdays.AI", href: "https://saturdays.ai/madrid/" }],
   },
   {
@@ -411,6 +412,14 @@ export const timeline: TimelineEntry[] = [
     start: "2023-03",
     end: "2023-06",
     description: "Mentoring the Computer Vision and Reinforcement Learning tracks of the 6th-edition AI bootcamp.",
+    media: [
+      { type: "image", src: "/images/timeline/ai-saturdays-mentor-6/image-01.jpg", alt: "AI Saturdays 6th edition 1" },
+      { type: "image", src: "/images/timeline/ai-saturdays-mentor-6/image-02.jpg", alt: "AI Saturdays 6th edition 2" },
+      { type: "image", src: "/images/timeline/ai-saturdays-mentor-6/image-03.jpg", alt: "AI Saturdays 6th edition 3" },
+      { type: "image", src: "/images/timeline/ai-saturdays-mentor-6/image-04.jpg", alt: "AI Saturdays 6th edition 4" },
+      { type: "image", src: "/images/timeline/ai-saturdays-mentor-6/image-05.jpg", alt: "AI Saturdays 6th edition 5" },
+      { type: "image", src: "/images/timeline/ai-saturdays-mentor-6/image-06.jpg", alt: "AI Saturdays 6th edition 6" },
+    ],
     links: [{ label: "Saturdays.AI", href: "https://saturdays.ai/madrid/" }],
   },
   {
@@ -536,6 +545,13 @@ export const timeline: TimelineEntry[] = [
     start: "2022-06",
     description:
       "Volunteer-run deep-learning bootcamp covering CNNs, autoencoders, NLP and reinforcement learning, with a group capstone (the BCI drone project).",
+    media: [
+      { type: "image", src: "/images/timeline/ai-saturdays-course/image-01.jpeg", alt: "AI Saturdays bootcamp 1" },
+      { type: "image", src: "/images/timeline/ai-saturdays-course/image-02.jpeg", alt: "AI Saturdays bootcamp 2" },
+      { type: "image", src: "/images/timeline/ai-saturdays-course/image-03.jpg", alt: "AI Saturdays bootcamp 3" },
+      { type: "image", src: "/images/timeline/ai-saturdays-course/image-04.jpg", alt: "AI Saturdays bootcamp 4" },
+      { type: "image", src: "/images/timeline/ai-saturdays-course/image-05.jpeg", alt: "AI Saturdays bootcamp 5" },
+    ],
     links: [{ label: "Saturdays.AI", href: "https://saturdays.ai/" }],
   },
   {
@@ -580,6 +596,7 @@ export const timeline: TimelineEntry[] = [
     start: "2021-09",
     description:
       "Course on how to set direction for ML projects — error analysis, mismatched data, transfer and multi-task learning.",
+    media: [{ type: "image", src: "/images/timeline/structuring-ml-coursera/image-01.png", alt: "Structuring ML Projects certificate" }],
     links: [{ label: "Coursera", href: "https://www.coursera.org/learn/machine-learning-projects" }],
   },
   {
@@ -677,6 +694,7 @@ export const timeline: TimelineEntry[] = [
       { type: "youtube", id: "qGxOLXtzfNc", title: "Drone programming 1" },
       { type: "youtube", id: "6Uuh7DfmfPw", title: "Drone programming 2" },
       { type: "youtube", id: "cAgejgrsRuM", title: "Drone programming 3" },
+      { type: "image", src: "/images/timeline/drone-programming-course/image-01.jpg", alt: "Drone programming course" },
     ],
   },
   {
@@ -709,6 +727,7 @@ export const timeline: TimelineEntry[] = [
     org: "Universidad Rey Juan Carlos",
     start: "2017-04",
     description: "University extension course in robotics.",
+    media: [{ type: "image", src: "/images/timeline/robotics-course/image-01.jpg", alt: "Advanced robotics course" }],
   },
   {
     id: "future-space",
