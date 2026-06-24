@@ -14,6 +14,7 @@ export const siteConfig = {
     { href: "/contact", label: "Contact" },
   ],
   socialLinks: [
+    { href: "https://x.com/RustyRoboz", label: "X" },
     { href: "https://www.instagram.com/rustyroboz/", label: "Instagram" },
     { href: "https://github.com/MrRobert91", label: "GitHub" },
     { href: "https://www.linkedin.com/in/david-robert/", label: "LinkedIn" },

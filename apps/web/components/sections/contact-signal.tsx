@@ -3,9 +3,9 @@ import { CoffeeRing, InkStamp, Squiggle, Tape } from "@/components/notebook";
 import { siteConfig } from "@/lib/site-config";
 
 const BRIEF_LINES = [
-  "What are you trying to build?",
-  "What's broken right now?",
-  "When does it need to ship?",
+  "What's the project or idea?",
+  "Consulting, training, or development?",
+  "Rough timeline?",
   "How can I reach you?",
 ];
 
@@ -14,7 +14,7 @@ function handleFor(href: string, label: string) {
   try {
     const { hostname, pathname } = new URL(href);
     const path = pathname.replace(/\/$/, "");
-    const atStyle = /instagram|medium/.test(hostname);
+    const atStyle = /instagram|medium|x\.com|twitter/.test(hostname);
     return atStyle ? `@${path.split("/").filter(Boolean).pop()}` : path || hostname;
   } catch {
     return label;
@@ -42,7 +42,7 @@ export function ContactSignal() {
               </span>{" "}
               something
               <br />
-              rusty.
+              together.
             </h2>
           </div>
           <div className="mt-4">
@@ -54,8 +54,15 @@ export function ContactSignal() {
           {/* left: pitch + channels */}
           <div>
             <p className="font-serif text-xl leading-relaxed text-foreground/85">
-              I take on a small number of contracts and collaborations each quarter. Send me a brief: what&apos;s broken,
-              what&apos;s missing, what needs to ship.
+              Got an AI-related project? I run consulting sessions to guide companies and teams through adopting
+              generative AI — for every kind of profile, developers and non-developers alike. I also deliver AI
+              trainings, technical consulting where you walk me through your case and I advise you, or hands-on
+              development projects. Right now I&apos;m especially into building LLM-based AI agents, but I&apos;m also up
+              for smaller projects of other kinds — VR, web apps, Android apps, computer vision, data science, and more.
+            </p>
+            <p className="mt-5 font-serif text-xl leading-relaxed text-foreground/85">
+              The easiest way to start is a quick email — tell me a bit about what you have in mind and I&apos;ll get
+              back to you.
             </p>
 
             <div className="mt-9">
@@ -105,10 +112,10 @@ export function ContactSignal() {
             <div className="mt-5 flex items-center justify-between gap-4">
               <a className="inline-flex" href={`mailto:${email}`}>
                 <span className="bg-accent px-5 py-3 font-mono text-[13px] font-semibold uppercase tracking-[0.16em] text-[#fdf6ea] shadow-paper">
-                  Send brief →
+                  Email me →
                 </span>
               </a>
-              <span className="font-hand text-lg text-muted-foreground">or just email me ↗</span>
+              <span className="font-hand text-lg text-muted-foreground">let&apos;s talk ↗</span>
             </div>
             <CoffeeRing size={84} style={{ bottom: -28, right: -10, opacity: 0.55 }} />
           </div>

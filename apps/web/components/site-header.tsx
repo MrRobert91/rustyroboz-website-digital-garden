@@ -40,8 +40,8 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 sm:px-6 lg:px-10 lg:py-4">
         <Link className="flex items-baseline gap-2" href="/" onClick={() => setOpen(false)}>
-          <span className="font-hand text-2xl leading-none text-accent-deep">Rusty Roboz</span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Labs</span>
+          <span className="font-hand text-3xl font-semibold leading-none text-accent-deep">Rusty Roboz</span>
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Labs</span>
         </Link>
 
         {/* Desktop navigation */}
