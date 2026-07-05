@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import { ScrollProgress } from "@/components/scroll-progress";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
@@ -58,20 +60,29 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <div className="ml-2">
+            <ThemeToggle />
+          </div>
         </nav>
 
-        {/* Mobile menu toggle */}
-        <button
-          aria-controls="mobile-nav"
-          aria-expanded={open}
-          aria-label={open ? "Close menu" : "Open menu"}
-          className="-mr-1 grid size-11 place-items-center rounded-full text-foreground transition-colors hover:text-accent md:hidden"
-          onClick={() => setOpen((value) => !value)}
-          type="button"
-        >
-          {open ? <X className="size-6" /> : <Menu className="size-6" />}
-        </button>
+        {/* Mobile: theme toggle + menu button */}
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
+          <button
+            aria-controls="mobile-nav"
+            aria-expanded={open}
+            aria-label={open ? "Close menu" : "Open menu"}
+            className="-mr-1 grid size-11 place-items-center rounded-full text-foreground transition-colors hover:text-accent"
+            onClick={() => setOpen((value) => !value)}
+            type="button"
+          >
+            {open ? <X className="size-6" /> : <Menu className="size-6" />}
+          </button>
+        </div>
       </div>
+
+      {/* Reading progress — a thin rust pencil line under the header rule */}
+      <ScrollProgress />
 
       {/* Mobile navigation panel */}
       <div

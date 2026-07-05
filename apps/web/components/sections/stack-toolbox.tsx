@@ -30,7 +30,7 @@ export function StackToolbox() {
                 <div className="mt-3 flex flex-wrap gap-2.5">
                   {group.items.map((item, i) => (
                     <span
-                      className="inline-block rounded-sm border border-border bg-paper-2 px-3.5 py-1 font-hand text-2xl text-foreground shadow-paper"
+                      className="hand-chip inline-block rounded-sm border border-border bg-paper-2 px-3.5 py-1 font-hand text-2xl text-foreground shadow-paper"
                       key={item}
                       style={{ transform: `rotate(${((i * 7) % 5) - 2}deg) scale(0.96)` }}
                     >

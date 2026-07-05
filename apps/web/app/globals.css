@@ -46,6 +46,12 @@
     font-feature-settings: "liga", "kern";
   }
 
+  /* Day ↔ night workshop swap eases like dimming the lamp */
+  body,
+  .theme-fade {
+    transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+  }
+
   a {
     @apply transition-colors;
   }
@@ -123,5 +129,47 @@
   }
   .shadow-paper {
     box-shadow: 0 12px 24px -18px rgba(40, 40, 50, 0.34), 0 1px 0 rgba(0, 0, 0, 0.04);
+  }
+
+  /* Handwritten stack chips: straighten + lift under the cursor.
+     !important beats the inline base rotation each chip carries. */
+  .hand-chip {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  @media (hover: hover) {
+    .hand-chip:hover {
+      transform: rotate(0deg) scale(1.06) !important;
+      box-shadow: 0 10px 20px -12px rgba(40, 40, 50, 0.45);
+      border-color: hsl(var(--accent) / 0.55);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Squiggle underlines draw themselves in (pathLength=1 on the SVG) */
+    .squiggle-draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: squiggle-draw 1s ease-out 0.45s forwards;
+    }
+
+    /* Gentle bob for the hero doodles */
+    .animate-float {
+      animation: float 5s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes squiggle-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes float {
+    from {
+      transform: translateY(0) rotate(0deg);
+    }
+    to {
+      transform: translateY(-7px) rotate(4deg);
+    }
   }
 }

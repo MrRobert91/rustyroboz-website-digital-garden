@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { CoffeeRing, Doodle, Squiggle, Sticky, Tape } from "@/components/notebook";
+import { WireframeRoboz } from "@/components/widgets/wireframe-roboz";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -22,7 +23,7 @@ export function Hero() {
             <span className="relative inline-block">
               <span className="font-serif italic font-normal text-accent">engineer</span>
               <span className="absolute -bottom-3 left-0 hidden sm:block">
-                <Squiggle color="hsl(var(--accent))" height={14} seed={3} strokeWidth={3} width={260} />
+                <Squiggle animate color="hsl(var(--accent))" height={14} seed={3} strokeWidth={3} width={260} />
               </span>
             </span>
           </h1>
@@ -35,29 +36,34 @@ export function Hero() {
           </div>
         </Reveal>
 
-        {/* subhead + CTAs */}
-        <div className="mt-14 grid items-end gap-10 lg:grid-cols-[1.2fr_1fr]">
-          <p className="max-w-xl font-serif text-xl leading-relaxed text-foreground/80">
-            Currently interested in Machine Learning, Computer Vision, Agentic AI, Quantum Computing, Robotics, Game
-            Development and Technology in general.
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 lg:justify-end">
-            <Link className={cn(buttonVariants({ variant: "default" }), "w-full justify-center sm:w-auto")} href="/projects">
-              View Projects
-              <ArrowRight className="ml-2 size-4" />
-            </Link>
-            <Link className={cn(buttonVariants({ variant: "outline" }), "w-full justify-center sm:w-auto")} href="/articles">
-              Read Articles
-            </Link>
+        {/* subhead + CTAs + interactive mascot */}
+        <div className="mt-14 grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+          <div>
+            <p className="max-w-xl font-serif text-xl leading-relaxed text-foreground/80">
+              Currently interested in Machine Learning, Computer Vision, Agentic AI, Quantum Computing, Robotics, Game
+              Development and Technology in general.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+              <Link className={cn(buttonVariants({ variant: "default" }), "w-full justify-center sm:w-auto")} href="/projects">
+                View Projects
+                <ArrowRight className="ml-2 size-4" />
+              </Link>
+              <Link className={cn(buttonVariants({ variant: "outline" }), "w-full justify-center sm:w-auto")} href="/articles">
+                Read Articles
+              </Link>
+            </div>
           </div>
+          <Reveal className="hidden justify-self-end lg:block" delay={0.15}>
+            <WireframeRoboz className="rotate-1" />
+          </Reveal>
         </div>
 
         {/* footer doodles */}
         <div className="mt-16 flex flex-wrap items-center justify-between gap-6">
           <div className="flex items-center gap-5">
-            <Doodle color="hsl(var(--accent-deep))" kind="gear" size={44} />
-            <Doodle color="hsl(var(--accent))" kind="bolt" size={32} />
-            <Doodle color="hsl(var(--accent-deep))" kind="spark" size={28} />
+            <Doodle className="animate-float" color="hsl(var(--accent-deep))" kind="gear" size={44} />
+            <Doodle className="animate-float" color="hsl(var(--accent))" kind="bolt" size={32} style={{ animationDelay: "-1.6s" }} />
+            <Doodle className="animate-float" color="hsl(var(--accent-deep))" kind="spark" size={28} style={{ animationDelay: "-3.1s" }} />
             <span className="font-hand text-lg text-muted-foreground -rotate-1">ai · robots · prototypes · notes</span>
           </div>
           <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">PG. 01 / COVER ↓</p>
