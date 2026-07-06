@@ -131,6 +131,20 @@ class SqliteRepository:
             connection.commit()
             return int(cursor.lastrowid)
 
+    def get_chat_messages(self, session_id: int, limit: int = 12) -> list[dict[str, str]]:
+        """Most recent messages of a session, oldest first (for agent history)."""
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT role, content FROM chat_messages
+                WHERE session_id = ?
+                ORDER BY id DESC
+                LIMIT ?
+                """,
+                (session_id, limit),
+            ).fetchall()
+        return [{"role": row["role"], "content": row["content"]} for row in reversed(rows)]
+
     def append_chat_message(self, session_id: int, role: str, content: str, citations: list[dict[str, Any]] | None = None) -> None:
         with self._connect() as connection:
             connection.execute(

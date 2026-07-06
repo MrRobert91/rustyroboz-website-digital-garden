@@ -2,15 +2,20 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any
 
 import numpy as np
 
 from .config import Settings
-from .content_source import build_content_signature, build_href, chunk_document, load_content_documents
+from .content_source import (
+    ContentDocument,
+    build_content_signature,
+    build_href,
+    chunk_document,
+    load_content_documents,
+)
 from .db import SqliteRepository
-from .embeddings import embed_text
+from .embeddings import Embedder
 from .vector_index import FaissVectorStore
 
 
@@ -25,15 +30,24 @@ class SearchResult:
 
 
 class KnowledgeBase:
-    def __init__(self, settings: Settings, repository: SqliteRepository, vector_store: FaissVectorStore) -> None:
+    def __init__(
+        self,
+        settings: Settings,
+        repository: SqliteRepository,
+        vector_store: FaissVectorStore,
+        embedder: Embedder,
+    ) -> None:
         self.settings = settings
         self.repository = repository
         self.vector_store = vector_store
+        self.embedder = embedder
         self.vector_meta: list[dict[str, Any]] = []
+        self.documents: list[ContentDocument] = []
 
     def sync(self) -> None:
         documents = load_content_documents(self.settings.resolved_content_root)
-        signature = build_content_signature(documents)
+        self.documents = documents
+        signature = self._build_signature(documents)
 
         if self._can_load_existing(signature):
             self.vector_store.load()
@@ -42,12 +56,13 @@ class KnowledgeBase:
 
         self.rebuild(documents, signature)
 
-    def rebuild(self, documents: list, signature: str | None = None) -> None:
-        signature = signature or build_content_signature(documents)
-        vectors: list[np.ndarray] = []
+    def rebuild(self, documents: list[ContentDocument], signature: str | None = None) -> None:
+        self.documents = documents
+        signature = signature or self._build_signature(documents)
         documents_payload: list[dict[str, Any]] = []
         chunks_payload: list[dict[str, Any]] = []
         meta: list[dict[str, Any]] = []
+        chunk_texts: list[str] = []
 
         for document in documents:
             documents_payload.append(
@@ -68,8 +83,7 @@ class KnowledgeBase:
 
             for chunk_index, chunk in enumerate(chunk_document(document)):
                 vector_id = len(meta)
-                embedding = embed_text(chunk, self.settings.faiss_dimension)
-                vectors.append(embedding)
+                chunk_texts.append(chunk)
                 meta_item = {
                     "faiss_vector_id": vector_id,
                     "slug": document.slug,
@@ -85,7 +99,6 @@ class KnowledgeBase:
                         "slug": document.slug,
                         "chunk_index": chunk_index,
                         "content": chunk,
-                        "embedding": embedding.tolist(),
                         "token_count": len(chunk.split()),
                         "metadata_json": {
                             "slug": document.slug,
@@ -96,19 +109,23 @@ class KnowledgeBase:
                     }
                 )
 
+        vectors = self.embedder.embed_documents(chunk_texts)
+        for chunk_payload, embedding in zip(chunks_payload, vectors):
+            chunk_payload["embedding"] = np.asarray(embedding).tolist()
+
         self.repository.replace_knowledge_base(documents_payload, chunks_payload)
         self.vector_store.reset()
-        if vectors:
-            self.vector_store.add(np.vstack(vectors))
+        if len(chunk_texts) > 0:
+            self.vector_store.add(vectors)
         self.vector_meta = meta
         self.vector_store.save()
         self._save_meta({"signature": signature, "vectors": meta})
 
-    def search(self, query: str, limit: int = 4) -> list[SearchResult]:
+    def search(self, query: str, limit: int = 5) -> list[SearchResult]:
         if self.vector_store.size == 0 or not self.vector_meta:
             return []
 
-        query_vector = embed_text(query, self.settings.faiss_dimension)
+        query_vector = self.embedder.embed_query(query)
         scores, indices = self.vector_store.search(query_vector, limit)
         results: list[SearchResult] = []
 
@@ -131,6 +148,35 @@ class KnowledgeBase:
 
         return results
 
+    # ---- Agent tool surface ----
+
+    def catalog(self) -> list[dict[str, Any]]:
+        """Everything published on the site, for the agent to browse."""
+        return [
+            {
+                "collection": document.collection,
+                "slug": document.slug,
+                "title": document.title,
+                "description": document.description,
+                "tags": document.tags,
+                "published_at": document.published_at,
+                "href": build_href(document.collection, document.slug),
+            }
+            for document in self.documents
+        ]
+
+    def get_document(self, collection: str, slug: str) -> ContentDocument | None:
+        for document in self.documents:
+            if document.collection == collection and document.slug == slug:
+                return document
+        return None
+
+    # ---- Index persistence ----
+
+    def _build_signature(self, documents: list[ContentDocument]) -> str:
+        content_signature = build_content_signature(documents)
+        return f"{content_signature}:{self.embedder.name}:{self.embedder.model}:{self.embedder.dimension}"
+
     def _can_load_existing(self, signature: str) -> bool:
         if not self.settings.faiss_index_path.exists() or not self.settings.faiss_meta_path.exists():
             return False
@@ -143,4 +189,3 @@ class KnowledgeBase:
     def _save_meta(self, payload: dict[str, Any]) -> None:
         self.settings.faiss_meta_path.parent.mkdir(parents=True, exist_ok=True)
         self.settings.faiss_meta_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-

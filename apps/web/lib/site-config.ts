@@ -11,6 +11,7 @@ export const siteConfig = {
     { href: "/timeline", label: "Timeline" },
     { href: "/projects", label: "Projects" },
     { href: "/articles", label: "Articles" },
+    { href: "/chat", label: "Chat" },
     { href: "/contact", label: "Contact" },
   ],
   socialLinks: [
