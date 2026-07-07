@@ -57,6 +57,9 @@ class Settings(BaseSettings):
     # main model chain when empty).
     guard_model: str = Field(default="", alias="GUARD_MODEL")
     agent_max_tool_rounds: int = Field(default=4, alias="AGENT_MAX_TOOL_ROUNDS")
+    # Token budget per LLM call in the agent loop. Long answers hit this cap
+    # (finish_reason "length") and get flagged as truncated in the UI.
+    agent_max_answer_tokens: int = Field(default=4000, alias="AGENT_MAX_ANSWER_TOKENS")
     chat_history_limit: int = Field(default=12, alias="CHAT_HISTORY_LIMIT")
 
     # Abuse limits for the public endpoint

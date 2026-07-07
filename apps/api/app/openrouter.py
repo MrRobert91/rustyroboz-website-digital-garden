@@ -74,12 +74,14 @@ class OpenRouterClient:
         messages: list[dict[str, Any]],
         tools: list[dict[str, Any]] | None = None,
         temperature: float = 0.2,
-        max_tokens: int = 900,
+        max_tokens: int = 4000,
     ) -> AsyncIterator[dict[str, Any]]:
         """Yields events:
         {"type": "model", "model": str}            — once, when a model accepts
         {"type": "content", "delta": str}          — streamed answer tokens
-        {"type": "end", "content": str, "tool_calls": [...], "model": str, "usage": {...}}
+        {"type": "end", "content": str, "tool_calls": [...], "model": str,
+         "usage": {...}, "finish_reason": str | None}  — "length" means the
+         answer was cut by the max_tokens cap
         """
         self._require_key()
 
@@ -126,6 +128,7 @@ class OpenRouterClient:
         seen_model: str | None = None
         got_payload = False
         usage: dict[str, Any] = {}
+        finish_reason: str | None = None
 
         async with self._http().stream(
             "POST", self.settings.openrouter_chat_url, headers=self._headers(), json=payload
@@ -156,6 +159,8 @@ class OpenRouterClient:
                     usage = _normalize_usage(chunk["usage"])
 
                 for choice in chunk.get("choices", []):
+                    if choice.get("finish_reason"):
+                        finish_reason = str(choice["finish_reason"])
                     delta = choice.get("delta") or {}
                     piece = delta.get("content")
                     if isinstance(piece, str) and piece:
@@ -184,6 +189,7 @@ class OpenRouterClient:
             "tool_calls": [tool_calls[index] for index in sorted(tool_calls)],
             "model": seen_model or model,
             "usage": usage,
+            "finish_reason": finish_reason,
         }
 
     async def complete(
