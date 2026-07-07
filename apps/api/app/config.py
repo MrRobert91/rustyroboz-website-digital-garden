@@ -19,14 +19,21 @@ class Settings(BaseSettings):
     cors_origins: str = Field(default="http://localhost:3000,http://web:3000", alias="CORS_ORIGINS")
     content_root: Path = Field(default=Path("./content"), alias="CONTENT_ROOT")
 
-    # Embeddings for the FAISS index. "fastembed" = local ONNX semantic model
-    # (multilingual, runs on CPU); "hash" = dependency-free hashing trick used
-    # as an offline fallback and in tests.
+    # Embeddings for the FAISS index.
+    #   "api"       — remote OpenAI-compatible /embeddings endpoint (OpenRouter by
+    #                 default): ~0 extra RAM, recommended on small servers.
+    #   "fastembed" — local ONNX semantic model (multilingual, CPU): no network,
+    #                 but keeps ~600MB resident.
+    #   "hash"      — dependency-free lexical fallback (tests/offline).
     embeddings_backend: str = Field(default="fastembed", alias="EMBEDDINGS_BACKEND")
     embedding_model: str = Field(
         default="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
         alias="EMBEDDING_MODEL",
     )
+    # Settings for the "api" backend. Key/base URL fall back to the OpenRouter ones.
+    embeddings_api_model: str = Field(default="openai/text-embedding-3-small", alias="EMBEDDINGS_API_MODEL")
+    embeddings_api_base_url: str = Field(default="", alias="EMBEDDINGS_API_BASE_URL")
+    embeddings_api_key: str = Field(default="", alias="EMBEDDINGS_API_KEY")
 
     # LLM provider — any OpenAI-compatible endpoint (OpenRouter by default).
     openrouter_api_key: str = Field(default="", alias="OPENROUTER_API_KEY")
@@ -60,6 +67,15 @@ class Settings(BaseSettings):
     @property
     def openrouter_chat_url(self) -> str:
         return f"{self.openrouter_base_url.rstrip('/')}/chat/completions"
+
+    @property
+    def embeddings_api_url(self) -> str:
+        base = self.embeddings_api_base_url.strip() or self.openrouter_base_url
+        return f"{base.rstrip('/')}/embeddings"
+
+    @property
+    def resolved_embeddings_api_key(self) -> str:
+        return self.embeddings_api_key.strip() or self.openrouter_api_key
 
     @property
     def parsed_openrouter_fallback_models(self) -> list[str]:

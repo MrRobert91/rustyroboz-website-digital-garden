@@ -301,6 +301,8 @@ class ChatAgent:
         }
 
     async def _run_tools(self, state: AgentState) -> AgentState:
+        import asyncio
+
         writer = _writer()
         messages = list(state.get("messages", []))
         citations = list(state.get("citations", []))
@@ -312,7 +314,9 @@ class ChatAgent:
             except ValueError:
                 arguments = {}
 
-            result = self._execute_tool(name, arguments, citations, writer)
+            # Off the event loop: search embeds the query, which may be a
+            # network call when the embeddings backend is "api".
+            result = await asyncio.to_thread(self._execute_tool, name, arguments, citations, writer)
             messages.append(
                 {
                     "role": "tool",
