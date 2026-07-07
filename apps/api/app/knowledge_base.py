@@ -53,6 +53,7 @@ class KnowledgeBase:
         self.vector_meta: list[dict[str, Any]] = []
         self.documents: list[ContentDocument] = load_content_documents(self.settings.resolved_content_root)
         self.ready = False
+        self.fts_enabled = False
 
     def attach(self, embedder: Embedder, vector_store: FaissVectorStore) -> None:
         self.embedder = embedder
@@ -68,6 +69,7 @@ class KnowledgeBase:
         if self._can_load_existing(signature):
             self.vector_store.load()
             self.vector_meta = self._load_meta()["vectors"]
+            self.fts_enabled = self.repository.has_fts()
             self.ready = True
             return
 
@@ -131,6 +133,7 @@ class KnowledgeBase:
             chunk_payload["embedding"] = np.asarray(embedding).tolist()
 
         self.repository.replace_knowledge_base(documents_payload, chunks_payload)
+        self.fts_enabled = self.repository.rebuild_fts(chunks_payload)
         self.vector_store.reset()
         if len(chunk_texts) > 0:
             self.vector_store.add(vectors)
@@ -140,19 +143,36 @@ class KnowledgeBase:
         self.ready = True
 
     def search(self, query: str, limit: int = 5) -> list[SearchResult]:
+        """Hybrid retrieval: semantic (FAISS) + keyword (SQLite FTS5 / BM25),
+        fused with Reciprocal Rank Fusion. Keyword ranking catches the exact
+        names (projects, tech, certs) that small embeddings miss."""
         if not self.ready or self.vector_store is None or self.vector_store.size == 0 or not self.vector_meta:
             return []
 
+        pool = max(limit * 2, 10)
         query_vector = self.embedder.embed_query(query)
-        scores, indices = self.vector_store.search(query_vector, limit)
-        results: list[SearchResult] = []
+        scores, indices = self.vector_store.search(query_vector, pool)
+        semantic_rank: list[int] = [
+            int(index)
+            for score, index in zip(scores[0], indices[0])
+            if 0 <= index < len(self.vector_meta) and float(score) > 0
+        ]
+        semantic_scores = {int(index): float(score) for score, index in zip(scores[0], indices[0])}
 
-        for score, index in zip(scores[0], indices[0]):
-            if index < 0 or index >= len(self.vector_meta):
-                continue
-            if float(score) <= 0:
-                continue
-            item = self.vector_meta[int(index)]
+        keyword_rank: list[int] = []
+        if getattr(self, "fts_enabled", False):
+            keyword_rank = [vid for vid in self.repository.fts_search(query, limit=pool) if vid < len(self.vector_meta)]
+
+        # RRF: score = Σ 1/(60 + rank)
+        fused: dict[int, float] = {}
+        for rank_list in (semantic_rank, keyword_rank):
+            for position, vector_id in enumerate(rank_list):
+                fused[vector_id] = fused.get(vector_id, 0.0) + 1.0 / (60 + position)
+
+        ordered = sorted(fused.items(), key=lambda item: item[1], reverse=True)[:limit]
+        results: list[SearchResult] = []
+        for vector_id, _fused_score in ordered:
+            item = self.vector_meta[vector_id]
             results.append(
                 SearchResult(
                     slug=item["slug"],
@@ -160,10 +180,9 @@ class KnowledgeBase:
                     collection=item["collection"],
                     href=item["href"],
                     content=item["content"],
-                    score=float(score),
+                    score=semantic_scores.get(vector_id, 0.0),
                 )
             )
-
         return results
 
     # ---- Agent tool surface ----

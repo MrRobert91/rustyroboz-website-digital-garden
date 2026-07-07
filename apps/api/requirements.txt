@@ -9,3 +9,5 @@ langgraph==1.0.4
 langchain-core==1.1.2
 PyYAML==6.0.3
 fastembed==0.7.1
+# Optional LangGraph tracing — activates automatically when LANGSMITH_TRACING=true
+langsmith==0.4.37

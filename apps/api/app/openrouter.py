@@ -1,9 +1,12 @@
 """Streaming client for any OpenAI-compatible chat endpoint (OpenRouter by default).
 
-Handles the model-fallback chain: the primary model is tried first and, while
-no tokens have been forwarded yet, any transport/HTTP/empty-stream failure
-moves on to the next candidate. The model that actually answers is surfaced
-in every event so the UI can display it.
+- Persistent connection pool (one AsyncClient reused across requests — no TLS
+  handshake per LLM call).
+- Model-fallback chain: the primary model is tried first and, while no tokens
+  have been forwarded yet, any transport/HTTP/empty-stream failure moves on to
+  the next candidate. The model that actually answers is surfaced in events.
+- Usage accounting: requests OpenRouter usage (tokens + USD cost) and attaches
+  it to the final event of every call.
 """
 
 from __future__ import annotations
@@ -21,9 +24,35 @@ class LlmError(RuntimeError):
     pass
 
 
+def _normalize_usage(raw: Any) -> dict[str, Any]:
+    if not isinstance(raw, dict):
+        return {}
+    details = raw.get("prompt_tokens_details") or {}
+    return {
+        "prompt_tokens": int(raw.get("prompt_tokens") or 0),
+        "completion_tokens": int(raw.get("completion_tokens") or 0),
+        "total_tokens": int(raw.get("total_tokens") or 0),
+        "cost_usd": float(raw.get("cost") or 0.0),
+        "cached_tokens": int(details.get("cached_tokens") or 0) if isinstance(details, dict) else 0,
+    }
+
+
 class OpenRouterClient:
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
+        self._client: httpx.AsyncClient | None = None
+
+    def _http(self) -> httpx.AsyncClient:
+        if self._client is None or self._client.is_closed:
+            self._client = httpx.AsyncClient(
+                timeout=self.settings.llm_timeout_seconds,
+                limits=httpx.Limits(max_keepalive_connections=4, max_connections=8),
+            )
+        return self._client
+
+    async def aclose(self) -> None:
+        if self._client and not self._client.is_closed:
+            await self._client.aclose()
 
     def _headers(self) -> dict[str, str]:
         headers = {
@@ -50,7 +79,7 @@ class OpenRouterClient:
         """Yields events:
         {"type": "model", "model": str}            — once, when a model accepts
         {"type": "content", "delta": str}          — streamed answer tokens
-        {"type": "end", "content": str, "tool_calls": [...], "model": str}
+        {"type": "end", "content": str, "tool_calls": [...], "model": str, "usage": {...}}
         """
         self._require_key()
 
@@ -86,6 +115,8 @@ class OpenRouterClient:
             "max_tokens": max_tokens,
             "stream": True,
             "messages": messages,
+            # OpenRouter: attach token counts + USD cost to the final chunk.
+            "usage": {"include": True},
         }
         if tools:
             payload["tools"] = tools
@@ -94,53 +125,55 @@ class OpenRouterClient:
         tool_calls: dict[int, dict[str, Any]] = {}
         seen_model: str | None = None
         got_payload = False
+        usage: dict[str, Any] = {}
 
-        async with httpx.AsyncClient(timeout=self.settings.llm_timeout_seconds) as client:
-            async with client.stream(
-                "POST", self.settings.openrouter_chat_url, headers=self._headers(), json=payload
-            ) as response:
-                if response.status_code >= 400:
-                    body = await response.aread()
-                    raise LlmError(f"HTTP {response.status_code}: {self._error_detail(body)}")
+        async with self._http().stream(
+            "POST", self.settings.openrouter_chat_url, headers=self._headers(), json=payload
+        ) as response:
+            if response.status_code >= 400:
+                body = await response.aread()
+                raise LlmError(f"HTTP {response.status_code}: {self._error_detail(body)}")
 
-                async for line in response.aiter_lines():
-                    if not line.startswith("data:"):
-                        continue
-                    data = line[len("data:") :].strip()
-                    if not data or data == "[DONE]":
-                        continue
-                    try:
-                        chunk = json.loads(data)
-                    except ValueError:
-                        continue
+            async for line in response.aiter_lines():
+                if not line.startswith("data:"):
+                    continue
+                data = line[len("data:") :].strip()
+                if not data or data == "[DONE]":
+                    continue
+                try:
+                    chunk = json.loads(data)
+                except ValueError:
+                    continue
 
-                    if isinstance(chunk.get("error"), dict):
-                        raise LlmError(str(chunk["error"].get("message", "provider error")))
+                if isinstance(chunk.get("error"), dict):
+                    raise LlmError(str(chunk["error"].get("message", "provider error")))
 
-                    got_payload = True
-                    if seen_model is None and isinstance(chunk.get("model"), str):
-                        seen_model = chunk["model"]
-                        yield {"type": "model", "model": seen_model}
+                got_payload = True
+                if seen_model is None and isinstance(chunk.get("model"), str):
+                    seen_model = chunk["model"]
+                    yield {"type": "model", "model": seen_model}
+                if chunk.get("usage"):
+                    usage = _normalize_usage(chunk["usage"])
 
-                    for choice in chunk.get("choices", []):
-                        delta = choice.get("delta") or {}
-                        piece = delta.get("content")
-                        if isinstance(piece, str) and piece:
-                            content_parts.append(piece)
-                            yield {"type": "content", "delta": piece}
-                        for call in delta.get("tool_calls") or []:
-                            index = int(call.get("index", 0))
-                            slot = tool_calls.setdefault(
-                                index,
-                                {"id": "", "type": "function", "function": {"name": "", "arguments": ""}},
-                            )
-                            if call.get("id"):
-                                slot["id"] = call["id"]
-                            function = call.get("function") or {}
-                            if function.get("name"):
-                                slot["function"]["name"] = function["name"]
-                            if function.get("arguments"):
-                                slot["function"]["arguments"] += function["arguments"]
+                for choice in chunk.get("choices", []):
+                    delta = choice.get("delta") or {}
+                    piece = delta.get("content")
+                    if isinstance(piece, str) and piece:
+                        content_parts.append(piece)
+                        yield {"type": "content", "delta": piece}
+                    for call in delta.get("tool_calls") or []:
+                        index = int(call.get("index", 0))
+                        slot = tool_calls.setdefault(
+                            index,
+                            {"id": "", "type": "function", "function": {"name": "", "arguments": ""}},
+                        )
+                        if call.get("id"):
+                            slot["id"] = call["id"]
+                        function = call.get("function") or {}
+                        if function.get("name"):
+                            slot["function"]["name"] = function["name"]
+                        if function.get("arguments"):
+                            slot["function"]["arguments"] += function["arguments"]
 
         if not got_payload:
             raise LlmError("The provider returned an empty stream.")
@@ -150,6 +183,7 @@ class OpenRouterClient:
             "content": "".join(content_parts),
             "tool_calls": [tool_calls[index] for index in sorted(tool_calls)],
             "model": seen_model or model,
+            "usage": usage,
         }
 
     async def complete(
@@ -157,36 +191,40 @@ class OpenRouterClient:
         messages: list[dict[str, Any]],
         temperature: float = 0.0,
         max_tokens: int = 200,
-    ) -> tuple[str, str]:
-        """Non-streaming helper (used by the guardrail). Returns (text, model)."""
+        model_override: str | None = None,
+    ) -> tuple[str, str, dict[str, Any]]:
+        """Non-streaming helper (used by the guardrail).
+        Returns (text, model, usage). `model_override` lets the guard use a
+        cheaper/faster model than the main chain."""
         self._require_key()
 
+        candidates = [model_override] if model_override else self.settings.model_candidates
         errors: list[str] = []
-        async with httpx.AsyncClient(timeout=self.settings.llm_timeout_seconds) as client:
-            for model in self.settings.model_candidates:
-                payload = {
-                    "model": model,
-                    "temperature": temperature,
-                    "max_tokens": max_tokens,
-                    "messages": messages,
-                }
-                try:
-                    response = await client.post(
-                        self.settings.openrouter_chat_url, headers=self._headers(), json=payload
-                    )
-                except httpx.HTTPError as exc:
-                    errors.append(f"{model}: {exc}")
-                    continue
+        for model in candidates:
+            payload = {
+                "model": model,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+                "messages": messages,
+                "usage": {"include": True},
+            }
+            try:
+                response = await self._http().post(
+                    self.settings.openrouter_chat_url, headers=self._headers(), json=payload
+                )
+            except httpx.HTTPError as exc:
+                errors.append(f"{model}: {exc}")
+                continue
 
-                if response.status_code >= 400:
-                    errors.append(f"{model}: HTTP {response.status_code}: {self._error_detail(response.content)}")
-                    continue
+            if response.status_code >= 400:
+                errors.append(f"{model}: HTTP {response.status_code}: {self._error_detail(response.content)}")
+                continue
 
-                data = response.json()
-                text = (data.get("choices", [{}])[0].get("message", {}).get("content") or "").strip()
-                if text:
-                    return text, str(data.get("model", model))
-                errors.append(f"{model}: empty completion")
+            data = response.json()
+            text = (data.get("choices", [{}])[0].get("message", {}).get("content") or "").strip()
+            if text:
+                return text, str(data.get("model", model)), _normalize_usage(data.get("usage"))
+            errors.append(f"{model}: empty completion")
 
         raise LlmError("All configured models failed. " + " | ".join(errors))
 

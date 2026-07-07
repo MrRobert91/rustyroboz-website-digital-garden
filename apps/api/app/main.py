@@ -1,6 +1,8 @@
+import time
+from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -15,7 +17,35 @@ from .vector_index import FaissVectorStore
 
 class ChatRequest(BaseModel):
     message: str
-    session_id: int | None = None
+    session_id: str | None = None
+
+
+class RateLimiter:
+    """Tiny in-memory sliding-window limiter (per IP, per process).
+    Enough to keep a public portfolio endpoint from burning API credits."""
+
+    def __init__(self, per_minute: int) -> None:
+        self.per_minute = per_minute
+        self.hits: dict[str, deque[float]] = defaultdict(deque)
+
+    def allow(self, key: str) -> bool:
+        now = time.time()
+        window = self.hits[key]
+        while window and now - window[0] > 60:
+            window.popleft()
+        if len(window) >= self.per_minute:
+            return False
+        window.append(now)
+        if len(self.hits) > 10_000:  # bounded memory under address churn
+            self.hits.clear()
+        return True
+
+
+def client_ip(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
 
 
 def create_app(settings=None) -> FastAPI:
@@ -57,6 +87,7 @@ def create_app(settings=None) -> FastAPI:
         yield
         if build_task and not build_task.done():
             build_task.cancel()
+        await chat_service.client.aclose()
         if knowledge_base.ready and knowledge_base.vector_store is not None:
             knowledge_base.vector_store.save()
 
@@ -99,15 +130,30 @@ def create_app(settings=None) -> FastAPI:
             "guardrails": settings.guardrails_enabled,
         }
 
+    limiter = RateLimiter(settings.rate_limit_per_minute)
+
+    def check_request(request: Request, payload: ChatRequest) -> None:
+        if not payload.message.strip():
+            raise HTTPException(status_code=400, detail="Message is empty.")
+        if len(payload.message) > settings.max_message_chars:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Message too long (max {settings.max_message_chars} characters).",
+            )
+        if not limiter.allow(client_ip(request)):
+            raise HTTPException(status_code=429, detail="Too many requests — try again in a minute.")
+
     @app.post("/api/v1/chat")
-    async def chat(payload: ChatRequest):
+    async def chat(payload: ChatRequest, request: Request):
+        check_request(request, payload)
         try:
             return await chat_service.ask(payload.message, payload.session_id)
         except RuntimeError as exc:
             raise HTTPException(status_code=502, detail=str(exc)) from exc
 
     @app.post("/api/v1/chat/stream")
-    async def chat_stream(payload: ChatRequest):
+    async def chat_stream(payload: ChatRequest, request: Request):
+        check_request(request, payload)
         return StreamingResponse(chat_service.stream(payload.message, payload.session_id), media_type="text/event-stream")
 
     return app

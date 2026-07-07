@@ -53,8 +53,19 @@ class Settings(BaseSettings):
 
     # Agent + guardrails
     guardrails_enabled: bool = Field(default=True, alias="GUARDRAILS_ENABLED")
+    # Optional cheaper/faster model for the guard classifier (falls back to the
+    # main model chain when empty).
+    guard_model: str = Field(default="", alias="GUARD_MODEL")
     agent_max_tool_rounds: int = Field(default=4, alias="AGENT_MAX_TOOL_ROUNDS")
     chat_history_limit: int = Field(default=12, alias="CHAT_HISTORY_LIMIT")
+
+    # Abuse limits for the public endpoint
+    max_message_chars: int = Field(default=2000, alias="MAX_MESSAGE_CHARS")
+    max_answer_chars: int = Field(default=8000, alias="MAX_ANSWER_CHARS")
+    rate_limit_per_minute: int = Field(default=8, alias="RATE_LIMIT_PER_MINUTE")
+
+    # Server-side cache for first-turn answers (the suggested questions)
+    answer_cache_ttl_seconds: int = Field(default=3600, alias="ANSWER_CACHE_TTL_SECONDS")
 
     @property
     def allowed_origins(self) -> list[str]:

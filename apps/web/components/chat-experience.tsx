@@ -12,7 +12,8 @@
  */
 import Link from "next/link";
 import { startTransition, useRef, useState } from "react";
-import { ArrowUpRight, CornerDownLeft } from "lucide-react";
+import { ArrowUpRight, CornerDownLeft, Zap } from "lucide-react";
+import { ChatMarkdown } from "@/components/chat-markdown";
 import { Squiggle, Tape } from "@/components/notebook";
 import { RobozAvatar, type RobozMood } from "@/components/widgets/roboz-avatar";
 import { cn } from "@/lib/utils";
@@ -24,12 +25,30 @@ type Citation = {
   collection?: string;
 };
 
+type Usage = {
+  prompt_tokens?: number;
+  completion_tokens?: number;
+  total_tokens?: number;
+  cost_usd?: number;
+  cached_tokens?: number;
+};
+
+type Telemetry = {
+  usage?: Usage;
+  tps?: number;
+  durationS?: number;
+  llmCalls?: number;
+  toolRounds?: number;
+  cached?: boolean;
+};
+
 type ChatMessage = {
   id: string;
   role: "user" | "assistant";
   content: string;
   citations?: Citation[];
   model?: string;
+  telemetry?: Telemetry;
 };
 
 type ChatExperienceProps = {
@@ -90,10 +109,21 @@ function shortModelName(model: string) {
   return base.replace(/:free$/, "");
 }
 
+function formatCost(cost?: number) {
+  if (!cost) {
+    return "$0";
+  }
+  return cost < 0.001 ? `$${cost.toFixed(6)}` : `$${cost.toFixed(4)}`;
+}
+
 const SUGGESTIONS = [
   "Which AI projects has David shipped?",
-  "What does he write about?",
-  "Tell me about his background as an AI engineer.",
+  "What has he built with LLMs and agents?",
+  "What's his experience teaching AI?",
+  "Tell me about his VR and game dev work",
+  "What's his background and certifications?",
+  "What is he exploring right now?",
+  "¿Qué ha hecho con computación cuántica?",
 ];
 
 export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
@@ -102,11 +132,14 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
   const [loading, setLoading] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sessionId, setSessionId] = useState<number | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [model, setModel] = useState<string | null>(null);
   const [statusLine, setStatusLine] = useState<string | null>(null);
   const [inputFocused, setInputFocused] = useState(false);
+  const [telemetry, setTelemetry] = useState<Telemetry | null>(null);
+  const [liveTps, setLiveTps] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const streamStatsRef = useRef<{ startedAt: number; chars: number }>({ startedAt: 0, chars: 0 });
 
   const mood: RobozMood = loading
     ? streaming
@@ -141,6 +174,8 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
     setStreaming(false);
     setError(null);
     setStatusLine("checking the question…");
+    setLiveTps(null);
+    streamStatsRef.current = { startedAt: 0, chars: 0 };
     setMessages((current) => [...current, userMessage, { id: assistantMessageId, role: "assistant", content: "" }]);
     scrollToEnd();
 
@@ -183,12 +218,23 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
           const delta = String(eventPayload.data.delta ?? "");
           setStreaming(true);
           setStatusLine(null);
+          // live tokens/s estimate (~4 chars per token) until the backend
+          // sends the accurate value with `done`
+          const stats = streamStatsRef.current;
+          if (!stats.startedAt) {
+            stats.startedAt = performance.now();
+          }
+          stats.chars += delta.length;
+          const elapsed = (performance.now() - stats.startedAt) / 1000;
+          if (elapsed > 0.4) {
+            setLiveTps(Math.round(stats.chars / 4 / elapsed));
+          }
           startTransition(() => {
             setMessages((current) =>
               current.map((item) => (item.id === assistantMessageId ? { ...item, content: `${item.content}${delta}` } : item)),
             );
             if (eventPayload.data.session_id) {
-              setSessionId(Number(eventPayload.data.session_id));
+              setSessionId(String(eventPayload.data.session_id));
             }
           });
           scrollToEnd();
@@ -198,6 +244,14 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
           const answer = String(eventPayload.data.answer ?? "");
           const citations = Array.isArray(eventPayload.data.citations) ? (eventPayload.data.citations as Citation[]) : [];
           const doneModel = String(eventPayload.data.model ?? "");
+          const doneTelemetry: Telemetry = {
+            usage: (eventPayload.data.usage as Usage) ?? undefined,
+            tps: Number(eventPayload.data.tps ?? 0) || undefined,
+            durationS: Number(eventPayload.data.duration_s ?? 0) || undefined,
+            llmCalls: Number(eventPayload.data.llm_calls ?? 0) || undefined,
+            toolRounds: Number(eventPayload.data.tool_rounds ?? 0),
+            cached: Boolean(eventPayload.data.cached),
+          };
 
           startTransition(() => {
             setMessages((current) =>
@@ -208,6 +262,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                       content: answer,
                       citations,
                       model: doneModel || item.model,
+                      telemetry: doneTelemetry,
                     }
                   : item,
               ),
@@ -215,8 +270,10 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
             if (doneModel) {
               setModel(doneModel);
             }
+            setTelemetry(doneTelemetry);
+            setLiveTps(null);
             if (eventPayload.data.session_id) {
-              setSessionId(Number(eventPayload.data.session_id));
+              setSessionId(String(eventPayload.data.session_id));
             }
           });
           scrollToEnd();
@@ -269,16 +326,54 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                     : "ask me about David's work")}
             </p>
             <div className="mt-4 space-y-2 border-t border-dashed border-border/70 pt-4">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Unit</p>
-              <p className="font-mono text-xs text-foreground">ROBOZ MK-1 · chat build</p>
-              <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Model online</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Model online</p>
               <p className="font-mono text-xs text-accent" title={model ?? undefined}>
                 {model ? shortModelName(model) : "standby — assigned on first reply"}
               </p>
+
+              {/* Live telemetry — this chatbot doubles as an LLM-engineering showcase */}
+              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Telemetry</p>
+              <dl className="space-y-1 font-mono text-[11px] text-foreground/85">
+                <div className="flex justify-between gap-2">
+                  <dt className="text-muted-foreground">tokens in / out</dt>
+                  <dd>
+                    {telemetry?.usage
+                      ? `${telemetry.usage.prompt_tokens ?? 0} / ${telemetry.usage.completion_tokens ?? 0}`
+                      : "—"}
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <dt className="text-muted-foreground">tokens / s</dt>
+                  <dd className={liveTps ? "text-accent" : undefined}>
+                    {liveTps ? `~${liveTps} (live)` : telemetry?.tps ? telemetry.tps : "—"}
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <dt className="text-muted-foreground">request cost</dt>
+                  <dd>{telemetry?.usage ? formatCost(telemetry.usage.cost_usd) : "—"}</dd>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <dt className="text-muted-foreground">llm calls · tools</dt>
+                  <dd>{telemetry?.llmCalls ? `${telemetry.llmCalls} · ${telemetry.toolRounds ?? 0}` : "—"}</dd>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <dt className="text-muted-foreground">latency</dt>
+                  <dd>{telemetry?.durationS ? `${telemetry.durationS}s` : "—"}</dd>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <dt className="text-muted-foreground">cache</dt>
+                  <dd className={telemetry?.cached ? "text-accent" : undefined}>
+                    {telemetry ? (telemetry.cached ? "hit ⚡" : "miss") : "—"}
+                  </dd>
+                </div>
+              </dl>
+
               {sessionId ? (
                 <>
-                  <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Session</p>
-                  <p className="font-mono text-xs text-foreground">#{String(sessionId).padStart(4, "0")}</p>
+                  <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Session</p>
+                  <p className="truncate font-mono text-[11px] text-foreground/70" title={sessionId}>
+                    {sessionId.slice(0, 12)}…
+                  </p>
                 </>
               ) : null}
             </div>
@@ -327,22 +422,36 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 }
                 return (
                   <article className="max-w-[95%] sm:max-w-2xl" key={message.id}>
-                    <div className="flex items-baseline gap-2.5">
+                    <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
                       <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">Roboz</p>
                       {message.model ? (
                         <p className="font-mono text-[10px] text-muted-foreground" title={message.model}>
                           via {shortModelName(message.model)}
                         </p>
                       ) : null}
+                      {message.telemetry?.usage ? (
+                        <p className="font-mono text-[10px] text-muted-foreground/80">
+                          {message.telemetry.usage.total_tokens ?? 0} tok
+                          {message.telemetry.tps ? ` · ${message.telemetry.tps} tok/s` : ""}
+                          {` · ${formatCost(message.telemetry.usage.cost_usd)}`}
+                        </p>
+                      ) : null}
+                      {message.telemetry?.cached ? (
+                        <p className="inline-flex items-center gap-0.5 font-mono text-[10px] text-accent">
+                          <Zap className="size-2.5" /> cached
+                        </p>
+                      ) : null}
                     </div>
                     <div className="relative mt-1.5 border border-border bg-background/70 px-4 py-3 shadow-paper">
-                      <p className="whitespace-pre-wrap font-serif text-[15px] leading-relaxed text-foreground">
-                        {message.content}
-                        {isStreamingThis ? <span aria-hidden className="ml-0.5 animate-pulse text-accent">▍</span> : null}
+                      <div>
+                        <ChatMarkdown content={message.content} />
+                        {isStreamingThis && message.content ? (
+                          <span aria-hidden className="ml-0.5 animate-pulse text-accent">▍</span>
+                        ) : null}
                         {!message.content && isStreamingThis ? (
                           <span className="font-hand text-lg text-muted-foreground">thinking…</span>
                         ) : null}
-                      </p>
+                      </div>
                       {message.citations?.length ? (
                         <div className="mt-3 flex flex-wrap gap-2 border-t border-dashed border-border/70 pt-3">
                           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
