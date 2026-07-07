@@ -335,6 +335,14 @@ class ChatAgent:
         if name == "search_site":
             query = str(arguments.get("query", "")).strip()
             writer({"type": "status", "stage": "searching", "detail": query})
+            if not self.knowledge_base.ready:
+                return {
+                    "status": (
+                        "The semantic index is still warming up after a restart. "
+                        "Use list_site_content to browse everything published and "
+                        "read_document to read the relevant pages instead."
+                    )
+                }
             results = self.knowledge_base.search(query, limit=5)
             for item in results[:3]:
                 self._track_citation(citations, item.collection, item.slug, item.title, item.href)

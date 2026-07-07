@@ -39,6 +39,11 @@ class Settings(BaseSettings):
     openrouter_site_name: str = Field(default="rustyroboz", alias="OPENROUTER_SITE_NAME")
     llm_timeout_seconds: float = Field(default=60.0, alias="LLM_TIMEOUT_SECONDS")
 
+    # "eager" builds the FAISS index before serving (dev/tests); "background"
+    # binds the port immediately and indexes in a thread (production — keeps
+    # platform healthchecks happy while the embedding model warms up).
+    index_startup_mode: str = Field(default="eager", alias="INDEX_STARTUP_MODE")
+
     # Agent + guardrails
     guardrails_enabled: bool = Field(default=True, alias="GUARDRAILS_ENABLED")
     agent_max_tool_rounds: int = Field(default=4, alias="AGENT_MAX_TOOL_ROUNDS")

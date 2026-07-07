@@ -30,21 +30,37 @@ class SearchResult:
 
 
 class KnowledgeBase:
+    """Semantic index + raw document access for the chat agent.
+
+    Documents (full MDX bodies, catalog) are loaded eagerly and cheaply at
+    construction so `read_document`/`list_site_content` work immediately.
+    The embedder + FAISS store attach later via `attach()` — in production
+    the index is built in a background thread after the port is bound, so
+    `ready` gates the semantic `search()`.
+    """
+
     def __init__(
         self,
         settings: Settings,
         repository: SqliteRepository,
-        vector_store: FaissVectorStore,
-        embedder: Embedder,
+        vector_store: FaissVectorStore | None = None,
+        embedder: Embedder | None = None,
     ) -> None:
         self.settings = settings
         self.repository = repository
         self.vector_store = vector_store
         self.embedder = embedder
         self.vector_meta: list[dict[str, Any]] = []
-        self.documents: list[ContentDocument] = []
+        self.documents: list[ContentDocument] = load_content_documents(self.settings.resolved_content_root)
+        self.ready = False
+
+    def attach(self, embedder: Embedder, vector_store: FaissVectorStore) -> None:
+        self.embedder = embedder
+        self.vector_store = vector_store
 
     def sync(self) -> None:
+        if self.embedder is None or self.vector_store is None:
+            raise RuntimeError("KnowledgeBase.sync() requires an attached embedder and vector store.")
         documents = load_content_documents(self.settings.resolved_content_root)
         self.documents = documents
         signature = self._build_signature(documents)
@@ -52,6 +68,7 @@ class KnowledgeBase:
         if self._can_load_existing(signature):
             self.vector_store.load()
             self.vector_meta = self._load_meta()["vectors"]
+            self.ready = True
             return
 
         self.rebuild(documents, signature)
@@ -120,9 +137,10 @@ class KnowledgeBase:
         self.vector_meta = meta
         self.vector_store.save()
         self._save_meta({"signature": signature, "vectors": meta})
+        self.ready = True
 
     def search(self, query: str, limit: int = 5) -> list[SearchResult]:
-        if self.vector_store.size == 0 or not self.vector_meta:
+        if not self.ready or self.vector_store is None or self.vector_store.size == 0 or not self.vector_meta:
             return []
 
         query_vector = self.embedder.embed_query(query)
