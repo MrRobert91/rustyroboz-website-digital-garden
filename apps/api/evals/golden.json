@@ -1,0 +1,23 @@
+{
+  "description": "Golden retrieval set: each question must surface the expected document among the top results. Run via tests/test_retrieval_evals.py (offline, hash+BM25 hybrid) — with the production embeddings the hit rate should only improve.",
+  "min_hit_rate": 0.75,
+  "top_k": 5,
+  "cases": [
+    { "question": "Tell me about the technical interview chatbot", "expected_slug": "technical-interview-chatbot" },
+    { "question": "How did David deploy the Hermes agent on a Hetzner VPS with OpenRouter?", "expected_slug": "hermes-agent-en-un-vps-de-hetzner-con-openrouter" },
+    { "question": "What is the metroidvania game made with AI generated art?", "expected_slug": "metroidvania-game-using-ai-generated-art" },
+    { "question": "Did David build anything with quantum random numbers?", "expected_slug": "quantum-random-number-generator" },
+    { "question": "Tell me about the SharedBrain project", "expected_slug": "sharedbrain" },
+    { "question": "What VR experience did he build with a Meta Quest 2?", "expected_slug": "susbeer-vr-experience" },
+    { "question": "Has David worked with brain computer interfaces?", "expected_slug": "brain-computer-interface-project" },
+    { "question": "Tell me about the digital twin in virtual reality", "expected_slug": "low-cost-vr-digital-twin" },
+    { "question": "Did he do face recognition with OpenCV?", "expected_slug": "face-recognition-and-tracking-with-opencv" },
+    { "question": "What did he build with Arduino for a car?", "expected_slug": "arduino-safe-brake-ligths" },
+    { "question": "traffic signal recognition with deep learning", "expected_slug": "recognition-of-traffic-signal-images-with-deep-learning" },
+    { "question": "How did he publish Cartastrofe on Google Play?", "expected_slug": "de-mvp-cogiendo-polvo-a-google-play-la-resurreccion-de-cartastrofe" },
+    { "question": "entornos virtuales en Python guía", "expected_slug": "guia-rapida-para-usar-entornos-virtuales-en-python" },
+    { "question": "Stable Diffusion and Dreambooth face images", "expected_slug": "genera-imagenes-de-tu-cara-con-stable-diffusion-y-dreambooth" },
+    { "question": "NASA hackathon participation", "expected_slug": "nasa-hackathon" },
+    { "question": "Socratic tutor with Gemma", "expected_slug": "socratic-gemma" }
+  ]
+}

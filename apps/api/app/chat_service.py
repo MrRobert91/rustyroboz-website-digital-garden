@@ -1,45 +1,59 @@
+"""Thin service around the LangGraph agent: sessions, history, caching and SSE framing.
+
+SSE protocol consumed by the web client:
+  event: status  {stage, detail, session_id}     — agent progress (guard/search/read/…)
+  event: meta    {model, session_id}             — which model is answering
+  event: chunk   {delta, session_id}             — streamed answer tokens
+  event: done    {answer, citations, model, usage, tps, duration_s, llm_calls,
+                  tool_rounds, cached, session_id}
+  event: error   {detail}
+"""
+
 from __future__ import annotations
 
-import asyncio
 import json
-import re
-from typing import Any, TypedDict
+import time
+from typing import Any
 
-import httpx
-from langgraph.graph import END, START, StateGraph
-
+from .agent import ChatAgent
 from .config import Settings
 from .db import SqliteRepository
-from .knowledge_base import KnowledgeBase, SearchResult
+from .knowledge_base import KnowledgeBase
+from .openrouter import OpenRouterClient
 
 
-OUT_OF_SCOPE_MESSAGE = (
-    "No tengo suficiente contexto en el contenido indexado para responder con fiabilidad. "
-    "Puedo ayudarte mejor si preguntas por proyectos, artículos, notas o trayectoria publicados en la web."
-)
-
-
-class ChatState(TypedDict, total=False):
-    message: str
-    session_id: int | None
-    retrieved: list[SearchResult]
-    answer: str
-    citations: list[dict[str, str]]
+def _sse(event: str, data: dict[str, Any]) -> str:
+    return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
 
 
 class ChatService:
-    def __init__(self, settings: Settings, repository: SqliteRepository, knowledge_base: KnowledgeBase) -> None:
+    def __init__(
+        self,
+        settings: Settings,
+        repository: SqliteRepository,
+        knowledge_base: KnowledgeBase,
+        client: OpenRouterClient | None = None,
+    ) -> None:
         self.settings = settings
         self.repository = repository
         self.knowledge_base = knowledge_base
-        self.graph = self._build_graph()
+        self.client = client or OpenRouterClient(settings)
+        self.agent = ChatAgent(settings, knowledge_base, self.client)
+        # First-turn answer cache (suggested-question chips hit this a lot).
+        self._answer_cache: dict[str, dict[str, Any]] = {}
 
-    async def ask(self, message: str, session_id: int | None = None) -> dict[str, Any]:
-        session_id = session_id or self.repository.create_chat_session(message)
-        state = await self.graph.ainvoke({"message": message, "session_id": session_id})
+    def _prepare(self, message: str, session_id: str | None) -> tuple[str, dict[str, Any], bool]:
+        fresh = not (session_id and self.repository.session_exists(session_id))
+        if fresh:
+            session_id = self.repository.create_chat_session(message)
+        history = self.repository.get_chat_messages(session_id, limit=self.settings.chat_history_limit)
+        return session_id, {"user_message": message, "history": history}, fresh and not history
 
-        citations = state.get("citations", [])
-        answer = state.get("answer", OUT_OF_SCOPE_MESSAGE)
+    def _finalize(self, session_id: str, message: str, state: dict[str, Any], started: float) -> dict[str, Any]:
+        answer = state.get("answer", "") or ""
+        citations = (state.get("citations") or [])[:4] if answer else []
+        model = state.get("model", "") or ""
+        usage = state.get("usage") or {}
 
         self.repository.append_chat_message(session_id, "user", message)
         self.repository.append_chat_message(session_id, "assistant", answer, citations)
@@ -48,240 +62,107 @@ class ChatService:
             "session_id": session_id,
             "answer": answer,
             "citations": citations,
+            "model": model,
+            "usage": usage,
+            "tps": state.get("tps", 0.0),
+            "duration_s": round(time.time() - started, 2),
+            "llm_calls": state.get("llm_calls", 0),
+            "tool_rounds": state.get("tool_rounds", 0),
+            "cached": False,
         }
 
-    async def stream(self, message: str, session_id: int | None = None):
-        try:
-            payload = await self.ask(message, session_id)
-            answer = payload["answer"]
+    # ---- first-turn answer cache ----
 
-            for start in range(0, len(answer), 48):
-                chunk = answer[start : start + 48]
-                event = {"delta": chunk, "session_id": payload["session_id"]}
-                yield f"event: chunk\ndata: {json.dumps(event, ensure_ascii=False)}\n\n"
-                await asyncio.sleep(0)
+    @staticmethod
+    def _cache_key(message: str) -> str:
+        return " ".join(message.lower().split())
 
-            yield f"event: done\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n"
-        except Exception as exc:
-            error_payload = {"detail": str(exc)}
-            yield f"event: error\ndata: {json.dumps(error_payload, ensure_ascii=False)}\n\n"
+    def _cache_get(self, message: str) -> dict[str, Any] | None:
+        entry = self._answer_cache.get(self._cache_key(message))
+        if not entry:
+            return None
+        if time.time() - entry["at"] > self.settings.answer_cache_ttl_seconds:
+            self._answer_cache.pop(self._cache_key(message), None)
+            return None
+        return entry["payload"]
 
-    def _build_graph(self):
-        graph = StateGraph(ChatState)
-        graph.add_node("retrieve", self._retrieve_context)
-        graph.add_node("answer", self._compose_answer)
-        graph.add_edge(START, "retrieve")
-        graph.add_edge("retrieve", "answer")
-        graph.add_edge("answer", END)
-        return graph.compile()
+    def _cache_put(self, message: str, payload: dict[str, Any]) -> None:
+        if not payload.get("answer"):
+            return
+        if len(self._answer_cache) >= 64:  # bounded — this is a tiny hot cache
+            self._answer_cache.pop(next(iter(self._answer_cache)))
+        self._answer_cache[self._cache_key(message)] = {"at": time.time(), "payload": payload}
 
-    def _retrieve_context(self, state: ChatState) -> ChatState:
-        results = self.knowledge_base.search(state["message"], limit=4)
-        return {"retrieved": results}
+    def _cached_payload(self, cached: dict[str, Any], session_id: str) -> dict[str, Any]:
+        usage = dict(cached.get("usage") or {})
+        usage["cost_usd"] = 0.0  # served from cache — this request cost nothing
+        return {**cached, "session_id": session_id, "usage": usage, "cached": True, "duration_s": 0.0}
 
-    async def _compose_answer(self, state: ChatState) -> ChatState:
-        retrieved = state.get("retrieved", [])
-        if not self._has_enough_context(state["message"], retrieved):
-            return {"answer": OUT_OF_SCOPE_MESSAGE, "citations": []}
+    # ---- entrypoints ----
 
-        citations = self._build_citations(retrieved)
-        answer = await self._request_completion(state["message"], retrieved, citations)
-        return {"answer": answer, "citations": citations}
+    async def ask(self, message: str, session_id: str | None = None) -> dict[str, Any]:
+        started = time.time()
+        session_id, state, cacheable = self._prepare(message, session_id)
 
-    def _has_enough_context(self, message: str, retrieved: list[SearchResult]) -> bool:
-        if not retrieved:
-            return False
+        cached = self._cache_get(message) if cacheable else None
+        if cached:
+            payload = self._cached_payload(cached, session_id)
+            self.repository.append_chat_message(session_id, "user", message)
+            self.repository.append_chat_message(session_id, "assistant", payload["answer"], payload["citations"])
+            return payload
 
-        query_tokens = set(re.findall(r"[a-zA-Z0-9áéíóúñüÁÉÍÓÚÑÜ]{3,}", message.lower()))
-        primary_tokens = set(
-            re.findall(
-                r"[a-zA-Z0-9áéíóúñüÁÉÍÓÚÑÜ]{3,}",
-                f"{retrieved[0].title} {retrieved[0].content}".lower(),
-            )
-        )
-        lexical_overlap = len(query_tokens & primary_tokens)
-        return retrieved[0].score >= 0.18 and lexical_overlap > 0
-
-    def _build_citations(self, retrieved: list[SearchResult]) -> list[dict[str, str]]:
-        citations: list[dict[str, str]] = []
-        seen: set[tuple[str, str]] = set()
-
-        for item in retrieved:
-            key = (item.collection, item.slug)
-            if key in seen:
-                continue
-            citations.append(
-                {
-                    "slug": item.slug,
-                    "title": item.title,
-                    "href": item.href,
-                    "collection": item.collection,
-                }
-            )
-            seen.add(key)
-            if len(citations) == 3:
-                break
-
-        return citations
-
-    async def _request_completion(
-        self,
-        message: str,
-        retrieved: list[SearchResult],
-        citations: list[dict[str, str]],
-    ) -> str:
-        if not self.settings.openrouter_api_key:
-            raise RuntimeError("OPENROUTER_API_KEY no está configurada en la API.")
-
-        headers = {
-            "Authorization": f"Bearer {self.settings.openrouter_api_key}",
-            "Content-Type": "application/json",
-        }
-        if self.settings.openrouter_site_url:
-            headers["HTTP-Referer"] = self.settings.openrouter_site_url
-        if self.settings.openrouter_site_name:
-            headers["X-Title"] = self.settings.openrouter_site_name
-
-        payload = self._build_openrouter_payload(message=message, retrieved=retrieved, citations=citations)
-
-        response: httpx.Response | None = None
-        retry_delays = (0.8, 1.6)
-
-        async with httpx.AsyncClient(timeout=45.0) as client:
-            for attempt in range(len(retry_delays) + 1):
-                try:
-                    response = await client.post(self.settings.openrouter_chat_url, headers=headers, json=payload)
-                except httpx.RequestError as exc:
-                    if attempt == len(retry_delays):
-                        raise RuntimeError(f"No se pudo conectar con OpenRouter: {exc}") from exc
-                    await asyncio.sleep(retry_delays[attempt])
-                    continue
-
-                if response.status_code not in {429, 500, 502, 503, 504} or attempt == len(retry_delays):
-                    break
-
-                retry_after = response.headers.get("retry-after")
-                delay = retry_delays[attempt]
-                if retry_after:
-                    try:
-                        delay = max(delay, float(retry_after))
-                    except ValueError:
-                        pass
-                await asyncio.sleep(delay)
-
-        if response is None:
-            raise RuntimeError("OpenRouter no devolvió ninguna respuesta.")
-        if response.status_code >= 400:
-            detail = self._extract_error_detail(response)
-            raise RuntimeError(f"OpenRouter devolvió {response.status_code}: {detail}")
-
-        data = response.json()
-        answer = (
-            data.get("choices", [{}])[0]
-            .get("message", {})
-            .get("content", "")
-            .strip()
-        )
-        if not answer:
-            raise RuntimeError("OpenRouter no devolvió contenido en la respuesta.")
-
-        return answer
-
-    def _build_openrouter_payload(
-        self,
-        message: str,
-        retrieved: list[SearchResult],
-        citations: list[dict[str, str]],
-    ) -> dict[str, Any]:
-        payload: dict[str, Any] = {
-            "model": self.settings.openrouter_model,
-            "temperature": 0.2,
-            "max_tokens": 700,
-            "messages": [
-                {"role": "system", "content": self._build_system_prompt()},
-                {
-                    "role": "user",
-                    "content": self._build_user_prompt(message=message, retrieved=retrieved, citations=citations),
-                },
-            ],
-            "provider": {
-                "allow_fallbacks": True,
-            },
-        }
-
-        fallback_models = [
-            model
-            for model in self.settings.parsed_openrouter_fallback_models
-            if model != self.settings.openrouter_model
-        ]
-        if fallback_models:
-            payload["models"] = fallback_models
-
+        final_state = await self.agent.graph.ainvoke(state)
+        payload = self._finalize(session_id, message, final_state, started)
+        if not payload["answer"]:
+            raise RuntimeError("The agent did not produce an answer.")
+        if cacheable:
+            self._cache_put(message, payload)
         return payload
 
-    def _build_system_prompt(self) -> str:
-        return (
-            "Eres el asistente de rustyroboz.com. "
-            "Responde únicamente usando el contexto recuperado del sitio personal. "
-            "No inventes proyectos, fechas, enlaces ni detalles que no aparezcan en el contexto. "
-            "Si el contexto no basta para responder, di exactamente: "
-            f"\"{OUT_OF_SCOPE_MESSAGE}\" "
-            "Responde en español salvo que la pregunta del usuario esté claramente en otro idioma. "
-            "Sé preciso, directo y útil."
-        )
-
-    def _build_user_prompt(
-        self,
-        message: str,
-        retrieved: list[SearchResult],
-        citations: list[dict[str, str]],
-    ) -> str:
-        context_blocks = []
-        for index, item in enumerate(retrieved[:4], start=1):
-            context_blocks.append(
-                "\n".join(
-                    [
-                        f"[Documento {index}]",
-                        f"Título: {item.title}",
-                        f"Colección: {item.collection}",
-                        f"URL: {item.href}",
-                        f"Score: {item.score:.4f}",
-                        "Contenido:",
-                        item.content.strip(),
-                    ]
-                )
-            )
-
-        citation_lines = [f"- {citation['title']} ({citation['href']})" for citation in citations]
-
-        return (
-            "Pregunta del usuario:\n"
-            f"{message.strip()}\n\n"
-            "Contexto recuperado del índice RAG:\n"
-            f"{'\n\n'.join(context_blocks)}\n\n"
-            "Citas que puedes usar como referencias finales:\n"
-            f"{'\n'.join(citation_lines)}\n\n"
-            "Instrucciones de respuesta:\n"
-            "- Prioriza la información más directamente relacionada con la pregunta.\n"
-            "- Si hay varias piezas de contexto, sintetízalas sin repetir texto bruto.\n"
-            "- Si no hay base suficiente, devuelve exactamente el mensaje de falta de contexto.\n"
-            "- No incluyas una sección separada de citas; las citas ya se enviarán por separado en la interfaz.\n"
-        )
-
-    def _extract_error_detail(self, response: httpx.Response) -> str:
+    async def stream(self, message: str, session_id: str | None = None):
+        started = time.time()
         try:
-            payload = response.json()
-        except ValueError:
-            return response.text[:300].strip() or "error desconocido"
+            session_id, state, cacheable = self._prepare(message, session_id)
 
-        if isinstance(payload, dict):
-            error = payload.get("error")
-            if isinstance(error, dict):
-                message = error.get("message")
-                if isinstance(message, str) and message.strip():
-                    return message.strip()
-            detail = payload.get("detail")
-            if isinstance(detail, str) and detail.strip():
-                return detail.strip()
+            cached = self._cache_get(message) if cacheable else None
+            if cached:
+                payload = self._cached_payload(cached, session_id)
+                self.repository.append_chat_message(session_id, "user", message)
+                self.repository.append_chat_message(session_id, "assistant", payload["answer"], payload["citations"])
+                if payload.get("model"):
+                    yield _sse("meta", {"model": payload["model"], "session_id": session_id})
+                answer = payload["answer"]
+                for start in range(0, len(answer), 64):
+                    yield _sse("chunk", {"delta": answer[start : start + 64], "session_id": session_id})
+                yield _sse("done", payload)
+                return
 
-        return str(payload)[:300]
+            final_state: dict[str, Any] = {}
+            async for mode, payload in self.agent.graph.astream(state, stream_mode=["custom", "values"]):
+                if mode == "custom" and isinstance(payload, dict):
+                    kind = payload.get("type")
+                    if kind == "chunk":
+                        yield _sse("chunk", {"delta": payload.get("delta", ""), "session_id": session_id})
+                    elif kind == "meta":
+                        yield _sse("meta", {"model": payload.get("model", ""), "session_id": session_id})
+                    elif kind == "status":
+                        yield _sse(
+                            "status",
+                            {
+                                "stage": payload.get("stage", ""),
+                                "detail": payload.get("detail", ""),
+                                "session_id": session_id,
+                            },
+                        )
+                elif mode == "values" and isinstance(payload, dict):
+                    final_state = payload
+
+            payload = self._finalize(session_id, message, final_state, started)
+            if not payload["answer"]:
+                yield _sse("error", {"detail": "The agent did not produce an answer."})
+                return
+            if cacheable:
+                self._cache_put(message, payload)
+            yield _sse("done", payload)
+        except Exception as exc:  # surfaced to the client as an SSE error frame
+            yield _sse("error", {"detail": str(exc)})

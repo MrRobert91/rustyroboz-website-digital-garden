@@ -7,6 +7,13 @@ ENV PORT=8000
 ENV SQLITE_PATH=/data/site.db
 ENV FAISS_INDEX_PATH=/data/faiss.index
 ENV FAISS_META_PATH=/data/index_meta.json
+# Bind the port immediately and build the FAISS index in a background thread,
+# so platform healthchecks pass while the embedding model warms up.
+ENV INDEX_STARTUP_MODE=background
+# Remote embeddings via OpenRouter's OpenAI-compatible /embeddings endpoint
+# (same OPENROUTER_API_KEY as the LLM): keeps the container ~2GB lighter than
+# running the local ONNX model. Set EMBEDDINGS_BACKEND=fastembed to go local.
+ENV EMBEDDINGS_BACKEND=api
 
 WORKDIR /app
 

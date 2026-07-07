@@ -2,6 +2,7 @@ import json
 import sqlite3
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 
 SCHEMA = """
@@ -55,6 +56,8 @@ def initialize_database(database_path: Path) -> None:
         connection.executescript(SCHEMA)
         _ensure_column(connection, "document_chunks", "embedding_json", "TEXT")
         _ensure_column(connection, "document_chunks", "faiss_vector_id", "INTEGER")
+        # Public, non-guessable session identifier (the numeric PK stays internal).
+        _ensure_column(connection, "chat_sessions", "public_id", "TEXT")
         connection.commit()
 
 
@@ -121,25 +124,55 @@ class SqliteRepository:
 
             connection.commit()
 
-    def create_chat_session(self, prompt: str) -> int:
+    def create_chat_session(self, prompt: str) -> str:
+        """Creates a session and returns its public (non-guessable) id."""
         title = prompt.strip()[:80]
+        public_id = uuid4().hex
         with self._connect() as connection:
-            cursor = connection.execute(
-                "INSERT INTO chat_sessions (session_title) VALUES (?)",
-                (title,),
+            connection.execute(
+                "INSERT INTO chat_sessions (session_title, public_id) VALUES (?, ?)",
+                (title, public_id),
             )
             connection.commit()
-            return int(cursor.lastrowid)
+        return public_id
 
-    def append_chat_message(self, session_id: int, role: str, content: str, citations: list[dict[str, Any]] | None = None) -> None:
+    def _session_pk(self, connection: sqlite3.Connection, public_id: str) -> int | None:
+        row = connection.execute("SELECT id FROM chat_sessions WHERE public_id = ?", (public_id,)).fetchone()
+        return int(row["id"]) if row else None
+
+    def session_exists(self, public_id: str) -> bool:
         with self._connect() as connection:
+            return self._session_pk(connection, public_id) is not None
+
+    def get_chat_messages(self, public_id: str, limit: int = 12) -> list[dict[str, str]]:
+        """Most recent messages of a session, oldest first (for agent history)."""
+        with self._connect() as connection:
+            pk = self._session_pk(connection, public_id)
+            if pk is None:
+                return []
+            rows = connection.execute(
+                """
+                SELECT role, content FROM chat_messages
+                WHERE session_id = ?
+                ORDER BY id DESC
+                LIMIT ?
+                """,
+                (pk, limit),
+            ).fetchall()
+        return [{"role": row["role"], "content": row["content"]} for row in reversed(rows)]
+
+    def append_chat_message(self, public_id: str, role: str, content: str, citations: list[dict[str, Any]] | None = None) -> None:
+        with self._connect() as connection:
+            pk = self._session_pk(connection, public_id)
+            if pk is None:
+                return
             connection.execute(
                 """
                 INSERT INTO chat_messages (session_id, role, content, citations_json)
                 VALUES (?, ?, ?, ?)
                 """,
                 (
-                    session_id,
+                    pk,
                     role,
                     content,
                     json.dumps(citations or [], ensure_ascii=False),
@@ -147,6 +180,49 @@ class SqliteRepository:
             )
             connection.execute(
                 "UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP WHERE id = ?",
-                (session_id,),
+                (pk,),
             )
             connection.commit()
+
+    # ---- FTS5 keyword index (hybrid retrieval) ----
+
+    def rebuild_fts(self, chunks: list[dict[str, Any]]) -> bool:
+        """(Re)creates the FTS5 chunk index. Returns False if FTS5 is unavailable."""
+        with self._connect() as connection:
+            try:
+                connection.execute("DROP TABLE IF EXISTS chunk_fts")
+                connection.execute(
+                    "CREATE VIRTUAL TABLE chunk_fts USING fts5(content, vector_id UNINDEXED)"
+                )
+            except sqlite3.OperationalError:
+                return False
+            connection.executemany(
+                "INSERT INTO chunk_fts (content, vector_id) VALUES (?, ?)",
+                [(chunk["content"], chunk["faiss_vector_id"]) for chunk in chunks],
+            )
+            connection.commit()
+        return True
+
+    def has_fts(self) -> bool:
+        with self._connect() as connection:
+            row = connection.execute(
+                "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'chunk_fts'"
+            ).fetchone()
+        return row is not None
+
+    def fts_search(self, query: str, limit: int = 10) -> list[int]:
+        """BM25-ranked vector ids for a keyword query (best first)."""
+        # Sanitize into a simple OR query — user text is not FTS syntax.
+        tokens = [token for token in "".join(c if c.isalnum() else " " for c in query).split() if len(token) > 1]
+        if not tokens:
+            return []
+        match = " OR ".join(f'"{token}"' for token in tokens[:12])
+        with self._connect() as connection:
+            try:
+                rows = connection.execute(
+                    "SELECT vector_id FROM chunk_fts WHERE chunk_fts MATCH ? ORDER BY bm25(chunk_fts) LIMIT ?",
+                    (match, limit),
+                ).fetchall()
+            except sqlite3.OperationalError:
+                return []
+        return [int(row["vector_id"]) for row in rows]

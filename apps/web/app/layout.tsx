@@ -44,16 +44,22 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+// Runs before paint so a saved (or OS-preferred) dark theme never flashes light.
+const themeInit = `try{var t=localStorage.getItem("theme");var d=t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches;if(d)document.documentElement.classList.add("dark")}catch(e){}`;
+
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    // suppressHydrationWarning: the inline theme script may add .dark to <html>
+    // before React hydrates.
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${spaceGrotesk.variable} ${plexSerif.variable} ${caveat.variable} ${jetbrainsMono.variable} font-display`}
       >
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         {/* overflow-x: clip (not hidden) keeps rotated cards from causing a
             horizontal scrollbar without turning this into a scroll container —
             which would break position: sticky on the timeline. */}
-        <div className="min-h-screen overflow-x-clip bg-background bg-paper-grid">
+        <div className="theme-fade min-h-screen overflow-x-clip bg-background bg-paper-grid">
           <SiteHeader />
           <main>{children}</main>
           <SiteFooter />

@@ -18,9 +18,10 @@ export function Squiggle({
   color = ACCENT,
   strokeWidth = 2,
   seed = 1,
+  animate = false,
   className,
   style,
-}: Common & { width?: number; height?: number; color?: string; strokeWidth?: number; seed?: number }) {
+}: Common & { width?: number; height?: number; color?: string; strokeWidth?: number; seed?: number; animate?: boolean }) {
   const steps = 24;
   const points: string[] = [];
   for (let i = 0; i <= steps; i++) {
@@ -31,7 +32,15 @@ export function Squiggle({
   }
   return (
     <svg aria-hidden className={className} height={height} style={{ display: "block", overflow: "visible", ...style }} width={width}>
-      <path d={points.join(" ")} fill="none" stroke={color} strokeLinecap="round" strokeWidth={strokeWidth} />
+      <path
+        className={animate ? "squiggle-draw" : undefined}
+        d={points.join(" ")}
+        fill="none"
+        pathLength={animate ? 1 : undefined}
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth={strokeWidth}
+      />
     </svg>
   );
 }
