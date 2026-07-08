@@ -101,6 +101,38 @@ async def test_chat_agent_searches_and_answers_with_citations(monkeypatch):
     assert "technical-interview-chatbot" in slugs
 
 
+async def test_truncated_answer_gets_notice(monkeypatch):
+    answer = "El chatbot de entrevistas técnicas es un asistente que se quedó a medias porque"
+    make_guard_allow(monkeypatch)
+
+    async def fake_stream_chat(self, messages, tools=None, temperature=0.2, max_tokens=4000):
+        yield {"type": "model", "model": "test/primary"}
+        yield {"type": "content", "delta": answer}
+        yield {
+            "type": "end",
+            "content": answer,
+            "model": "test/primary",
+            "tool_calls": [],
+            "usage": FAKE_USAGE,
+            "finish_reason": "length",
+        }
+
+    monkeypatch.setattr(OpenRouterClient, "stream_chat", fake_stream_chat)
+    app, _ = build_test_app()
+    transport = ASGITransport(app=app)
+
+    async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        response = await client.post(
+            "/api/v1/chat",
+            json={"message": "hazme un perfil psicologico de david", "session_id": None},
+        )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["answer"].startswith(answer)
+    assert "respuesta recortada" in payload["answer"]
+
+
 async def test_first_turn_answers_are_cached(monkeypatch):
     answer = "The Technical Interview Chatbot is an assistant for practicing technical interviews."
     make_guard_allow(monkeypatch)

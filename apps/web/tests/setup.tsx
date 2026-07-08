@@ -33,3 +33,6 @@ class MockIntersectionObserver {
 }
 
 vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
+
+// jsdom does not implement Element scrolling APIs (chat auto-scroll uses them).
+Element.prototype.scrollTo = Element.prototype.scrollTo ?? (() => {});
