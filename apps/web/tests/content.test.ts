@@ -19,6 +19,17 @@ describe("content loader", () => {
     expect(article.tags).toContain("google-play-store");
   });
 
+  it("loads El autor material with its published metadata and download link", async () => {
+    const article = await getItemBySlug(
+      "articles",
+      "cuando-los-humanos-trabajan-para-los-agentes-como-nacio-el-autor-material",
+    );
+
+    expect(article.title).toContain("El autor material");
+    expect(article.coverImage).toContain("el-autor-material.webp");
+    expect(article.body).toContain("/downloads/el-autor-material.pdf");
+  });
+
   it("builds a tag index across collections", async () => {
     const tags = await getTagIndex();
     expect(tags.get("ai-art")).toBeDefined();
