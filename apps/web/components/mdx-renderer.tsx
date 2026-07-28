@@ -10,6 +10,18 @@ type MdxRendererProps = {
 const components = {
   a: (props: AnchorHTMLAttributes<HTMLAnchorElement>) => {
     const href = props.href ?? "#";
+    if (props.download) {
+      return (
+        <a
+          className="font-medium text-accent underline underline-offset-4 hover:text-accent/80"
+          download={props.download}
+          href={href}
+        >
+          {props.children}
+        </a>
+      );
+    }
+
     if (href.startsWith("http")) {
       return (
         <a className="font-medium text-accent underline-offset-4 hover:underline" href={href} rel="noreferrer" target="_blank">
