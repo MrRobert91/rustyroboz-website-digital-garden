@@ -12,9 +12,10 @@ export type TimelineLink = {
   href: string;
 };
 
-/** A visual attached to an entry: an embedded YouTube video or an image. */
+/** A visual attached to an entry: an image, local video, or embedded YouTube video. */
 export type TimelineMediaItem =
   | { type: "youtube"; id: string; title?: string }
+  | { type: "video"; src: string; poster?: string; title?: string }
   | { type: "image"; src: string; alt?: string };
 
 export type TimelineEntry = {

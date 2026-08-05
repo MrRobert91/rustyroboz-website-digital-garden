@@ -40,7 +40,7 @@ function isInternalCrossHref(href: string) {
 
 export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
   const media = item.media ?? [];
-  const videos = media.filter((entry) => entry.type === "youtube");
+  const videos = media.filter((entry) => entry.type === "youtube" || entry.type === "video");
   const images = media.filter((entry) => entry.type === "image");
   const crossLinks = getCrossLinks(item);
 

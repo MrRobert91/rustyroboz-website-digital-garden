@@ -186,6 +186,16 @@ function normalizeMedia(raw: unknown): TimelineMediaItem[] {
     if (value.type === "youtube" && value.id) {
       return [{ type: "youtube", id: String(value.id), title: value.title ? String(value.title) : undefined }];
     }
+    if (value.type === "video" && value.src) {
+      return [
+        {
+          type: "video",
+          src: String(value.src),
+          poster: value.poster ? String(value.poster) : undefined,
+          title: value.title ? String(value.title) : undefined,
+        },
+      ];
+    }
     if (value.type === "image" && value.src) {
       return [{ type: "image", src: String(value.src), alt: value.alt ? String(value.alt) : undefined }];
     }

@@ -53,6 +53,12 @@ describe("public routes", () => {
     expect(screen.getByRole("heading", { name: /technical interview chatbot/i })).toBeInTheDocument();
   });
 
+  it("renders the Learning AI Factory case study with a playable generated sample", async () => {
+    render(await ProjectDetailPage({ params: Promise.resolve({ slug: "learning-ai-factory" }) }));
+    expect(screen.getByRole("heading", { name: /ai learning factory/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/muestra generada/i)).toHaveAttribute("src", "/videos/nlp-course-sample.mp4");
+  });
+
   it("filters content by tag", async () => {
     render(await TagPage({ params: Promise.resolve({ tag: "ai-art" }) }));
     expect(screen.getByRole("heading", { name: /tag: ai-art/i })).toBeInTheDocument();

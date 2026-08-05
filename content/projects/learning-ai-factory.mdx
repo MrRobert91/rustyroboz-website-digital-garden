@@ -1,0 +1,156 @@
+---
+title: "AI Learning Factory: de una idea vaga a un curso publicable"
+description: "Una fábrica de contenidos educativos dirigida por agentes: investigación, lecciones, slides, voz, vídeo y publicación, con contratos, versionado, costes y control humano."
+slug: "learning-ai-factory"
+type: "project"
+publishedAt: "2026-08-05"
+updatedAt: "2026-08-05"
+tags: ["ai-agents", "edtech", "langgraph", "multimodal-ai", "llmops"]
+draft: false
+featured: true
+coverImage: "/images/projects/learning-ai-factory/01-projects-dashboard.png"
+readingTime: "12 min"
+status: "active"
+tech: ["Python", "FastAPI", "Next.js", "LangGraph", "SQLite", "OpenRouter", "Marp", "FFmpeg", "Docker"]
+links:
+  GitHub: "https://github.com/MrRobert91/Learning-AI-Factory"
+  Live app: "https://frontend-gczzuw.sliplane.app/"
+media:
+  - type: video
+    src: /videos/nlp-course-sample.mp4
+    poster: /images/projects/learning-ai-factory/video-sample-poster.jpg
+    title: "Muestra generada: curso de NLP clásico"
+---
+
+Pedirle a un LLM «hazme un curso» es fácil. Conseguir que investigue con fuentes, mantenga una línea pedagógica, produzca artefactos editables, respete una identidad visual, sintetice una voz, monte un vídeo y deje rastro de cuánto costó cada decisión es otra historia.
+
+**AI Learning Factory** nació precisamente en ese espacio incómodo entre una demo que sorprende durante cinco minutos y un sistema que se puede usar de verdad. Es una aplicación web que convierte una idea todavía borrosa en una cadena de producción educativa: brief, investigación, plan, lecciones, diapositivas, guion docente, narración, vídeo y paquete de publicación.
+
+El vídeo que aparece sobre estas líneas no es un mockup: es un fragmento de 45 segundos de un artefacto real de 20:20 generado por la plataforma para un curso de NLP clásico. Incluye slides renderizadas, narración TTS y montaje automático.
+
+![Panel de proyectos de AI Learning Factory](/images/projects/learning-ai-factory/01-projects-dashboard.png)
+
+## La tesis: fabricar no significa pulsar un botón
+
+La metáfora de la fábrica es deliberada, pero no pretende esconder al docente detrás de una cinta transportadora. Al contrario: cada etapa tiene una responsabilidad clara, un contrato de entrada y salida, una versión activa y, cuando hace falta, una parada para revisión humana.
+
+Ese matiz cambia el producto. En vez de una conversación interminable cuyo estado vive en el contexto del modelo, el sistema trabaja con **artefactos explícitos**. Un `course_idea_brief` alimenta al Curador; el `research_brief` alimenta al Diseñador de curso; el `course_plan` da estructura a las lecciones; y así hasta llegar al vídeo y a la publicación. Cada resultado se puede inspeccionar, descargar, editar, regenerar o sustituir por material propio.
+
+No es una cadena rígida. Se puede ejecutar el flujo completo o empezar en mitad del proceso —por ejemplo, subir unas slides y generar solo el guion y el vídeo—. Esa capacidad de recombinar etapas convierte el proyecto en una plataforma, no en un script largo con siete llamadas a una API.
+
+## Empezar por una buena pregunta
+
+La primera pieza es un asistente de ideación. Recibe frases como «quiero un curso corto sobre RAG» y responde con preguntas concretas para fijar audiencia, nivel, alcance, duración y resultado esperado. También permite decidir cómo se investigará: web libre, corpus propio complementado con web o únicamente fuentes proporcionadas.
+
+![Asistente de ideación y selección de fuentes](/images/projects/learning-ai-factory/02-ideation-assistant.png)
+
+El objetivo no es alargar el chat, sino **cerrarlo** con un brief estructurado. Cuando el problema está suficientemente definido, la conversación se transforma en un proyecto reproducible. Esta frontera entre lenguaje natural y contrato tipado evita que el resto del pipeline tenga que adivinar qué quería decir el usuario veinte mensajes atrás.
+
+## Workflows que se ven, se entienden y se pueden parar
+
+La aplicación incluye plantillas para investigación, creación de slides, producción completa con vídeo y recorridos parciales. También permite duplicarlas y construir workflows propios.
+
+![Biblioteca de workflows completos y parciales](/images/projects/learning-ai-factory/03-workflows.png)
+
+El workflow completo encadena siete pasos: Curador, Plan del curso, Lecciones, Slides, Guion docente, Adaptación a voz y Vídeo. La publicación se prepara después como una fase explícita porque subir a YouTube tiene consecuencias externas y nunca debe ocurrir de forma silenciosa.
+
+![Pipeline visual de siete agentes](/images/projects/learning-ai-factory/04-workflow-video-pipeline.png)
+
+El motor usa **LangGraph con checkpoints en SQLite**. Eso permite pausar una ejecución para revisión, aprobarla, rechazarla con feedback y reanudarla incluso después de reiniciar el servicio. La interfaz recibe progreso mediante SSE; no necesita bloquear una petición HTTP durante una producción que puede durar minutos.
+
+## La arquitectura: contratos en el centro, modelos en el borde
+
+La solución vive en un monorepo con tres piezas principales:
+
+```text
+Navegador
+   │
+   ▼
+Next.js ── proxy /api ──► FastAPI (REST + SSE)
+                              │
+                 ┌────────────┼────────────┐
+                 ▼            ▼            ▼
+          Workflow engine   Runner     Servicios de dominio
+            (LangGraph)    de jobs    proyectos / artefactos
+                 │            │        costes / auth / OAuth
+                 └──────┬─────┘
+                        ▼
+              SQLite + Alembic + filesystem
+          checkpoints · eventos · wiki · versiones
+                        │
+                        ▼
+             paquete factory_agents
+      agentes · contratos Pydantic · herramientas
+          │              │                │
+          ▼              ▼                ▼
+   OpenRouter/web   Marp/Chromium     TTS/FFmpeg/YouTube
+```
+
+`apps/web` contiene la experiencia Next.js en español. `apps/api` expone la API FastAPI, la autenticación, el motor de ejecuciones, los eventos, los costes y los repositorios. `packages/factory_agents` concentra los agentes, sus herramientas y los contratos de los artefactos.
+
+La decisión importante no es el framework. Es que **el proveedor de IA queda en el borde**. El dominio no intercambia párrafos ambiguos, sino objetos validados. Esto permite cambiar modelos, reintentar una etapa o regenerar solo una salida sin perder la historia del proyecto.
+
+## Diez especialistas, no un superprompt
+
+La pantalla de agentes hace visible qué sabe hacer cada rol, qué recibe, qué entrega y qué herramientas puede usar. Hay especialistas para ideación, curación, diseño de curso, lecciones, slides, guion, voz, vídeo, publicación y análisis de rendimiento.
+
+![Catálogo de agentes y contratos de entrada y salida](/images/projects/learning-ai-factory/05-agent-profiles.png)
+
+Cada agente admite múltiples perfiles. Un perfil combina `soul.md` —personalidad, gusto y criterio editorial— con `agents.md` —reglas operativas verificables—, además del modelo, la política de revisión y los ajustes propios de la etapa. Las versiones quedan congeladas al iniciar una ejecución, de modo que un cambio futuro no reescribe el pasado.
+
+En Slides, por ejemplo, un perfil controla orientación 16:9 o 9:16, paleta, logotipo, posición, opacidad, generación de imágenes y estilo visual. También decide si se ejecutará una evaluación automática y cuántas regeneraciones se permiten.
+
+![Perfil versionado del agente de slides](/images/projects/learning-ai-factory/06-slide-agent-profile.png)
+
+Este diseño resuelve un problema habitual en productos con IA: si un resultado cambia, hay que poder responder **qué modelo, qué prompt, qué perfil y qué inputs lo produjeron**. Sin esa trazabilidad, mejorar deja de ser ingeniería y se convierte en superstición.
+
+## Artefactos versionados y costes que no desaparecen
+
+Una ejecución no sobrescribe archivos anteriores. Produce nuevas versiones y marca cuál está seleccionada. Las slides pueden descargarse como HTML, PDF o PPTX; las lecciones como Markdown o PDF; el vídeo como MP4 con subtítulos y capítulos; y el paquete de publicación incluye título, descripción, tags y miniatura.
+
+![Proyecto real con pipeline, costes y artefactos](/images/projects/learning-ai-factory/08-project-factory.png)
+
+En el proyecto de NLP usado para la muestra, el panel registraba 8 de 8 etapas con resultado, 125 operaciones, 1.348.534 tokens, 20.631 caracteres de TTS y cinco imágenes. Separaba además el gasto histórico —**1,4211 USD**, incluyendo versiones descartadas— del coste atribuible a los artefactos activos —**1,2949 USD**—. Son cifras observadas en el despliegue el 5 de agosto de 2026.
+
+Esa diferencia es pequeña en dinero, pero enorme en diseño: el sistema no borra el coste de los intentos que ya no se enseñan. Para evaluar un pipeline de IA hay que medir el proceso completo, no únicamente la versión bonita que sobrevivió.
+
+## Multimedia: donde una demo suele romperse
+
+Generar Markdown es la parte sencilla. El tramo multimedia combina varias herramientas con contratos muy distintos:
+
+- Marp y Chromium convierten las slides en HTML, PDF, PPTX e imágenes.
+- El guionista amplía el contenido visual como lo haría un docente, sin limitarse a leer la pantalla.
+- El adaptador de voz segmenta el texto para TTS y conserva la correspondencia con cada slide.
+- El sintetizador reutiliza segmentos mediante caché para evitar pagar y generar de nuevo lo que no ha cambiado.
+- FFmpeg compone audio, imágenes, subtítulos y capítulos en un MP4 horizontal o vertical.
+- El publicador prepara metadatos y miniatura; la subida por OAuth siempre exige confirmación explícita.
+
+![Reproductor del artefacto de vídeo generado](/images/projects/learning-ai-factory/09-generated-video-artifact.png)
+
+El montaje tiene límites configurables de threads, filtros, preset y CRF. No es un detalle cosmético: en un despliegue con recursos compartidos, una composición de vídeo mal acotada puede convertir una tarea de fondo en un incidente de CPU.
+
+## Seguridad y control: autonomía con límites
+
+Permitir que un agente escriba y ejecute ejemplos de Python requiere algo más serio que un `try/catch`. En Docker, el sandbox usa **Landlock** para restringir el filesystem y **seccomp** para bloquear red, procesos, namespaces y syscalls peligrosas, además de límites de recursos. El backend se ejecuta como usuario sin privilegios y el modo inseguro local solo se activa de forma explícita.
+
+La aplicación protege proyectos y artefactos por propietario, firma la sesión y mantiene las credenciales OAuth fuera de los artefactos. Las acciones irreversibles —publicar un vídeo o aplicar una propuesta de mejora— permanecen detrás de una decisión humana.
+
+La mejora continua sigue la misma filosofía. El Analista puede leer métricas y comentarios de YouTube y proponer cambios en la memoria del canal o en los `agents.md`, pero no aplicarlos por su cuenta.
+
+![Bandeja de propuestas de mejora continua](/images/projects/learning-ai-factory/07-continuous-improvement.png)
+
+## Por qué este proyecto está conectado con mi trabajo
+
+Trabajo como **Lead AI Instructor en Factoría F5**, donde diseño y actualizo itinerarios formativos, imparto bootcamps de IA y acompaño a estudiantes con perfiles muy distintos. En ese contexto, crear un curso nunca consiste únicamente en redactar contenido: hay que investigar, definir resultados de aprendizaje, secuenciar conceptos, construir ejemplos, preparar material visual, explicar con claridad y revisar lo que no funciona.
+
+AI Learning Factory convierte ese conocimiento de dominio en software. No intenta sustituir el criterio docente; intenta que ese criterio sea **configurable, observable y reutilizable**. La memoria de proyecto conserva decisiones y glosario entre lecciones. Los checkpoints reservan espacio para la revisión humana. Los perfiles permiten adaptar el mismo pipeline a otra audiencia, formato o identidad visual.
+
+También condensa varias áreas de mi experiencia técnica: APIs y sistemas distribuidos, agentes y RAG, contratos de datos, generación multimodal, observabilidad de costes, seguridad de ejecución, Docker y despliegue. Para mí, esa es la parte más interesante del proyecto: no demostrar que un modelo puede escribir, sino demostrar que puedo diseñar el sistema que decide **cuándo, con qué contexto, bajo qué límites y con qué evidencia** debe hacerlo.
+
+## Lo que escalaría después
+
+La arquitectura actual encaja bien con una herramienta personal desplegada en dos servicios y almacenamiento persistente. Si el producto creciera hacia múltiples equipos y ejecuciones concurrentes, el siguiente salto sería separar responsabilidades: PostgreSQL para concurrencia, una cola de trabajos dedicada, object storage para binarios pesados y workers multimedia aislados del API.
+
+Eso no invalida SQLite ni el filesystem actuales. Elegir una solución proporcional también es ingeniería. El objetivo de esta versión era cerrar el ciclo completo, observar dónde aparecía complejidad real y mantener cada decisión lo bastante explícita como para evolucionarla después.
+
+AI Learning Factory empezó con una pregunta sencilla: «¿Cuánto de la producción de un curso se puede automatizar sin perder control pedagógico?». La respuesta no fue «todo». Fue algo más útil: **cada vez más, siempre que los contratos, la trazabilidad y las decisiones humanas formen parte de la arquitectura desde el principio**.
