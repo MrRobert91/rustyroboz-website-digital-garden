@@ -30,6 +30,18 @@ describe("content loader", () => {
     expect(article.body).toContain("/downloads/el-autor-material.pdf");
   });
 
+  it("loads the Learning AI Factory case study with its local video sample", async () => {
+    const project = await getItemBySlug("projects", "learning-ai-factory");
+
+    expect(project.title).toContain("AI Learning Factory");
+    expect((project.links as Record<string, string>).GitHub).toBe("https://github.com/MrRobert91/Learning-AI-Factory");
+    expect(project.media).toContainEqual(
+      expect.objectContaining({ type: "video", src: "/videos/nlp-course-sample.mp4" }),
+    );
+    expect(project.body).toContain("FastAPI");
+    expect(project.body).toContain("Factoría F5");
+  });
+
   it("builds a tag index across collections", async () => {
     const tags = await getTagIndex();
     expect(tags.get("ai-art")).toBeDefined();

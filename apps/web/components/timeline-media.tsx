@@ -27,6 +27,16 @@ export function TimelineMedia({ items, title }: { items: TimelineMediaItem[]; ti
         {item.type === "image" ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img alt={item.alt ?? title} className="size-full object-cover" loading="lazy" src={item.src} />
+        ) : item.type === "video" ? (
+          <video
+            aria-label={item.title ?? title}
+            className="size-full bg-black object-contain"
+            controls
+            playsInline
+            poster={item.poster}
+            preload="metadata"
+            src={item.src}
+          />
         ) : playing ? (
           <iframe
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
