@@ -166,7 +166,7 @@ export function Sticky({
         ...style,
       }}
     >
-      <span className="font-hand text-lg">{children}</span>
+      <span className="font-serif text-lg">{children}</span>
     </div>
   );
 }
