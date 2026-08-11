@@ -69,7 +69,7 @@ function PrototypeCard({
             {prefix}-{num}
           </span>
           {isProject ? (
-            <span className="bg-accent px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-[#fdf6ea]">
+            <span className="bg-accent-surface px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-on-accent">
               Project
             </span>
           ) : (
@@ -150,7 +150,7 @@ export function ProjectsPrototypes({ items, withHeader = true }: ProjectsPrototy
             {/* Legend so the two card styles read clearly. */}
             <div className="flex flex-col gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
               <span className="flex items-center gap-2">
-                <span className="bg-accent px-2 py-0.5 text-[10px] font-semibold text-[#fdf6ea]">Project</span>
+                <span className="bg-accent-surface px-2 py-0.5 text-[10px] font-semibold text-on-accent">Project</span>
                 polished work
               </span>
               <span className="flex items-center gap-2">

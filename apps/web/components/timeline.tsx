@@ -16,7 +16,7 @@ import {
 
 const CARD_ROTATE = ["-rotate-[0.4deg]", "rotate-[0.5deg]", "-rotate-[0.3deg]", "rotate-[0.6deg]"];
 
-const ERA_LABEL_CLASS = "font-display text-2xl font-bold uppercase tracking-tight text-foreground/35 sm:text-3xl";
+const ERA_LABEL_CLASS = "font-display text-2xl font-bold uppercase tracking-tight text-muted-foreground sm:text-3xl";
 
 /** Compact "era" label drawn big and faded next to each entry. */
 function eraLabel(entry: TimelineEntry) {
@@ -85,7 +85,7 @@ function TimelineCard({
 
   return (
     <div
-      className={`relative flex flex-col justify-between border border-border bg-paper-2/85 text-left shadow-paper ${
+      className={`relative flex flex-col justify-between border border-control-border bg-paper-2/85 text-left shadow-paper ${
         ranged ? "p-6 lg:p-7" : "p-5"
       } ${CARD_ROTATE[index % CARD_ROTATE.length]}`}
       style={minHeight ? { minHeight } : undefined}

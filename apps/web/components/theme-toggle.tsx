@@ -34,7 +34,7 @@ export function ThemeToggle() {
     <button
       aria-label={isDark === null ? "Change color theme" : isDark ? "Switch to light mode" : "Switch to dark mode"}
       aria-pressed={isDark ?? undefined}
-      className="grid size-9 place-items-center rounded-full border border-border/70 text-muted-foreground transition-colors hover:border-accent/60 hover:text-accent"
+      className="grid size-9 place-items-center rounded-full border border-control-border text-muted-foreground transition-colors hover:border-accent hover:text-accent"
       onClick={toggle}
       title={isDark ? "Use light theme" : "Use dark theme"}
       type="button"

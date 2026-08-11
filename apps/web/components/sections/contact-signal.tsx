@@ -112,7 +112,7 @@ export function ContactSignal({ photo }: { photo?: string }) {
             </div>
             <div className="mt-5 flex items-center justify-between gap-4">
               <a className="inline-flex" href={`mailto:${email}`}>
-                <span className="bg-accent px-5 py-3 font-mono text-[13px] font-semibold uppercase tracking-[0.16em] text-[#fdf6ea] shadow-paper">
+                <span className="bg-accent-surface px-5 py-3 font-mono text-[13px] font-semibold uppercase tracking-[0.16em] text-on-accent shadow-paper">
                   Email me →
                 </span>
               </a>

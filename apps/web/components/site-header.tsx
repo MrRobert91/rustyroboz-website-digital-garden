@@ -53,7 +53,7 @@ export function SiteHeader() {
               aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
                 "rounded-full px-3.5 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors",
-                isActive(item.href) ? "bg-accent text-[#fdf6ea]" : "text-muted-foreground hover:text-accent",
+                isActive(item.href) ? "bg-accent-surface text-on-accent" : "text-muted-foreground hover:text-accent",
               )}
               href={item.href}
               key={item.href}

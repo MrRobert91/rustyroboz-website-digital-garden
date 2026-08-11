@@ -191,7 +191,7 @@ export function InkStamp({
         fontWeight: 600,
         transform: `rotate(${angle}deg)`,
         display: "inline-block",
-        opacity: 0.82,
+        opacity: 1,
         backgroundImage: "radial-gradient(rgba(255,255,255,0.5) 1px, transparent 2px)",
         backgroundSize: "3px 3px",
         ...style,

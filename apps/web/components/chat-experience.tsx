@@ -404,7 +404,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 <div className="mt-5 flex flex-wrap gap-2.5">
                   {SUGGESTIONS.map((suggestion) => (
                     <button
-                      className="hand-chip border border-border bg-paper-2 px-3.5 py-1.5 font-hand text-lg text-foreground shadow-paper"
+                      className="hand-chip border border-control-border bg-paper-2 px-3.5 py-1.5 font-hand text-lg text-foreground shadow-paper"
                       key={suggestion}
                       onClick={() => setInput(suggestion)}
                       style={{ transform: `rotate(${(suggestion.length % 3) - 1}deg)` }}
@@ -441,7 +441,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                         </p>
                       ) : null}
                       {message.telemetry?.usage ? (
-                        <p className="font-mono text-[10px] text-muted-foreground/80">
+                        <p className="font-mono text-[10px] text-muted-foreground">
                           {message.telemetry.usage.total_tokens ?? 0} tok
                           {message.telemetry.tps ? ` · ${message.telemetry.tps} tok/s` : ""}
                           {` · ${formatCost(message.telemetry.usage.cost_usd)}`}
@@ -470,7 +470,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                           </span>
                           {message.citations.map((citation) => (
                             <Link
-                              className="inline-flex items-center gap-1 border border-border bg-paper-2 px-2 py-0.5 font-mono text-[11px] text-accent-deep transition-colors hover:border-accent/60 hover:text-accent"
+                              className="inline-flex items-center gap-1 border border-control-border bg-paper-2 px-2 py-0.5 font-mono text-[11px] text-accent-deep transition-colors hover:border-accent hover:text-accent"
                               href={citation.href}
                               key={`${message.id}-${citation.collection}-${citation.slug}`}
                             >
@@ -509,7 +509,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
               <textarea
                 aria-describedby={error ? "chat-error" : undefined}
                 aria-invalid={Boolean(error)}
-                className="min-h-20 w-full resize-y border border-border bg-background px-4 py-3 font-serif text-[15px] leading-relaxed text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-accent"
+                className="min-h-20 w-full resize-y border border-control-border bg-background px-4 py-3 font-serif text-[15px] leading-relaxed text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
                 id="chat-prompt"
                 name="prompt"
                 onBlur={() => setInputFocused(false)}
@@ -525,8 +525,8 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 </p>
                 <button
                   className={cn(
-                    "inline-flex items-center gap-2 bg-accent px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[#fdf6ea] shadow-paper transition-all",
-                    loading || !input.trim() ? "cursor-not-allowed opacity-50" : "hover:-translate-y-0.5 hover:bg-accent-deep",
+                    "inline-flex items-center gap-2 bg-accent-surface px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-on-accent shadow-paper transition-all",
+                    loading || !input.trim() ? "cursor-not-allowed opacity-50" : "hover:-translate-y-0.5 hover:bg-accent-surface-hover",
                   )}
                   disabled={loading || !input.trim()}
                   type="submit"

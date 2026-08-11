@@ -60,7 +60,7 @@ export function TimelineMedia({ items, title }: { items: TimelineMediaItem[]; ti
               src={`https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`}
             />
             <span className="absolute inset-0 grid place-items-center bg-foreground/25 transition-colors group-hover/play:bg-foreground/35">
-              <span className="grid size-14 place-items-center rounded-full bg-accent text-background shadow-lg transition-transform group-hover/play:scale-110">
+              <span className="grid size-14 place-items-center rounded-full bg-accent-surface text-on-accent shadow-lg transition-transform group-hover/play:scale-110">
                 <Play className="size-6 translate-x-0.5 fill-current" />
               </span>
             </span>

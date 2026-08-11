@@ -22,7 +22,7 @@ export function StackToolbox() {
             <Reveal delay={(gi % 2) * 0.06} key={group.title}>
               <div className="relative border border-border bg-paper-2/70 p-6">
                 <span
-                  className="absolute -top-4 left-6 bg-accent px-3.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-[#fdf6ea]"
+                  className="absolute -top-4 left-6 bg-accent-surface px-3.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-on-accent"
                   style={{ transform: `rotate(${gi % 2 ? -2 : 1.5}deg)` }}
                 >
                   {group.title}

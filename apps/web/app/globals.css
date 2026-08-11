@@ -12,9 +12,14 @@
   --card: 44 30% 98%;
   --border: 38 18% 84%; /* neutral pencil line */
   --line-rule: 210 28% 55%; /* ruled blue line */
-  --accent: 12 50% 42%; /* rust, a touch deeper/less bright */
-  --accent-deep: 11 56% 29%;
-  --ring: 12 50% 42%;
+  --accent: 12 62% 34%; /* rust link/text */
+  --accent-deep: 11 66% 25%;
+  --accent-surface: 12 62% 34%;
+  --accent-surface-hover: 11 66% 25%;
+  --on-accent: 40 38% 97%;
+  --control-border: 32 14% 42%;
+  --disabled-foreground: 33 8% 46%;
+  --ring: 12 62% 34%;
   --focus: 215 90% 36%;
 }
 
@@ -26,11 +31,16 @@
   --muted: 38 15% 64%;
   --muted-foreground: 38 15% 64%;
   --card: 28 9% 16%;
-  --border: 34 12% 28%;
+  --border: 34 12% 34%;
   --line-rule: 210 14% 42%;
-  --accent: 13 58% 52%;
-  --accent-deep: 13 56% 44%;
-  --ring: 13 58% 52%;
+  --accent: 14 86% 72%;
+  --accent-deep: 15 90% 80%;
+  --accent-surface: 12 62% 34%;
+  --accent-surface-hover: 11 66% 28%;
+  --on-accent: 40 38% 97%;
+  --control-border: 35 16% 62%;
+  --disabled-foreground: 36 10% 56%;
+  --ring: 14 86% 72%;
   --focus: 48 96% 62%;
 }
 

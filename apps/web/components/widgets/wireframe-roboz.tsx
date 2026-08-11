@@ -161,7 +161,7 @@ export function WireframeRoboz({ className }: { className?: string }) {
           <div className="flex items-center gap-3">
             <span className="font-hand text-base text-accent-deep">drag to spin ↻</span>
             <AnimationToggle
-              className="min-h-11 border border-border bg-background px-3 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground"
+              className="min-h-11 border border-control-border bg-background px-3 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground"
               pause={pause}
               paused={paused}
               resume={resume}
