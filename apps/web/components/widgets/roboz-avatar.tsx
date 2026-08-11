@@ -13,6 +13,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { boxEdges, jitter, project, rotate, type Seg, type Vec3 } from "@/lib/wire3d";
 import { useSketchCanvas, type SketchInk, type SketchState } from "./use-sketch-canvas";
+import { AnimationToggle } from "./animation-toggle";
 import { cn } from "@/lib/utils";
 
 export type RobozMood = "idle" | "listening" | "thinking" | "talking";
@@ -331,15 +332,28 @@ export function RobozAvatar({ mood = "idle", className }: { mood?: RobozMood; cl
     [],
   );
 
-  const canvasRef = useSketchCanvas(draw, { spin: 0, initialRx: -0.06, initialRy: 0.16, maxRx: 0.5 });
+  const { canvasRef, pause, paused, resume } = useSketchCanvas(draw, {
+    spin: 0,
+    initialRx: -0.06,
+    initialRy: 0.16,
+    maxRx: 0.5,
+  });
 
   return (
-    <canvas
-      aria-label="ROBOZ, the hand-drawn robot assistant. It idles, listens, thinks and talks along with the conversation. Drag to spin."
-      className={cn("h-64 w-full cursor-grab active:cursor-grabbing", className)}
-      ref={canvasRef}
-      role="img"
-      style={{ touchAction: "pan-y" }}
-    />
+    <div className={cn("w-full", className)}>
+      <canvas
+        aria-label="ROBOZ, the hand-drawn robot assistant. It idles, listens, thinks and talks along with the conversation. Drag to spin."
+        className="h-64 w-full cursor-grab active:cursor-grabbing"
+        ref={canvasRef}
+        role="img"
+        style={{ touchAction: "pan-y" }}
+      />
+      <AnimationToggle
+        className="mx-auto mt-2 block min-h-11 border border-border bg-background px-3 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground"
+        pause={pause}
+        paused={paused}
+        resume={resume}
+      />
+    </div>
   );
 }

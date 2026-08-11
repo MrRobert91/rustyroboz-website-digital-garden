@@ -6,7 +6,7 @@
  * with inertia, live theme colors, and prefers-reduced-motion support
  * (reduced = a static frame that still re-renders on drag/theme change).
  */
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type SketchInk = {
   ink: string;
@@ -56,7 +56,24 @@ export function useSketchCanvas(
 ) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const drawRef = useRef(draw);
+  const controlsRef = useRef<{ start: () => void; stop: () => void; renderStatic: () => void } | null>(null);
+  const pausedRef = useRef(false);
+  const visibleRef = useRef(false);
+  const [paused, setPaused] = useState(false);
   drawRef.current = draw;
+
+  const pause = useCallback(() => {
+    pausedRef.current = true;
+    setPaused(true);
+    controlsRef.current?.stop();
+    controlsRef.current?.renderStatic();
+  }, []);
+
+  const resume = useCallback(() => {
+    pausedRef.current = false;
+    setPaused(false);
+    controlsRef.current?.start();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -71,8 +88,12 @@ export function useSketchCanvas(
     }
     const context = ctx;
 
-    const reduced =
-      typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const motionQuery =
+      typeof window.matchMedia === "function" ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+    if (motionQuery?.matches) {
+      pausedRef.current = true;
+      setPaused(true);
+    }
 
     const state: SketchState = { rx: initialRx, ry: initialRy, t: 0, wobbleSeed: 1, dragging: false };
     let vx = 0;
@@ -84,11 +105,13 @@ export function useSketchCanvas(
 
     const clampRx = (value: number) => Math.min(maxRx, Math.max(-maxRx, value));
 
-    function render(now: number) {
-      const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
-      last = now;
+    function render(now: number, advance = true) {
+      const dt = advance && last ? Math.min((now - last) / 1000, 0.05) : 0;
+      if (advance) {
+        last = now;
+      }
       state.t += dt;
-      if (now - lastWobble > 140) {
+      if (advance && now - lastWobble > 140) {
         state.wobbleSeed = ((now * 0.73) % 977) + 1;
         lastWobble = now;
       }
@@ -111,7 +134,7 @@ export function useSketchCanvas(
     }
 
     const start = () => {
-      if (!raf && !reduced) {
+      if (visibleRef.current && !pausedRef.current && !raf) {
         last = 0;
         raf = requestAnimationFrame(loop);
       }
@@ -122,7 +145,18 @@ export function useSketchCanvas(
         raf = 0;
       }
     };
-    const renderStatic = () => render(performance.now());
+    const renderStatic = () => render(performance.now(), false);
+    controlsRef.current = { start, stop, renderStatic };
+
+    const setPausedFromPreference = (shouldPause: boolean) => {
+      if (!shouldPause) {
+        return;
+      }
+      pausedRef.current = true;
+      setPaused(true);
+      stop();
+      renderStatic();
+    };
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -130,7 +164,7 @@ export function useSketchCanvas(
       canvas.width = Math.max(1, Math.round(rect.width * dpr));
       canvas.height = Math.max(1, Math.round(rect.height * dpr));
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      if (reduced || !raf) {
+      if (pausedRef.current || !raf) {
         renderStatic();
       }
     };
@@ -138,7 +172,7 @@ export function useSketchCanvas(
     // Live theme colors — repaint when .dark toggles on <html>.
     const themeWatch = new MutationObserver(() => {
       ink = readInk();
-      if (reduced || !raf) {
+      if (pausedRef.current || !raf) {
         renderStatic();
       }
     });
@@ -153,6 +187,7 @@ export function useSketchCanvas(
 
     // Only animate while on screen.
     const io = new IntersectionObserver(([entry]) => {
+      visibleRef.current = Boolean(entry?.isIntersecting);
       if (entry?.isIntersecting) {
         start();
       } else {
@@ -184,7 +219,7 @@ export function useSketchCanvas(
       state.rx = clampRx(state.rx + dy * 0.006);
       vy = dx * 0.4;
       vx = dy * 0.3;
-      if (reduced) {
+      if (pausedRef.current || !raf) {
         renderStatic();
       }
     };
@@ -195,20 +230,25 @@ export function useSketchCanvas(
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerup", onUp, { passive: true });
 
-    if (reduced) {
-      renderStatic();
-    }
+    setPausedFromPreference(Boolean(motionQuery?.matches));
+    const onMotionPreferenceChange = (event: MediaQueryListEvent) => setPausedFromPreference(event.matches);
+    motionQuery?.addEventListener?.("change", onMotionPreferenceChange);
 
     return () => {
       stop();
+      visibleRef.current = false;
+      if (controlsRef.current?.stop === stop) {
+        controlsRef.current = null;
+      }
       io.disconnect();
       resizeObserver?.disconnect();
       themeWatch.disconnect();
       canvas.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
+      motionQuery?.removeEventListener?.("change", onMotionPreferenceChange);
     };
   }, [spin, initialRx, initialRy, maxRx]);
 
-  return canvasRef;
+  return { canvasRef, pause, paused, resume };
 }

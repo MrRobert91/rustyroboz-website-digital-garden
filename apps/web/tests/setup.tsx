@@ -43,5 +43,17 @@ class MockIntersectionObserver {
 
 vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
 
+const canvasContext = new Proxy(
+  {},
+  {
+    get: () => vi.fn(),
+    set: () => true,
+  },
+) as CanvasRenderingContext2D;
+Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
+  configurable: true,
+  value: vi.fn(() => canvasContext),
+});
+
 // jsdom does not implement Element scrolling APIs (chat auto-scroll uses them).
 Element.prototype.scrollTo = Element.prototype.scrollTo ?? (() => {});
