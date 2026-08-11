@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { POST, resetContactRateLimitForTests } from "@/app/api/contact/route";
+import { POST } from "@/app/api/contact/route";
+import { resetContactRateLimitForTests } from "@/lib/contact-rate-limit";
 
 const valid = {
   name: "David Example",

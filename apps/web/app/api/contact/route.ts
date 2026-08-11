@@ -1,28 +1,11 @@
 import { NextResponse } from "next/server";
 import { validateContactPayload } from "@/lib/contact";
+import { isContactRateLimited } from "@/lib/contact-rate-limit";
 
 const MAX_BODY_BYTES = 16_384;
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1_000;
-const RATE_LIMIT_REQUESTS = 5;
-const attempts = new Map<string, number[]>();
 
 function clientAddress(request: Request) {
   return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
-}
-
-function rateLimited(address: string, now = Date.now()) {
-  const recent = (attempts.get(address) ?? []).filter((timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS);
-  if (recent.length >= RATE_LIMIT_REQUESTS) {
-    attempts.set(address, recent);
-    return true;
-  }
-  recent.push(now);
-  attempts.set(address, recent);
-  return false;
-}
-
-export function resetContactRateLimitForTests() {
-  attempts.clear();
 }
 
 export async function POST(request: Request) {
@@ -31,7 +14,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, message: "The request is too large." }, { status: 413 });
   }
 
-  if (rateLimited(clientAddress(request))) {
+  if (isContactRateLimited(clientAddress(request))) {
     return NextResponse.json({ ok: false, message: "Too many attempts. Please try again later." }, { status: 429 });
   }
 
