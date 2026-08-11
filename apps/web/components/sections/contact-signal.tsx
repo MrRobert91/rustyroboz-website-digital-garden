@@ -1,13 +1,7 @@
 import Link from "next/link";
-import { CoffeeRing, InkStamp, Polaroid, Squiggle, Tape } from "@/components/notebook";
+import { ContactForm } from "@/components/contact-form";
+import { InkStamp, Polaroid, Squiggle } from "@/components/notebook";
 import { siteConfig } from "@/lib/site-config";
-
-const BRIEF_LINES = [
-  "What's the project or idea?",
-  "Consulting, training, or development?",
-  "Rough timeline?",
-  "How can I reach you?",
-];
 
 /** Turn a social URL into a short notebook-style handle. */
 function handleFor(href: string, label: string) {
@@ -68,7 +62,7 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
             </p>
 
             <div className="mt-9">
-              <a className="inline-block font-hand text-3xl text-accent-deep -rotate-1 hover:text-accent" href={`mailto:${email}`}>
+              <a className="inline-block font-serif text-xl font-semibold text-accent-deep underline decoration-2 underline-offset-8 hover:text-accent" href={`mailto:${email}`}>
                 {email}
               </a>
               <Squiggle className="mt-1" color="hsl(var(--accent))" height={10} seed={6} strokeWidth={2} width={320} />
@@ -88,7 +82,7 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
                       <span className="w-24 font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
                         {link.label}
                       </span>
-                      <span className="font-hand text-2xl text-foreground transition-colors group-hover:text-accent">
+                      <span className="font-serif text-lg text-foreground transition-colors group-hover:text-accent group-hover:underline">
                         {handleFor(link.href, link.label)}
                       </span>
                       <span className="ml-auto font-mono text-sm tracking-[0.16em] text-accent">OPEN ↗</span>
@@ -99,28 +93,7 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
             </div>
           </div>
 
-          {/* right: handwritten brief card */}
-          <div className="relative rotate-1 border border-border bg-paper-2 p-8 shadow-soft">
-            <Tape angle={-4} height={24} style={{ top: -12, left: "50%", marginLeft: -70 }} width={140} />
-            <p className="mb-3 font-hand text-2xl text-accent-deep">quick brief —</p>
-            <div className="font-hand text-xl leading-relaxed text-foreground">
-              {BRIEF_LINES.map((line) => (
-                <div className="mb-5" key={line}>
-                  <p className="m-0">{line}</p>
-                  <div className="mt-1 h-6 border-b border-dashed border-border" />
-                </div>
-              ))}
-            </div>
-            <div className="mt-5 flex items-center justify-between gap-4">
-              <a className="inline-flex" href={`mailto:${email}`}>
-                <span className="bg-accent-surface px-5 py-3 font-mono text-sm font-semibold uppercase tracking-[0.16em] text-on-accent shadow-paper">
-                  Email me →
-                </span>
-              </a>
-              <span className="font-hand text-lg text-muted-foreground">let&apos;s talk ↗</span>
-            </div>
-            <CoffeeRing size={84} style={{ bottom: -28, right: -10, opacity: 0.55 }} />
-          </div>
+          <ContactForm />
         </div>
       </div>
     </section>
