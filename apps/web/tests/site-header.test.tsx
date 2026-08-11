@@ -13,6 +13,9 @@ describe("SiteHeader", () => {
 
     const currentLinks = screen.getAllByRole("link", { name: "Projects", current: "page" });
     expect(currentLinks).toHaveLength(2);
+    for (const link of currentLinks) {
+      expect(link).toHaveClass("bg-accent-surface", "font-bold", "text-on-accent");
+    }
     for (const link of screen.getAllByRole("link", { name: "About" })) {
       expect(link).not.toHaveAttribute("aria-current");
     }

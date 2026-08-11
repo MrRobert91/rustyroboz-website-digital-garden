@@ -52,8 +52,10 @@ export function SiteHeader() {
             <Link
               aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
-                "rounded-full px-3.5 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors",
-                isActive(item.href) ? "bg-accent-surface text-on-accent" : "text-muted-foreground hover:text-accent",
+                "rounded-full border px-3.5 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors",
+                isActive(item.href)
+                  ? "border-accent-surface bg-accent-surface font-bold text-on-accent shadow-paper"
+                  : "border-transparent text-muted-foreground hover:border-control-border hover:text-accent",
               )}
               href={item.href}
               key={item.href}
@@ -98,15 +100,16 @@ export function SiteHeader() {
             <Link
               aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
-                "flex items-center justify-between border-b border-dashed border-border/60 py-3.5 font-mono text-sm uppercase tracking-[0.16em] transition-colors last:border-b-0",
-                isActive(item.href) ? "text-accent" : "text-foreground/80 hover:text-accent",
+                "my-1 flex items-center justify-between rounded-md border px-4 py-3.5 font-mono text-sm uppercase tracking-[0.16em] transition-colors",
+                isActive(item.href)
+                  ? "border-accent-surface bg-accent-surface font-bold text-on-accent shadow-paper"
+                  : "border-transparent text-foreground/80 hover:border-control-border hover:text-accent",
               )}
               href={item.href}
               key={item.href}
               onClick={() => setOpen(false)}
             >
               {item.label}
-              {isActive(item.href) ? <span aria-hidden className="text-accent">●</span> : null}
             </Link>
           ))}
           <div className="flex flex-wrap gap-x-5 gap-y-2 pb-4 pt-4">
