@@ -135,6 +135,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [model, setModel] = useState<string | null>(null);
   const [statusLine, setStatusLine] = useState<string | null>(null);
+  const [completionAnnouncement, setCompletionAnnouncement] = useState("");
   const [inputFocused, setInputFocused] = useState(false);
   const [telemetry, setTelemetry] = useState<Telemetry | null>(null);
   const [liveTps, setLiveTps] = useState<number | null>(null);
@@ -173,6 +174,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
     setLoading(true);
     setStreaming(false);
     setError(null);
+    setCompletionAnnouncement("");
     setStatusLine("checking the question…");
     setLiveTps(null);
     streamStatsRef.current = { startedAt: 0, chars: 0 };
@@ -275,6 +277,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
             if (eventPayload.data.session_id) {
               setSessionId(String(eventPayload.data.session_id));
             }
+            setCompletionAnnouncement("Response ready.");
           });
           scrollToEnd();
         }
@@ -382,7 +385,15 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
 
         {/* Conversation column */}
         <div className="flex min-h-[34rem] flex-col">
-          <div className="max-h-[60vh] flex-1 space-y-5 overflow-y-auto px-5 py-6 lg:px-8" ref={scrollRef}>
+          <div
+            aria-busy={loading}
+            aria-label="Conversation with Roboz"
+            aria-live="polite"
+            aria-relevant="additions text"
+            className="max-h-[60vh] flex-1 space-y-5 overflow-y-auto px-5 py-6 lg:px-8"
+            ref={scrollRef}
+            role="log"
+          >
             {messages.length === 0 ? (
               <div className="relative border border-dashed border-border bg-background/60 px-5 py-6">
                 <p className="font-serif text-base leading-relaxed text-foreground/80">
@@ -421,7 +432,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                   );
                 }
                 return (
-                  <article className="max-w-[95%] sm:max-w-2xl" key={message.id}>
+                  <article aria-hidden={isStreamingThis} className="max-w-[95%] sm:max-w-2xl" key={message.id}>
                     <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
                       <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">Roboz</p>
                       {message.model ? (
@@ -478,9 +489,16 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
 
           {/* Composer */}
           <div className="border-t border-border/80 bg-paper-2/60 px-5 py-5 lg:px-8">
+            <p aria-atomic="true" aria-live="polite" className="sr-only">
+              {completionAnnouncement}
+            </p>
             {error ? (
-              <div className="mb-4 border-2 border-accent/70 bg-background/70 px-4 py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-accent">
-                ✱ {error}
+              <div
+                className="mb-4 border-2 border-accent/70 bg-background/70 px-4 py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-accent"
+                id="chat-error"
+                role="alert"
+              >
+                ✱ Chat error: {error} Review your question and try again.
               </div>
             ) : null}
 
@@ -489,6 +507,8 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 Question
               </label>
               <textarea
+                aria-describedby={error ? "chat-error" : undefined}
+                aria-invalid={Boolean(error)}
                 className="min-h-20 w-full resize-y border border-border bg-background px-4 py-3 font-serif text-[15px] leading-relaxed text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-accent"
                 id="chat-prompt"
                 name="prompt"
