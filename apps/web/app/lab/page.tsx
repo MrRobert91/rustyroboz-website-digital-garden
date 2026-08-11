@@ -1,9 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Squiggle, Tape } from "@/components/notebook";
 import { Reveal } from "@/components/reveal";
 import { BlochSphere } from "@/components/widgets/bloch-sphere";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+export const metadata: Metadata = {
+  title: "AI Lab",
+  description: "Interactive AI and computing experiments from the Rusty Roboz workbench.",
+};
 
 export default async function LabPage() {
   return (

@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { ChatExperience } from "@/components/chat-experience";
 import { Squiggle } from "@/components/notebook";
+
+export const metadata: Metadata = {
+  title: "Personal Chat",
+  description: "Ask the Rusty Roboz assistant about David Robert's published projects, articles, and experience.",
+};
 
 export default async function ChatPage() {
   return (

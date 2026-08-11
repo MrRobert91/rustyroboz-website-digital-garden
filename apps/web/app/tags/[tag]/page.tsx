@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ContentCard } from "@/components/content-card";
 import { SectionHeading } from "@/components/section-heading";
 import { getEntriesByTag, getTagIndex } from "@/lib/content";
@@ -9,6 +10,14 @@ type TagPageProps = {
 export async function generateStaticParams() {
   const tags = await getTagIndex();
   return [...tags.keys()].map((tag) => ({ tag }));
+}
+
+export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
+  const { tag } = await params;
+  return {
+    title: `Tag: ${tag}`,
+    description: `Projects, articles, and notes tagged ${tag}.`,
+  };
 }
 
 export default async function TagPage({ params }: TagPageProps) {

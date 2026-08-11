@@ -3,6 +3,10 @@ import React from "react";
 import { vi } from "vitest";
 
 vi.mock("next/font/google", () => ({
+  Space_Grotesk: () => ({ className: "font-display", variable: "--font-display" }),
+  IBM_Plex_Serif: () => ({ className: "font-serif", variable: "--font-serif" }),
+  Caveat: () => ({ className: "font-hand", variable: "--font-hand" }),
+  JetBrains_Mono: () => ({ className: "font-mono", variable: "--font-mono" }),
   Manrope: () => ({ className: "font-manrope", variable: "--font-manrope" }),
   Newsreader: () => ({ className: "font-newsreader", variable: "--font-newsreader" }),
 }));

@@ -4,7 +4,7 @@ import { EraTimeline } from "@/components/timeline";
 import { timeline } from "@/lib/timeline";
 
 export const metadata: Metadata = {
-  title: "Timeline | David Robert",
+  title: "Timeline",
   description:
     "A chronological timeline of David Robert's work — AI engineering and training roles, certifications, studies, and personal projects, most recent first.",
 };

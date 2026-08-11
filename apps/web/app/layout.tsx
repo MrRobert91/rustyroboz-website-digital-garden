@@ -31,7 +31,10 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: siteConfig.title,
+  title: {
+    default: siteConfig.title,
+    template: "%s | Rusty Roboz Labs",
+  },
   description: siteConfig.description,
 };
 
