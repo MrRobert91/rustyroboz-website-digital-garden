@@ -11,30 +11,31 @@ export function ContentCard({ item }: ContentCardProps) {
   const href = getContentHref(item);
   return (
     <article
-      className="group relative h-full border border-border bg-paper-2/80 shadow-paper transition-transform duration-200 hover:-translate-y-1"
+      className="group relative h-full border border-border bg-paper-2/80 shadow-paper transition-transform duration-200 hover:-translate-y-1 focus-within:outline focus-within:outline-3 focus-within:outline-offset-4 focus-within:outline-[hsl(var(--focus))]"
       lang={item.language}
     >
       <Tape angle={-5} height={16} style={{ top: -9, left: 28 }} width={70} />
-      {item.coverImage ? (
-        <Link className="block border-b border-border" href={href}>
+      <Link aria-label={item.title} className="block h-full" href={href}>
+        {item.coverImage ? (
+          <div className="border-b border-border">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             alt=""
             className="aspect-[16/10] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
             src={item.coverImage}
           />
-        </Link>
-      ) : null}
-      <div className="flex flex-col gap-3 p-6">
+          </div>
+        ) : null}
+        <div className="flex flex-col gap-3 p-6">
         <div className="flex items-center justify-between gap-3">
           <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">{item.collection}</span>
           <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{item.readingTime}</span>
         </div>
         <h3 className="font-display text-2xl font-bold tracking-tight text-foreground">
-          <Link className="inline-flex items-center gap-1.5 transition-colors hover:text-accent" href={href}>
+          <span className="inline-flex items-center gap-1.5 transition-colors group-hover:text-accent">
             {item.title}
-            <ArrowUpRight className="size-4" />
-          </Link>
+            <ArrowUpRight aria-hidden className="size-4" />
+          </span>
         </h3>
         <p className="font-serif text-sm leading-6 text-muted-foreground">{item.description}</p>
         <div className="mt-1 flex flex-wrap gap-2">
@@ -51,11 +52,12 @@ export function ContentCard({ item }: ContentCardProps) {
           <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
             {new Date(item.publishedAt).toLocaleDateString("en-US")}
           </span>
-          <Link className="font-hand text-lg text-accent-deep hover:text-accent" href={href}>
+          <span className="font-hand text-lg text-accent-deep group-hover:underline">
             see notes →
-          </Link>
+          </span>
         </div>
-      </div>
+        </div>
+      </Link>
     </article>
   );
 }

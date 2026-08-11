@@ -59,11 +59,12 @@ function PrototypeCard({
     : "border border-border shadow-paper";
 
   return (
-    <div
-      className={`relative bg-paper-2 p-7 transition-transform duration-300 sm:hover:-translate-y-1 sm:hover:rotate-0 ${frame} ${CARD_ROTATE[index % CARD_ROTATE.length]}`}
+    <article
+      className={`group relative bg-paper-2 transition-transform duration-300 focus-within:outline focus-within:outline-3 focus-within:outline-offset-4 focus-within:outline-[hsl(var(--focus))] sm:hover:-translate-y-1 sm:hover:rotate-0 ${frame} ${CARD_ROTATE[index % CARD_ROTATE.length]}`}
       lang={item.language}
     >
       <Tape angle={index % 2 ? 5 : -7} height={18} style={{ top: -10, [index % 2 ? "right" : "left"]: 30 }} width={78} />
+      <Link aria-label={item.title} className="block p-7" href={href}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <span className="font-mono text-sm font-semibold uppercase tracking-[0.18em] text-accent">
@@ -83,16 +84,12 @@ function PrototypeCard({
       </div>
 
       <h3 className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight text-foreground">
-        <Link className="transition-colors hover:text-accent" href={href}>
-          {item.title}
-        </Link>
+        <span className="transition-colors group-hover:text-accent">{item.title}</span>
       </h3>
 
       {/* cover image, with a technical-drawing placeholder fallback */}
-      <Link
-        aria-label={`Open ${item.title}`}
-        className="relative mt-4 grid h-32 place-items-center overflow-hidden border border-dashed border-[rgba(120,120,130,0.4)] bg-[#f4f1ea] dark:bg-foreground/5"
-        href={href}
+      <div
+        className="relative mt-4 grid h-32 place-items-center overflow-hidden border border-dashed border-control-border bg-[#f4f1ea] dark:bg-foreground/5"
         style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent 0 8px, rgba(120,120,130,0.1) 8px 9px)" }}
       >
         {item.coverImage ? (
@@ -109,7 +106,7 @@ function PrototypeCard({
         <span className="absolute bottom-1.5 right-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[rgba(60,60,70,0.5)]">
           FIG.{num}
         </span>
-      </Link>
+      </div>
 
       <p className="mt-4 line-clamp-3 font-serif text-base leading-relaxed text-foreground/75">{item.description}</p>
 
@@ -122,11 +119,12 @@ function PrototypeCard({
             {tag}
           </span>
         ))}
-        <Link className="ml-auto font-hand text-lg text-accent-deep hover:text-accent" href={href}>
+        <span className="ml-auto font-hand text-lg text-accent-deep group-hover:underline">
           View project →
-        </Link>
+        </span>
       </div>
-    </div>
+      </Link>
+    </article>
   );
 }
 
