@@ -42,6 +42,18 @@ describe("content loader", () => {
     expect(project.body).toContain("Factoría F5");
   });
 
+  it("loads the Qiskit certification prep prototype with real screenshots", async () => {
+    const project = await getItemBySlug("projects", "qiskit-certification-prep");
+
+    expect(project.title).toContain("Qiskit Certification Prep");
+    expect((project.links as Record<string, string>).GitHub).toBe(
+      "https://github.com/MrRobert91/QuantumComputingGuide",
+    );
+    expect(project.coverImage).toContain("quantum-computing-guide/01-study-dashboard.png");
+    expect(project.body).toContain("68-question mock exam");
+    expect(project.body).toContain("04-circuit-playground.png");
+  });
+
   it("builds a tag index across collections", async () => {
     const tags = await getTagIndex();
     expect(tags.get("ai-art")).toBeDefined();
