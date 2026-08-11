@@ -58,6 +58,11 @@
     @apply transition-colors;
   }
 
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+    outline: 3px solid hsl(var(--focus)) !important;
+    outline-offset: 3px !important;
+  }
+
   .skip-link {
     position: fixed;
     left: 1rem;
