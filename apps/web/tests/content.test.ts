@@ -26,8 +26,25 @@ describe("content loader", () => {
     );
 
     expect(article.title).toContain("El autor material");
+    expect(article.language).toBe("es");
     expect(article.coverImage).toContain("el-autor-material.webp");
     expect(article.body).toContain("/downloads/el-autor-material.pdf");
+  });
+
+  it("requires an explicit supported language on every published entry", async () => {
+    const collections = await Promise.all([
+      getCollection("articles"),
+      getCollection("projects"),
+      getCollection("notes"),
+      getCollection("pages"),
+    ]);
+    const entries = collections.flat();
+
+    expect(entries.length).toBeGreaterThan(0);
+    expect(entries.every((entry) => entry.language === "en" || entry.language === "es")).toBe(true);
+    expect(
+      entries.find((entry) => entry.slug === "hermes-agent-en-un-vps-de-hetzner-con-openrouter")?.language,
+    ).toBe("es");
   });
 
   it("loads the Learning AI Factory case study with its local video sample", async () => {

@@ -45,7 +45,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
   const crossLinks = getCrossLinks(item);
 
   return (
-    <article className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
+    <article className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20" lang={item.language}>
       <div className="max-w-3xl">
         <div className="flex flex-wrap gap-2">
           <Badge>{item.collection}</Badge>

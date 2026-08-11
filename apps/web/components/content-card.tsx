@@ -10,7 +10,10 @@ type ContentCardProps = {
 export function ContentCard({ item }: ContentCardProps) {
   const href = getContentHref(item);
   return (
-    <article className="group relative h-full border border-border bg-paper-2/80 shadow-paper transition-transform duration-200 hover:-translate-y-1">
+    <article
+      className="group relative h-full border border-border bg-paper-2/80 shadow-paper transition-transform duration-200 hover:-translate-y-1"
+      lang={item.language}
+    >
       <Tape angle={-5} height={16} style={{ top: -9, left: 28 }} width={70} />
       {item.coverImage ? (
         <Link className="block border-b border-border" href={href}>

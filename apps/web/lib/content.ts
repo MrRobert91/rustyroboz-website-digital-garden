@@ -19,6 +19,7 @@ type CommonFrontmatter = {
   title: string;
   description: string;
   slug: string;
+  language: "en" | "es";
   publishedAt: string;
   updatedAt: string;
   tags: string[];
@@ -100,6 +101,7 @@ function assertCommonFrontmatter(frontmatter: Record<string, unknown>, filePath:
     "title",
     "description",
     "slug",
+    "language",
     "publishedAt",
     "updatedAt",
     "tags",
@@ -123,11 +125,15 @@ function normalizeFrontmatter(
 ): ContentFrontmatter {
   assertCommonFrontmatter(raw, filePath);
   const frontmatter = raw as Record<string, unknown> & CommonFrontmatter;
+  if (frontmatter.language !== "en" && frontmatter.language !== "es") {
+    throw new Error(`Invalid or missing language in ${filePath}; expected \"en\" or \"es\"`);
+  }
 
   const base = {
     title: String(frontmatter.title),
     description: String(frontmatter.description),
     slug: String(frontmatter.slug),
+    language: frontmatter.language,
     publishedAt: String(frontmatter.publishedAt),
     updatedAt: String(frontmatter.updatedAt),
     tags: Array.isArray(frontmatter.tags) ? frontmatter.tags.map((tag) => String(tag).toLowerCase()) : [],

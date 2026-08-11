@@ -7,6 +7,7 @@ import ContactPage from "@/app/contact/page";
 import LabPage from "@/app/lab/page";
 import NotesPage from "@/app/notes/page";
 import HomePage from "@/app/page";
+import ArticleDetailPage from "@/app/articles/[slug]/page";
 import ProjectDetailPage from "@/app/projects/[slug]/page";
 import ProjectsPage from "@/app/projects/page";
 import TagPage from "@/app/tags/[tag]/page";
@@ -51,6 +52,16 @@ describe("public routes", () => {
   it("renders a project detail route from slug", async () => {
     render(await ProjectDetailPage({ params: Promise.resolve({ slug: "technical-interview-chatbot" }) }));
     expect(screen.getByRole("heading", { name: /technical interview chatbot/i })).toBeInTheDocument();
+  });
+
+  it("marks Spanish article details and cards with their content language", async () => {
+    const slug = "cuando-los-humanos-trabajan-para-los-agentes-como-nacio-el-autor-material";
+    const detail = render(await ArticleDetailPage({ params: Promise.resolve({ slug }) }));
+    expect(detail.container.querySelector("article[lang='es']")).toBeInTheDocument();
+    detail.unmount();
+
+    const list = render(await ArticlesPage());
+    expect(list.getByText(/Cuando los humanos trabajan/i).closest("article")).toHaveAttribute("lang", "es");
   });
 
   it("renders the Learning AI Factory case study with a playable generated sample", async () => {

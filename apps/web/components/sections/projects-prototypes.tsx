@@ -60,6 +60,7 @@ function PrototypeCard({
   return (
     <div
       className={`relative bg-paper-2 p-7 transition-transform duration-300 sm:hover:-translate-y-1 sm:hover:rotate-0 ${frame} ${CARD_ROTATE[index % CARD_ROTATE.length]}`}
+      lang={item.language}
     >
       <Tape angle={index % 2 ? 5 : -7} height={18} style={{ top: -10, [index % 2 ? "right" : "left"]: 30 }} width={78} />
       <div className="flex items-start justify-between gap-3">
