@@ -43,7 +43,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 sm:px-6 lg:px-10 lg:py-4">
         <Link className="flex items-baseline gap-2" href="/" onClick={() => setOpen(false)}>
           <span className="font-hand text-3xl font-semibold leading-none text-accent-deep">Rusty Roboz</span>
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Labs</span>
+          <span className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">Labs</span>
         </Link>
 
         {/* Desktop navigation */}
@@ -52,7 +52,7 @@ export function SiteHeader() {
             <Link
               aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
-                "rounded-full border px-3.5 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors",
+                "rounded-full border px-3.5 py-2 font-mono text-sm uppercase tracking-[0.14em] transition-colors",
                 isActive(item.href)
                   ? "border-accent-surface bg-accent-surface font-bold text-on-accent shadow-paper"
                   : "border-transparent text-muted-foreground hover:border-control-border hover:text-accent",
@@ -115,7 +115,7 @@ export function SiteHeader() {
           <div className="flex flex-wrap gap-x-5 gap-y-2 pb-4 pt-4">
             {siteConfig.socialLinks.map((link) => (
               <a
-                className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-accent"
+                className="font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-accent"
                 href={link.href}
                 key={link.href}
                 rel="noreferrer"

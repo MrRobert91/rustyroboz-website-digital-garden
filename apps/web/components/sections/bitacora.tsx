@@ -12,7 +12,7 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
     <section className="dotted-paper relative overflow-hidden border-y border-border/70">
       <div className="mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="max-w-2xl">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Writing</p>
+          <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">Writing</p>
           <h2 className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-6xl">
             Writing <span className="font-hand font-normal text-accent">(notes)</span>
           </h2>
@@ -31,10 +31,10 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
               >
                 <Tape angle={index % 2 ? 4 : -5} height={16} style={{ top: -9, left: 26 }} width={70} />
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  <span className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
                     {new Date(item.publishedAt).toLocaleDateString("en-US")}
                   </span>
-                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  <span className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
                     {item.readingTime}
                   </span>
                 </div>
@@ -67,7 +67,7 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
                 <div className="mt-4 flex flex-wrap gap-2">
                   {item.tags.slice(0, 3).map((tag) => (
                     <span
-                      className="border border-border bg-background/50 px-2.5 py-1 font-mono text-[11px] tracking-[0.12em] text-foreground/70"
+                      className="border border-border bg-background/50 px-2.5 py-1 font-mono text-sm tracking-[0.12em] text-foreground/70"
                       key={tag}
                     >
                       {tag}
@@ -80,7 +80,7 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
         </div>
 
         <div className="mt-10">
-          <Link className="font-hand text-2xl text-accent-deep hover:text-accent" href="/articles">
+          <Link className="font-mono text-sm font-semibold uppercase tracking-[0.08em] text-accent-deep hover:text-accent" href="/articles">
             Read all articles →
           </Link>
         </div>

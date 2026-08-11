@@ -320,7 +320,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
         <aside className="border-b border-dashed border-border/80 px-5 py-6 lg:border-b-0 lg:border-r">
           <div className="lg:sticky lg:top-24">
             <RobozAvatar className="mx-auto max-w-[220px]" mood={mood} />
-            <p aria-live="polite" className="mt-3 min-h-7 text-center font-hand text-xl text-accent-deep">
+            <p aria-live="polite" className="mt-3 min-h-7 text-center font-serif text-base text-accent-deep">
               {statusLine ??
                 (mood === "talking"
                   ? "explaining…"
@@ -329,14 +329,14 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                     : "ask me about David's work")}
             </p>
             <div className="mt-4 space-y-2 border-t border-dashed border-border/70 pt-4">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Model online</p>
-              <p className="font-mono text-xs text-accent" title={model ?? undefined}>
+              <p className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">Model online</p>
+              <p className="font-mono text-sm text-accent" title={model ?? undefined}>
                 {model ? shortModelName(model) : "standby — assigned on first reply"}
               </p>
 
               {/* Live telemetry — this chatbot doubles as an LLM-engineering showcase */}
-              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Telemetry</p>
-              <dl className="space-y-1 font-mono text-[11px] text-foreground/85">
+              <p className="mt-3 font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">Telemetry</p>
+              <dl className="space-y-1 font-mono text-sm text-foreground/85">
                 <div className="flex justify-between gap-2">
                   <dt className="text-muted-foreground">tokens in / out</dt>
                   <dd>
@@ -373,8 +373,8 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
 
               {sessionId ? (
                 <>
-                  <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Session</p>
-                  <p className="truncate font-mono text-[11px] text-foreground/70" title={sessionId}>
+                  <p className="mt-3 font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">Session</p>
+                  <p className="truncate font-mono text-sm text-foreground/70" title={sessionId}>
                     {sessionId.slice(0, 12)}…
                   </p>
                 </>
@@ -404,7 +404,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 <div className="mt-5 flex flex-wrap gap-2.5">
                   {SUGGESTIONS.map((suggestion) => (
                     <button
-                      className="hand-chip border border-control-border bg-paper-2 px-3.5 py-1.5 font-hand text-lg text-foreground shadow-paper"
+                      className="hand-chip border border-control-border bg-paper-2 px-3.5 py-2 font-display text-sm font-medium text-foreground shadow-paper"
                       key={suggestion}
                       onClick={() => setInput(suggestion)}
                       style={{ transform: `rotate(${(suggestion.length % 3) - 1}deg)` }}
@@ -422,7 +422,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 if (message.role === "user") {
                   return (
                     <article className="ml-auto max-w-[85%] sm:max-w-xl" key={message.id}>
-                      <p className="text-right font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      <p className="text-right font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">
                         You
                       </p>
                       <div className="mt-1.5 border border-foreground/20 bg-foreground px-4 py-3 text-background shadow-paper">
@@ -434,21 +434,21 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 return (
                   <article aria-hidden={isStreamingThis} className="max-w-[95%] sm:max-w-2xl" key={message.id}>
                     <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">Roboz</p>
+                      <p className="font-mono text-sm uppercase tracking-[0.2em] text-accent">Roboz</p>
                       {message.model ? (
-                        <p className="font-mono text-[10px] text-muted-foreground" title={message.model}>
+                        <p className="font-mono text-sm text-muted-foreground" title={message.model}>
                           via {shortModelName(message.model)}
                         </p>
                       ) : null}
                       {message.telemetry?.usage ? (
-                        <p className="font-mono text-[10px] text-muted-foreground">
+                        <p className="font-mono text-sm text-muted-foreground">
                           {message.telemetry.usage.total_tokens ?? 0} tok
                           {message.telemetry.tps ? ` · ${message.telemetry.tps} tok/s` : ""}
                           {` · ${formatCost(message.telemetry.usage.cost_usd)}`}
                         </p>
                       ) : null}
                       {message.telemetry?.cached ? (
-                        <p className="inline-flex items-center gap-0.5 font-mono text-[10px] text-accent">
+                        <p className="inline-flex items-center gap-0.5 font-mono text-sm text-accent">
                           <Zap className="size-2.5" /> cached
                         </p>
                       ) : null}
@@ -460,17 +460,17 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                           <span aria-hidden className="ml-0.5 animate-pulse text-accent">▍</span>
                         ) : null}
                         {!message.content && isStreamingThis ? (
-                          <span className="font-hand text-lg text-muted-foreground">thinking…</span>
+                          <span className="font-serif text-base text-muted-foreground">Thinking…</span>
                         ) : null}
                       </div>
                       {message.citations?.length ? (
                         <div className="mt-3 flex flex-wrap gap-2 border-t border-dashed border-border/70 pt-3">
-                          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                          <span className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
                             Sources
                           </span>
                           {message.citations.map((citation) => (
                             <Link
-                              className="inline-flex items-center gap-1 border border-control-border bg-paper-2 px-2 py-0.5 font-mono text-[11px] text-accent-deep transition-colors hover:border-accent hover:text-accent"
+                              className="inline-flex items-center gap-1 border border-control-border bg-paper-2 px-2 py-0.5 font-mono text-sm text-accent-deep transition-colors hover:border-accent hover:text-accent"
                               href={citation.href}
                               key={`${message.id}-${citation.collection}-${citation.slug}`}
                             >
@@ -494,7 +494,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
             </p>
             {error ? (
               <div
-                className="mb-4 border-2 border-accent/70 bg-background/70 px-4 py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-accent"
+                className="mb-4 border-2 border-accent/70 bg-background/70 px-4 py-2.5 font-mono text-sm uppercase tracking-[0.08em] text-accent"
                 id="chat-error"
                 role="alert"
               >
@@ -503,7 +503,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
             ) : null}
 
             <form className="space-y-3" onSubmit={handleSubmit}>
-              <label className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground" htmlFor="chat-prompt">
+              <label className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground" htmlFor="chat-prompt">
                 Question
               </label>
               <textarea
@@ -520,12 +520,12 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 value={input}
               />
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                <p className="font-mono text-sm uppercase tracking-[0.14em] text-muted-foreground">
                   Grounded in published content · guarded against off-topic use
                 </p>
                 <button
                   className={cn(
-                    "inline-flex items-center gap-2 bg-accent-surface px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-on-accent shadow-paper transition-all",
+                    "inline-flex items-center gap-2 bg-accent-surface px-5 py-2.5 font-mono text-sm font-semibold uppercase tracking-[0.16em] text-on-accent shadow-paper transition-all",
                     loading || !input.trim() ? "cursor-not-allowed opacity-50" : "hover:-translate-y-0.5 hover:bg-accent-surface-hover",
                   )}
                   disabled={loading || !input.trim()}
@@ -542,7 +542,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
 
       <div className="border-t border-border/80 px-5 py-3 lg:px-8">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          <span className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
             LangGraph agent · FAISS retrieval · OpenRouter models with fallback
           </span>
           <Squiggle color="hsl(var(--accent) / 0.5)" height={8} seed={11} strokeWidth={1.5} width={90} />

@@ -349,7 +349,7 @@ export function RobozAvatar({ mood = "idle", className }: { mood?: RobozMood; cl
         style={{ touchAction: "pan-y" }}
       />
       <AnimationToggle
-        className="mx-auto mt-2 block min-h-11 border border-control-border bg-background px-3 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground"
+        className="mx-auto mt-2 block min-h-11 border border-control-border bg-background px-3 font-mono text-sm uppercase tracking-[0.12em] text-foreground"
         pause={pause}
         paused={paused}
         resume={resume}

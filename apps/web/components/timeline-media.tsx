@@ -76,7 +76,7 @@ export function TimelineMedia({ items, title }: { items: TimelineMediaItem[]; ti
           <button aria-label="Next" className={`${NAV_BUTTON} right-2`} onClick={() => move(1)} type="button">
             <ChevronRight className="size-4" />
           </button>
-          <span className="absolute right-2 top-2 rounded-full bg-background/85 px-2 py-0.5 font-mono text-[10px] text-foreground/70">
+          <span className="absolute right-2 top-2 rounded-full bg-background/85 px-2 py-0.5 font-mono text-sm text-foreground/70">
             {index + 1}/{items.length}
           </span>
           <div className="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center gap-1.5">

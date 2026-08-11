@@ -24,7 +24,7 @@ const components = {
     <ul className="mb-3 ml-1 list-none space-y-1.5 font-serif text-[15px] leading-relaxed text-foreground last:mb-0">{children}</ul>
   ),
   ol: ({ children }: { children?: ReactNode }) => (
-    <ol className="mb-3 ml-5 list-decimal space-y-1.5 font-serif text-[15px] leading-relaxed text-foreground marker:font-mono marker:text-xs marker:text-accent last:mb-0">{children}</ol>
+    <ol className="mb-3 ml-5 list-decimal space-y-1.5 font-serif text-[15px] leading-relaxed text-foreground marker:font-mono marker:text-sm marker:text-accent last:mb-0">{children}</ol>
   ),
   li: ({ children }: { children?: ReactNode }) => (
     <li className="relative pl-5 [ol_&]:pl-1 [ul_&]:before:absolute [ul_&]:before:left-0 [ul_&]:before:text-accent [ul_&]:before:content-['→']">
@@ -33,9 +33,9 @@ const components = {
   ),
   code: ({ children, className }: { children?: ReactNode; className?: string }) =>
     className ? (
-      <code className="font-mono text-[13px] leading-relaxed">{children}</code>
+      <code className="font-mono text-sm leading-relaxed">{children}</code>
     ) : (
-      <code className="border border-border/70 bg-paper-2 px-1.5 py-0.5 font-mono text-[13px] text-accent-deep">{children}</code>
+      <code className="border border-border/70 bg-paper-2 px-1.5 py-0.5 font-mono text-sm text-accent-deep">{children}</code>
     ),
   pre: ({ children }: { children?: ReactNode }) => (
     <pre className="mb-3 overflow-x-auto border border-border bg-paper-2/80 p-3 shadow-paper last:mb-0">{children}</pre>
@@ -59,7 +59,7 @@ const components = {
     </div>
   ),
   th: ({ children }: { children?: ReactNode }) => (
-    <th className="border border-border bg-paper-2 px-2.5 py-1.5 text-left font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground">
+    <th className="border border-border bg-paper-2 px-2.5 py-1.5 text-left font-mono text-sm uppercase tracking-[0.08em] text-muted-foreground">
       {children}
     </th>
   ),

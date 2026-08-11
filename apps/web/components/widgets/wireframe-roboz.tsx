@@ -155,13 +155,13 @@ export function WireframeRoboz({ className }: { className?: string }) {
           style={{ touchAction: "pan-y" }}
         />
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-dashed border-border/70 pt-2">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          <span className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
             Fig. 00 — Roboz MK-1
           </span>
           <div className="flex items-center gap-3">
-            <span className="font-hand text-base text-accent-deep">drag to spin ↻</span>
+            <span className="font-mono text-sm text-accent-deep">Drag to spin ↻</span>
             <AnimationToggle
-              className="min-h-11 border border-control-border bg-background px-3 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground"
+              className="min-h-11 border border-control-border bg-background px-3 font-mono text-sm uppercase tracking-[0.12em] text-foreground"
               pause={pause}
               paused={paused}
               resume={resume}

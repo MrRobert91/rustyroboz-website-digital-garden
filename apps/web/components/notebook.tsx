@@ -185,7 +185,7 @@ export function InkStamp({
         border: "2px solid hsl(var(--accent))",
         color: "hsl(var(--accent))",
         padding: "6px 12px",
-        fontSize: 11,
+        fontSize: 14,
         letterSpacing: "0.2em",
         textTransform: "uppercase",
         fontWeight: 600,
@@ -248,7 +248,7 @@ export function Polaroid({
           <span
             className="font-mono"
             style={{
-              fontSize: 10,
+              fontSize: 14,
               letterSpacing: "0.18em",
               color: "rgba(50,30,15,0.55)",
               textTransform: "uppercase",

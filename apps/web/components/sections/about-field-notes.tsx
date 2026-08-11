@@ -30,12 +30,12 @@ export function AboutFieldNotes({ paragraphs, photos, headingLevel = 2 }: AboutF
       <div className="mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">§02 — Field notes</p>
+            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§02 — Field notes</p>
             <Heading className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-7xl">
               About <span className="font-hand font-normal text-accent">(me)</span>
             </Heading>
           </div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">PG. 02 / 06</p>
+          <p className="font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">PG. 02 / 06</p>
         </div>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
@@ -78,14 +78,14 @@ export function AboutFieldNotes({ paragraphs, photos, headingLevel = 2 }: AboutF
 
             {/* spec sheet */}
             <div className="relative mt-10 rounded border-2 border-dashed border-accent bg-paper-2/60 p-6">
-              <span className="absolute -top-3.5 left-5 bg-background px-2.5 font-hand text-xl text-accent-deep">
+              <span className="absolute -top-3.5 left-5 bg-background px-2.5 font-display text-base font-semibold text-accent-deep">
                 spec sheet ✱
               </span>
               <dl className="grid grid-cols-[100px_1fr] gap-x-5 gap-y-3 sm:grid-cols-[120px_1fr]">
                 {specs.map(([k, v]) => (
                   <div className="contents" key={k}>
-                    <dt className="pt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{k}</dt>
-                    <dd className="font-hand text-xl text-foreground">{v}</dd>
+                    <dt className="pt-1 font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">{k}</dt>
+                    <dd className="font-serif text-lg text-foreground">{v}</dd>
                   </div>
                 ))}
               </dl>
@@ -93,12 +93,12 @@ export function AboutFieldNotes({ paragraphs, photos, headingLevel = 2 }: AboutF
 
             {/* capabilities checklist */}
             <div className="mt-8">
-              <p className="mb-3 inline-block font-hand text-2xl text-accent-deep -rotate-1">things I can do →</p>
+              <p className="mb-3 inline-block font-display text-lg font-semibold text-accent-deep">Things I can do →</p>
               <div className="grid gap-x-6 gap-y-2.5 sm:grid-cols-2">
                 {siteConfig.capabilities.map((label) => (
                   <div className="flex items-center gap-3" key={label}>
                     <HandCheck color="hsl(var(--accent))" size={20} />
-                    <span className="font-hand text-xl text-foreground">{label}</span>
+                    <span className="font-serif text-lg text-foreground">{label}</span>
                   </div>
                 ))}
               </div>

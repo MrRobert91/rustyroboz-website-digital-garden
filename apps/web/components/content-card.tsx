@@ -28,8 +28,8 @@ export function ContentCard({ item }: ContentCardProps) {
         ) : null}
         <div className="flex flex-col gap-3 p-6">
         <div className="flex items-center justify-between gap-3">
-          <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">{item.collection}</span>
-          <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{item.readingTime}</span>
+          <span className="font-mono text-sm uppercase tracking-[0.16em] text-accent">{item.collection}</span>
+          <span className="font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">{item.readingTime}</span>
         </div>
         <h3 className="font-display text-2xl font-bold tracking-tight text-foreground">
           <span className="inline-flex items-center gap-1.5 transition-colors group-hover:text-accent">
@@ -41,7 +41,7 @@ export function ContentCard({ item }: ContentCardProps) {
         <div className="mt-1 flex flex-wrap gap-2">
           {item.tags.slice(0, 3).map((tag) => (
             <span
-              className="border border-border bg-background/50 px-2.5 py-1 font-mono text-[11px] tracking-[0.12em] text-foreground/70"
+              className="border border-border bg-background/50 px-2.5 py-1 font-mono text-sm tracking-[0.12em] text-foreground/70"
               key={tag}
             >
               {tag}
@@ -49,10 +49,10 @@ export function ContentCard({ item }: ContentCardProps) {
           ))}
         </div>
         <div className="mt-2 flex items-center justify-between gap-3 border-t border-dashed border-border pt-4">
-          <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+          <span className="font-mono text-sm uppercase tracking-[0.14em] text-muted-foreground">
             {new Date(item.publishedAt).toLocaleDateString("en-US")}
           </span>
-          <span className="font-hand text-lg text-accent-deep group-hover:underline">
+          <span className="font-mono text-sm font-semibold uppercase tracking-[0.08em] text-accent-deep group-hover:underline">
             see notes →
           </span>
         </div>

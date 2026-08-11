@@ -71,16 +71,16 @@ function PrototypeCard({
             {prefix}-{num}
           </span>
           {isProject ? (
-            <span className="bg-accent-surface px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-on-accent">
+            <span className="bg-accent-surface px-2 py-0.5 font-mono text-sm font-semibold uppercase tracking-[0.16em] text-on-accent">
               Project
             </span>
           ) : (
-            <span className="border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            <span className="border border-border px-2 py-0.5 font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">
               Experiment
             </span>
           )}
         </div>
-        {stamp ? <InkStamp angle={-4} label={stamp} style={{ fontSize: 10, padding: "5px 10px" }} /> : null}
+        {stamp ? <InkStamp angle={-4} label={stamp} style={{ fontSize: 14, padding: "5px 10px" }} /> : null}
       </div>
 
       <h3 className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight text-foreground">
@@ -103,7 +103,7 @@ function PrototypeCard({
         ) : (
           <Doodle color="hsl(var(--accent-deep))" kind={DOODLE_KINDS[index % DOODLE_KINDS.length]} size={56} />
         )}
-        <span className="absolute bottom-1.5 right-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[rgba(60,60,70,0.5)]">
+        <span className="absolute bottom-1.5 right-2 font-mono text-sm uppercase tracking-[0.18em] text-[rgba(60,60,70,0.5)]">
           FIG.{num}
         </span>
       </div>
@@ -113,13 +113,13 @@ function PrototypeCard({
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {tags.slice(0, 4).map((tag) => (
           <span
-            className="border border-border bg-background/50 px-2.5 py-1 font-mono text-[11px] tracking-[0.12em] text-foreground/75"
+            className="border border-border bg-background/50 px-2.5 py-1 font-mono text-sm tracking-[0.12em] text-foreground/75"
             key={tag}
           >
             {tag}
           </span>
         ))}
-        <span className="ml-auto font-hand text-lg text-accent-deep group-hover:underline">
+        <span className="ml-auto font-mono text-sm font-semibold uppercase tracking-[0.08em] text-accent-deep group-hover:underline">
           View project →
         </span>
       </div>
@@ -139,7 +139,7 @@ export function ProjectsPrototypes({ items, withHeader = true, headingLevel = 2 
         {withHeader ? (
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">§03 — Work</p>
+              <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§03 — Work</p>
               <Heading className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-7xl">
                 Projects <span className="font-hand font-normal text-accent">&amp; Experiments</span>
               </Heading>
@@ -148,20 +148,20 @@ export function ProjectsPrototypes({ items, withHeader = true, headingLevel = 2 
               </div>
             </div>
             {/* Legend so the two card styles read clearly. */}
-            <div className="flex flex-col gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+            <div className="flex flex-col gap-2 font-mono text-sm uppercase tracking-[0.14em] text-muted-foreground">
               <span className="flex items-center gap-2">
-                <span className="bg-accent-surface px-2 py-0.5 text-[10px] font-semibold text-on-accent">Project</span>
+                <span className="bg-accent-surface px-2 py-0.5 text-sm font-semibold text-on-accent">Project</span>
                 polished work
               </span>
               <span className="flex items-center gap-2">
-                <span className="border border-border px-2 py-0.5 text-[10px]">Experiment</span>
+                <span className="border border-border px-2 py-0.5 text-sm">Experiment</span>
                 short build
               </span>
             </div>
           </div>
         ) : (
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Selected work</p>
+            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">Selected work</p>
             <Heading className="mt-2 font-display text-4xl font-bold tracking-tight text-foreground lg:text-5xl">
               Projects <span className="font-hand font-normal text-accent">&amp; Experiments</span>
             </Heading>

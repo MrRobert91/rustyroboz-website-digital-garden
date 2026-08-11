@@ -11,7 +11,7 @@ export default async function ChatPage() {
   return (
     <section className="dotted-paper relative overflow-hidden border-b border-border/70">
       <div className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-24">
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">§ Lab — RAG Agent</p>
+        <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§ Lab — RAG Agent</p>
         <h1 className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-6xl">
           Personal Chat <span className="font-hand font-normal text-accent">(ask ROBOZ)</span>
         </h1>

@@ -31,7 +31,7 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
       <div className="mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">§06 — Signal</p>
+            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§06 — Signal</p>
             <Heading className="mt-2 font-display text-6xl font-bold leading-[0.95] tracking-tight text-foreground lg:text-8xl">
               Let&apos;s
               <br />
@@ -48,7 +48,7 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
           </div>
           <div className="mt-4 flex items-start gap-5">
             {photo ? <Polaroid alt="Portrait of David Robert." angle={4} caption="DAVID" height={150} src={photo} width={130} /> : null}
-            <InkStamp angle={6} label="OPEN FOR WORK" style={{ fontSize: 13, padding: "8px 14px" }} />
+            <InkStamp angle={6} label="OPEN FOR WORK" style={{ fontSize: 14, padding: "8px 14px" }} />
           </div>
         </div>
 
@@ -75,7 +75,7 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
             </div>
 
             <div className="mt-11">
-              <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">▸ or find me at</p>
+              <p className="mb-3 font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">▸ or find me at</p>
               <ul className="grid gap-3.5">
                 {siteConfig.socialLinks.map((link) => (
                   <li className="flex items-baseline gap-4 border-b border-dashed border-border pb-2.5" key={link.href}>
@@ -85,13 +85,13 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
                       rel="noreferrer"
                       target="_blank"
                     >
-                      <span className="w-24 font-mono text-[13px] uppercase tracking-[0.18em] text-muted-foreground">
+                      <span className="w-24 font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
                         {link.label}
                       </span>
                       <span className="font-hand text-2xl text-foreground transition-colors group-hover:text-accent">
                         {handleFor(link.href, link.label)}
                       </span>
-                      <span className="ml-auto font-mono text-[11px] tracking-[0.16em] text-accent">OPEN ↗</span>
+                      <span className="ml-auto font-mono text-sm tracking-[0.16em] text-accent">OPEN ↗</span>
                     </Link>
                   </li>
                 ))}
@@ -113,7 +113,7 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
             </div>
             <div className="mt-5 flex items-center justify-between gap-4">
               <a className="inline-flex" href={`mailto:${email}`}>
-                <span className="bg-accent-surface px-5 py-3 font-mono text-[13px] font-semibold uppercase tracking-[0.16em] text-on-accent shadow-paper">
+                <span className="bg-accent-surface px-5 py-3 font-mono text-sm font-semibold uppercase tracking-[0.16em] text-on-accent shadow-paper">
                   Email me →
                 </span>
               </a>

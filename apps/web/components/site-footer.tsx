@@ -20,7 +20,7 @@ export function SiteFooter() {
           <div className="flex flex-wrap items-center gap-4">
             {siteConfig.socialLinks.map((link) => (
               <Link
-                className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-accent"
+                className="font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-accent"
                 href={link.href}
                 key={link.href}
                 rel="noreferrer"
@@ -34,8 +34,8 @@ export function SiteFooter() {
       </div>
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-6 pb-8 lg:px-10">
         <Doodle color="hsl(var(--accent-deep))" kind="gear" size={26} />
-        <span className="font-hand text-lg text-muted-foreground">© 2026 — rusty roboz labs · drawn in madrid</span>
-        <Link className="font-hand text-lg text-accent-deep transition-colors hover:text-accent" href="/lab">
+        <span className="font-serif text-sm text-muted-foreground">© 2026 — Rusty Roboz Labs · drawn in Madrid</span>
+        <Link className="font-mono text-sm font-semibold uppercase tracking-[0.08em] text-accent-deep transition-colors hover:text-accent" href="/lab">
           · visit the lab bench →
         </Link>
       </div>

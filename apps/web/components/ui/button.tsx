@@ -13,7 +13,7 @@ export const buttonVariants = cva(
       },
       size: {
         default: "",
-        sm: "px-3 py-2 text-xs uppercase tracking-[0.18em]",
+        sm: "px-3 py-2 text-sm uppercase tracking-[0.18em]",
       },
     },
     defaultVariants: {

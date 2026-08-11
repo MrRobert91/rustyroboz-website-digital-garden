@@ -15,9 +15,9 @@ export default function TimelinePage() {
       <div className="mx-auto max-w-5xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div className="max-w-2xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">§05 — Logbook</p>
+            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§05 — Logbook</p>
             <h1 className="mt-2 font-display text-6xl font-bold tracking-tight text-foreground lg:text-8xl">Timeline</h1>
-            <p className="mt-4 font-hand text-2xl text-accent-deep -rotate-1">the whole thing, most recent first ↓</p>
+            <p className="mt-4 font-serif text-xl text-accent-deep">The whole thing, most recent first ↓</p>
             <p className="mt-5 font-serif text-lg leading-relaxed text-foreground/80">
               Roles, certifications, studies and personal projects. Longer roles take up more space, so you can see at a
               glance how the years line up.
@@ -36,7 +36,7 @@ export default function TimelinePage() {
           <EraTimeline entries={timeline} />
         </div>
 
-        <p className="mt-6 pl-8 font-hand text-xl text-accent-deep -rotate-1 sm:pl-12">↓ to be continued</p>
+        <p className="mt-6 pl-8 font-serif text-lg text-accent-deep sm:pl-12">↓ To be continued</p>
       </div>
     </section>
   );
