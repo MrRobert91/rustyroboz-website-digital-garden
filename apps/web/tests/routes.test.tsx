@@ -59,6 +59,18 @@ describe("public routes", () => {
     expect(screen.getByLabelText(/generated sample/i)).toHaveAttribute("src", "/videos/nlp-course-sample.mp4");
   });
 
+  it("renders the Qiskit certification prep prototype", async () => {
+    render(await ProjectDetailPage({ params: Promise.resolve({ slug: "qiskit-certification-prep" }) }));
+    expect(screen.getByRole("heading", { name: /qiskit certification prep/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
+      "href",
+      "https://github.com/MrRobert91/QuantumComputingGuide",
+    );
+    expect(screen.getByTestId("mdx-content")).toHaveTextContent(
+      "A Bell circuit executed on Qiskit Aer",
+    );
+  });
+
   it("filters content by tag", async () => {
     render(await TagPage({ params: Promise.resolve({ tag: "ai-art" }) }));
     expect(screen.getByRole("heading", { name: /tag: ai-art/i })).toBeInTheDocument();
