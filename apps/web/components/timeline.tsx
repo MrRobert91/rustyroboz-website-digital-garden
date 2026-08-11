@@ -40,7 +40,7 @@ function entryMinHeight(entry: TimelineEntry) {
 function TimelineLinkChip({ link }: { link: TimelineLink }) {
   const isInternal = link.href.startsWith("/");
   const className =
-    "inline-flex items-center gap-1 border border-dashed border-border px-3 py-1 font-mono text-sm uppercase tracking-[0.12em] text-foreground/70 transition-colors hover:border-accent hover:text-accent";
+    "interactive-link interactive-control inline-flex items-center gap-1 border border-control-border px-3 py-1 font-mono text-sm uppercase tracking-[0.12em] text-foreground/70 transition-colors hover:text-accent";
 
   if (isInternal) {
     return (

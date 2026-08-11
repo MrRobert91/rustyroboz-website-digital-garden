@@ -26,7 +26,7 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
           {items.map((item, index) => (
             <Reveal delay={(index % 2) * 0.06} key={`${item.collection}-${item.slug}`}>
               <Link
-                className="group relative block border border-border bg-paper-2/80 p-7 shadow-paper transition-transform duration-200 hover:-translate-y-1"
+                className="hover-card group relative block border border-border bg-paper-2/80 p-7 shadow-paper transition-transform duration-200"
                 href={getContentHref(item)}
               >
                 <Tape angle={index % 2 ? 4 : -5} height={16} style={{ top: -9, left: 26 }} width={70} />
@@ -52,7 +52,7 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       alt={item.title}
-                      className="absolute inset-0 size-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      className="hover-image-target absolute inset-0 size-full object-cover transition-transform duration-300"
                       loading="lazy"
                       src={item.coverImage}
                     />
@@ -80,7 +80,7 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
         </div>
 
         <div className="mt-10">
-          <Link className="font-mono text-sm font-semibold uppercase tracking-[0.08em] text-accent-deep hover:text-accent" href="/articles">
+          <Link className="interactive-link font-mono text-sm font-semibold uppercase tracking-[0.08em] text-accent-deep hover:text-accent" href="/articles">
             Read all articles →
           </Link>
         </div>

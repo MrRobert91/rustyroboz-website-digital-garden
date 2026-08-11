@@ -11,7 +11,7 @@ export function ContentCard({ item }: ContentCardProps) {
   const href = getContentHref(item);
   return (
     <article
-      className="group relative h-full border border-border bg-paper-2/80 shadow-paper transition-transform duration-200 hover:-translate-y-1 focus-within:outline focus-within:outline-3 focus-within:outline-offset-4 focus-within:outline-[hsl(var(--focus))]"
+      className="hover-card group relative h-full border border-border bg-paper-2/80 shadow-paper transition-transform duration-200 focus-within:outline focus-within:outline-3 focus-within:outline-offset-4 focus-within:outline-[hsl(var(--focus))]"
       lang={item.language}
     >
       <Tape angle={-5} height={16} style={{ top: -9, left: 28 }} width={70} />
@@ -21,7 +21,7 @@ export function ContentCard({ item }: ContentCardProps) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             alt=""
-            className="aspect-[16/10] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+            className="hover-image-target aspect-[16/10] w-full object-cover transition-transform duration-300"
             src={item.coverImage}
           />
           </div>

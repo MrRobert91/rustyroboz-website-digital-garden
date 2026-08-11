@@ -470,7 +470,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                           </span>
                           {message.citations.map((citation) => (
                             <Link
-                              className="inline-flex items-center gap-1 border border-control-border bg-paper-2 px-2 py-0.5 font-mono text-sm text-accent-deep transition-colors hover:border-accent hover:text-accent"
+                              className="interactive-link interactive-control inline-flex items-center gap-1 border border-control-border bg-paper-2 px-2 py-0.5 font-mono text-sm text-accent-deep transition-colors hover:text-accent"
                               href={citation.href}
                               key={`${message.id}-${citation.collection}-${citation.slug}`}
                             >
@@ -526,7 +526,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 <button
                   className={cn(
                     "inline-flex items-center gap-2 bg-accent-surface px-5 py-2.5 font-mono text-sm font-semibold uppercase tracking-[0.16em] text-on-accent shadow-paper transition-all",
-                    loading || !input.trim() ? "cursor-not-allowed opacity-50" : "hover:-translate-y-0.5 hover:bg-accent-surface-hover",
+                    loading || !input.trim() ? "cursor-not-allowed opacity-50" : "hover-button-lift hover:bg-accent-surface-hover",
                   )}
                   disabled={loading || !input.trim()}
                   type="submit"

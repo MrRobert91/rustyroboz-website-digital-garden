@@ -62,7 +62,7 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
             </p>
 
             <div className="mt-9">
-              <a className="inline-block font-serif text-xl font-semibold text-accent-deep underline decoration-2 underline-offset-8 hover:text-accent" href={`mailto:${email}`}>
+              <a className="interactive-link inline-block font-serif text-xl font-semibold text-accent-deep underline decoration-2 underline-offset-8 hover:text-accent" href={`mailto:${email}`}>
                 {email}
               </a>
               <Squiggle className="mt-1" color="hsl(var(--accent))" height={10} seed={6} strokeWidth={2} width={320} />
@@ -74,7 +74,7 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
                 {siteConfig.socialLinks.map((link) => (
                   <li className="flex items-baseline gap-4 border-b border-dashed border-border pb-2.5" key={link.href}>
                     <Link
-                      className="group flex flex-1 items-baseline gap-4"
+                      className="interactive-link group flex flex-1 items-baseline gap-4"
                       href={link.href}
                       rel="noreferrer"
                       target="_blank"

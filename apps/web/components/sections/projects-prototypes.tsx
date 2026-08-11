@@ -60,7 +60,7 @@ function PrototypeCard({
 
   return (
     <article
-      className={`group relative bg-paper-2 transition-transform duration-300 focus-within:outline focus-within:outline-3 focus-within:outline-offset-4 focus-within:outline-[hsl(var(--focus))] sm:hover:-translate-y-1 sm:hover:rotate-0 ${frame} ${CARD_ROTATE[index % CARD_ROTATE.length]}`}
+      className={`hover-card group relative bg-paper-2 transition-transform duration-300 focus-within:outline focus-within:outline-3 focus-within:outline-offset-4 focus-within:outline-[hsl(var(--focus))] ${frame} ${CARD_ROTATE[index % CARD_ROTATE.length]}`}
       lang={item.language}
     >
       <Tape angle={index % 2 ? 5 : -7} height={18} style={{ top: -10, [index % 2 ? "right" : "left"]: 30 }} width={78} />

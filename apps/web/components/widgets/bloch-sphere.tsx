@@ -198,7 +198,7 @@ export function BlochSphere() {
   };
 
   const chip =
-    "border border-control-border bg-paper-2 px-4 py-1.5 font-mono text-sm uppercase tracking-[0.14em] text-foreground shadow-paper transition-all duration-150 hover:border-accent hover:text-accent active:translate-y-px";
+    "interactive-control border border-control-border bg-paper-2 px-4 py-1.5 font-mono text-sm uppercase tracking-[0.14em] text-foreground shadow-paper transition-all duration-150 hover:text-accent active:translate-y-px";
 
   return (
     <div className="w-full">
