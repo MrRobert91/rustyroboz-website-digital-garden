@@ -15,6 +15,7 @@
   --accent: 12 50% 42%; /* rust, a touch deeper/less bright */
   --accent-deep: 11 56% 29%;
   --ring: 12 50% 42%;
+  --focus: 215 90% 36%;
 }
 
 .dark {
@@ -30,6 +31,7 @@
   --accent: 13 58% 52%;
   --accent-deep: 13 56% 44%;
   --ring: 13 58% 52%;
+  --focus: 48 96% 62%;
 }
 
 @layer base {
@@ -54,6 +56,25 @@
 
   a {
     @apply transition-colors;
+  }
+
+  .skip-link {
+    position: fixed;
+    left: 1rem;
+    top: 1rem;
+    z-index: 100;
+    transform: translateY(-200%);
+    border: 2px solid hsl(var(--focus));
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 3px solid hsl(var(--focus));
+    outline-offset: 3px;
   }
 
   @media (prefers-reduced-motion: reduce) {

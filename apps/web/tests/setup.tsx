@@ -23,6 +23,11 @@ vi.mock("next/image", () => ({
   default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} alt={props.alt ?? ""} />,
 }));
 
+vi.mock("next/navigation", () => ({
+  notFound: vi.fn(),
+  usePathname: () => "/",
+}));
+
 vi.mock("next-mdx-remote/rsc", () => ({
   MDXRemote: ({ source }: { source: string }) => <div data-testid="mdx-content">{source}</div>,
 }));
