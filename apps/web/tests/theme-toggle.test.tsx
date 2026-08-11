@@ -14,6 +14,7 @@ describe("ThemeToggle", () => {
 
     const toggle = await screen.findByRole("button", { name: /switch to light mode/i });
     expect(toggle).toHaveAttribute("aria-pressed", "true");
+    expect(toggle).toHaveClass("size-11");
 
     fireEvent.click(toggle);
 
