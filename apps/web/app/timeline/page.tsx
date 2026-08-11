@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function TimelinePage() {
   return (
     <section className="dotted-paper relative">
-      <div className="mx-auto max-w-5xl px-6 py-16 lg:px-16 lg:py-24">
+      <div className="reading-surface mx-auto max-w-5xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div className="max-w-2xl">
             <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§05 — Logbook</p>

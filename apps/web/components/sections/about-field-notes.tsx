@@ -27,7 +27,7 @@ export function AboutFieldNotes({ paragraphs, photos, headingLevel = 2 }: AboutF
 
   return (
     <section className="dotted-paper relative overflow-hidden border-b border-border/70">
-      <div className="mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
+      <div className="reading-surface mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
             <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§02 — Field notes</p>

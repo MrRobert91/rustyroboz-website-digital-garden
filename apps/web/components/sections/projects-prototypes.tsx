@@ -135,7 +135,7 @@ export function ProjectsPrototypes({ items, withHeader = true, headingLevel = 2 
 
   return (
     <section className="dotted-paper relative overflow-hidden border-y border-border/70">
-      <div className="mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
+      <div className="reading-surface mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         {withHeader ? (
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div>

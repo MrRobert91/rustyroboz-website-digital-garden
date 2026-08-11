@@ -10,7 +10,7 @@ const DOODLE_KINDS = ["gear", "bolt", "spark", "star"] as const;
 export function Bitacora({ items }: { items: ContentItem[] }) {
   return (
     <section className="dotted-paper relative overflow-hidden border-y border-border/70">
-      <div className="mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
+      <div className="reading-surface mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="max-w-2xl">
           <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">Writing</p>
           <h2 className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-6xl">

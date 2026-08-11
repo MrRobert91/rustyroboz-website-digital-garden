@@ -6,7 +6,7 @@ import { siteConfig } from "@/lib/site-config";
 export function StackToolbox() {
   return (
     <section className="dotted-paper relative overflow-hidden border-b border-border/70">
-      <div className="mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
+      <div className="reading-surface mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§04 — Toolbox</p>

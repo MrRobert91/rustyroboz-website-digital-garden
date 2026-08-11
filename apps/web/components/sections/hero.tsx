@@ -14,7 +14,7 @@ export function Hero() {
       <Tape angle={-4} className="hidden sm:block" height={24} style={{ top: -6, left: 80 }} width={120} />
       <Tape angle={3} className="hidden sm:block" height={24} style={{ top: -6, right: 80 }} width={120} />
 
-      <div className="mx-auto max-w-6xl px-6 pb-20 pt-16 lg:px-16 lg:pb-28 lg:pt-24">
+      <div className="reading-surface mx-auto max-w-6xl px-6 pb-20 pt-16 lg:px-16 lg:pb-28 lg:pt-24">
         {/* headline */}
         <Reveal className="relative">
           <p className="font-hand text-5xl text-accent -rotate-1 sm:text-6xl lg:text-7xl">Hi, I&apos;m David,</p>

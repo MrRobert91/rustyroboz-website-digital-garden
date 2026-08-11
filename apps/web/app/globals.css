@@ -124,14 +124,18 @@
   /* Dotted grid (graph-paper) — the site-wide paper texture */
   .dotted-paper {
     background-color: hsl(var(--card));
-    background-image: radial-gradient(hsl(var(--line-rule) / 0.5) 1px, transparent 1.4px);
-    background-size: 22px 22px;
+    background-image: radial-gradient(hsl(var(--line-rule) / 0.22) 1px, transparent 1.3px);
+    background-size: 32px 32px;
   }
 
   /* Dotted canvas behind the whole site — matches the .dotted-paper sections */
   .bg-paper-grid {
-    background-image: radial-gradient(hsl(var(--line-rule) / 0.5) 1px, transparent 1.4px);
-    background-size: 22px 22px;
+    background-image: radial-gradient(hsl(var(--line-rule) / 0.22) 1px, transparent 1.3px);
+    background-size: 32px 32px;
+  }
+
+  .reading-surface {
+    background-color: hsl(var(--background));
   }
 
   .bg-hero-texture {
