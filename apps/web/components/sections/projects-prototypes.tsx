@@ -15,6 +15,7 @@ type ProjectsPrototypesProps = {
   items: ContentItem[];
   /** Show the page-style header (used on /projects, hidden on the home teaser). */
   withHeader?: boolean;
+  headingLevel?: 1 | 2;
 };
 
 /**
@@ -129,9 +130,10 @@ function PrototypeCard({
   );
 }
 
-export function ProjectsPrototypes({ items, withHeader = true }: ProjectsPrototypesProps) {
+export function ProjectsPrototypes({ items, withHeader = true, headingLevel = 2 }: ProjectsPrototypesProps) {
   const cards = items as CardItem[];
   const numbers = buildTypeNumbers(cards);
+  const Heading = headingLevel === 1 ? "h1" : "h2";
 
   return (
     <section className="dotted-paper relative overflow-hidden border-y border-border/70">
@@ -140,9 +142,9 @@ export function ProjectsPrototypes({ items, withHeader = true }: ProjectsPrototy
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">§03 — Work</p>
-              <h2 className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-7xl">
+              <Heading className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-7xl">
                 Projects <span className="font-hand font-normal text-accent">&amp; Experiments</span>
-              </h2>
+              </Heading>
               <div className="mt-3">
                 <Squiggle color="hsl(var(--accent))" height={14} seed={4} strokeWidth={3} width={320} />
               </div>
@@ -162,9 +164,9 @@ export function ProjectsPrototypes({ items, withHeader = true }: ProjectsPrototy
         ) : (
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Selected work</p>
-            <h2 className="mt-2 font-display text-4xl font-bold tracking-tight text-foreground lg:text-5xl">
+            <Heading className="mt-2 font-display text-4xl font-bold tracking-tight text-foreground lg:text-5xl">
               Projects <span className="font-hand font-normal text-accent">&amp; Experiments</span>
-            </h2>
+            </Heading>
           </div>
         )}
 

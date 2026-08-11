@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 export default async function ProjectsPage() {
   const items = await getCollection("projects");
 
-  return <ProjectsPrototypes items={items} withHeader />;
+  return <ProjectsPrototypes headingLevel={1} items={items} withHeader />;
 }

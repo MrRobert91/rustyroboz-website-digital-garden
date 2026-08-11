@@ -22,8 +22,9 @@ function handleFor(href: string, label: string) {
 }
 
 /** Screen 06 — Contact / Signal. */
-export function ContactSignal({ photo }: { photo?: string }) {
+export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; headingLevel?: 1 | 2 }) {
   const email = siteConfig.email || "hello@rustyroboz.com";
+  const Heading = headingLevel === 1 ? "h1" : "h2";
 
   return (
     <section className="dotted-paper relative overflow-hidden">
@@ -31,7 +32,7 @@ export function ContactSignal({ photo }: { photo?: string }) {
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">§06 — Signal</p>
-            <h2 className="mt-2 font-display text-6xl font-bold leading-[0.95] tracking-tight text-foreground lg:text-8xl">
+            <Heading className="mt-2 font-display text-6xl font-bold leading-[0.95] tracking-tight text-foreground lg:text-8xl">
               Let&apos;s
               <br />
               <span className="relative inline-block">
@@ -43,7 +44,7 @@ export function ContactSignal({ photo }: { photo?: string }) {
               something
               <br />
               together.
-            </h2>
+            </Heading>
           </div>
           <div className="mt-4 flex items-start gap-5">
             {photo ? <Polaroid alt="Portrait of David Robert." angle={4} caption="DAVID" height={150} src={photo} width={130} /> : null}

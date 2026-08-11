@@ -44,7 +44,7 @@ export default async function AboutPage() {
 
   return (
     <>
-      <AboutFieldNotes paragraphs={paragraphs} photos={photos} />
+      <AboutFieldNotes headingLevel={1} paragraphs={paragraphs} photos={photos} />
       <StackToolbox />
     </>
   );

@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   const photo = firstPublicImage("/images/contact/portrait.jpg", "/images/contact/portrait.png");
-  return <ContactSignal photo={photo} />;
+  return <ContactSignal headingLevel={1} photo={photo} />;
 }

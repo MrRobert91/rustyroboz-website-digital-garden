@@ -7,10 +7,12 @@ type AboutFieldNotesProps = {
   paragraphs: string[];
   /** Optional real photos for the two polaroids. Fall back to drawn placeholders when missing. */
   photos?: { first?: string; second?: string };
+  headingLevel?: 1 | 2;
 };
 
 /** Screen 02 — About / Field notes. */
-export function AboutFieldNotes({ paragraphs, photos }: AboutFieldNotesProps) {
+export function AboutFieldNotes({ paragraphs, photos, headingLevel = 2 }: AboutFieldNotesProps) {
+  const Heading = headingLevel === 1 ? "h1" : "h2";
   const specs: [string, React.ReactNode][] = [
     ["base", siteConfig.location],
     ["focus", "AI systems · games · product eng."],
@@ -29,9 +31,9 @@ export function AboutFieldNotes({ paragraphs, photos }: AboutFieldNotesProps) {
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">§02 — Field notes</p>
-            <h2 className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-7xl">
+            <Heading className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-7xl">
               About <span className="font-hand font-normal text-accent">(me)</span>
-            </h2>
+            </Heading>
           </div>
           <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">PG. 02 / 06</p>
         </div>

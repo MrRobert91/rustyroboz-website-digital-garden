@@ -29,6 +29,7 @@ export default async function TagPage({ params }: TagPageProps) {
       <SectionHeading
         description="A cross-section of projects, articles, and notes related by topic."
         eyebrow="Tags"
+        headingLevel={1}
         title={`Tag: ${tag}`}
       />
       <div className="mt-12 grid gap-6 lg:grid-cols-2">

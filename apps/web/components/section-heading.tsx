@@ -6,13 +6,15 @@ type SectionHeadingProps = {
   title: string;
   description: ReactNode;
   className?: string;
+  headingLevel?: 1 | 2;
 };
 
-export function SectionHeading({ eyebrow, title, description, className }: SectionHeadingProps) {
+export function SectionHeading({ eyebrow, title, description, className, headingLevel = 2 }: SectionHeadingProps) {
+  const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
     <div className={cn("max-w-3xl", className)}>
       <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{eyebrow}</p>
-      <h2 className="mt-3 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">{title}</h2>
+      <Heading className="mt-3 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">{title}</Heading>
       <p className="mt-4 font-serif text-base leading-7 text-muted-foreground">{description}</p>
     </div>
   );
