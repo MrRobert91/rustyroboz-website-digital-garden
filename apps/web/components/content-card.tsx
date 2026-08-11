@@ -31,12 +31,12 @@ export function ContentCard({ item }: ContentCardProps) {
           <span className="font-mono text-sm uppercase tracking-[0.16em] text-accent">{item.collection}</span>
           <span className="font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">{item.readingTime}</span>
         </div>
-        <h3 className="font-display text-2xl font-bold tracking-tight text-foreground">
+        <h2 className="font-display text-2xl font-bold tracking-tight text-foreground">
           <span className="inline-flex items-center gap-1.5 transition-colors group-hover:text-accent">
             {item.title}
             <ArrowUpRight aria-hidden className="size-4" />
           </span>
-        </h3>
+        </h2>
         <p className="font-serif text-sm leading-6 text-muted-foreground">{item.description}</p>
         <div className="mt-1 flex flex-wrap gap-2">
           {item.tags.slice(0, 3).map((tag) => (

@@ -260,7 +260,7 @@ export function Polaroid({
           </span>
         )}
       </div>
-      <span className="font-hand" style={{ position: "absolute", bottom: 8, left: 14, fontSize: 16, color: "#5a4426" }}>
+      <span className="font-hand" style={{ position: "absolute", bottom: 8, left: 14, fontSize: 16, color: "hsl(var(--foreground))" }}>
         {caption.toLowerCase()}
       </span>
     </div>

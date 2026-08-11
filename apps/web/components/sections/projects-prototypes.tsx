@@ -41,17 +41,20 @@ function PrototypeCard({
   index,
   prefix,
   num,
+  headingLevel,
 }: {
   item: CardItem;
   index: number;
   prefix: "PROJ" | "EXP";
   num: string;
+  headingLevel: 2 | 3;
 }) {
   const isProject = (item.type ?? "experiment") === "project";
   // Status stamp is independent of the project/experiment tag; skip it if unset.
   const stamp = item.status ? projectStatusStamp[item.status] : undefined;
   const tags = item.tech?.length ? item.tech : item.tags;
   const href = getContentHref(item);
+  const Heading = headingLevel === 2 ? "h2" : "h3";
 
   // Projects get a slightly stronger frame so they stand out in the mixed grid.
   const frame = isProject
@@ -83,9 +86,9 @@ function PrototypeCard({
         {stamp ? <InkStamp angle={-4} label={stamp} style={{ fontSize: 14, padding: "5px 10px" }} /> : null}
       </div>
 
-      <h3 className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight text-foreground">
+      <Heading className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight text-foreground">
         <span className="transition-colors group-hover:text-accent">{item.title}</span>
-      </h3>
+      </Heading>
 
       {/* cover image, with a technical-drawing placeholder fallback */}
       <div
@@ -173,7 +176,13 @@ export function ProjectsPrototypes({ items, withHeader = true, headingLevel = 2 
             const meta = numbers.get(`${item.collection}:${item.slug}`) ?? { prefix: "EXP" as const, num: "00" };
             return (
               <Reveal delay={(index % 2) * 0.06} key={`${item.collection}-${item.slug}`}>
-                <PrototypeCard index={index} item={item} num={meta.num} prefix={meta.prefix} />
+                <PrototypeCard
+                  headingLevel={headingLevel === 1 ? 2 : 3}
+                  index={index}
+                  item={item}
+                  num={meta.num}
+                  prefix={meta.prefix}
+                />
               </Reveal>
             );
           })}

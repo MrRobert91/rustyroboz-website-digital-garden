@@ -18,7 +18,7 @@ export function LogbookTimeline() {
             </h2>
           </div>
           <Sticky angle={-4} className="hidden sm:block" color="#fcd9c8" style={{ width: 190 }}>
-            ↓ time goes <span className="font-bold text-accent-deep">down</span> the page
+            ↓ time goes <span className="font-bold text-[#6b2d1a]">down</span> the page
           </Sticky>
         </div>
 
