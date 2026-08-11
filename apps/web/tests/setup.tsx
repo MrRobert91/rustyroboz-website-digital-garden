@@ -25,7 +25,7 @@ vi.mock("next/image", () => ({
 
 vi.mock("next/navigation", () => ({
   notFound: vi.fn(),
-  usePathname: () => "/",
+  usePathname: vi.fn(() => "/"),
 }));
 
 vi.mock("next-mdx-remote/rsc", () => ({

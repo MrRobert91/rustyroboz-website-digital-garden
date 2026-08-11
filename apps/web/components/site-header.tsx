@@ -50,6 +50,7 @@ export function SiteHeader() {
         <nav aria-label="Primary navigation" className="hidden items-center gap-1 md:flex">
           {siteConfig.navigation.map((item) => (
             <Link
+              aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
                 "rounded-full px-3.5 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors",
                 isActive(item.href) ? "bg-accent text-[#fdf6ea]" : "text-muted-foreground hover:text-accent",
@@ -95,6 +96,7 @@ export function SiteHeader() {
         <nav aria-label="Mobile navigation" className="mx-auto flex max-w-6xl flex-col px-5 py-3 sm:px-6">
           {siteConfig.navigation.map((item) => (
             <Link
+              aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
                 "flex items-center justify-between border-b border-dashed border-border/60 py-3.5 font-mono text-sm uppercase tracking-[0.16em] transition-colors last:border-b-0",
                 isActive(item.href) ? "text-accent" : "text-foreground/80 hover:text-accent",
