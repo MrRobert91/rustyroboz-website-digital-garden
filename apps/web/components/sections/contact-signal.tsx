@@ -46,7 +46,7 @@ export function ContactSignal({ photo }: { photo?: string }) {
             </h2>
           </div>
           <div className="mt-4 flex items-start gap-5">
-            {photo ? <Polaroid angle={4} height={150} label="DAVID" src={photo} width={130} /> : null}
+            {photo ? <Polaroid alt="Portrait of David Robert." angle={4} caption="DAVID" height={150} src={photo} width={130} /> : null}
             <InkStamp angle={6} label="OPEN FOR WORK" style={{ fontSize: 13, padding: "8px 14px" }} />
           </div>
         </div>

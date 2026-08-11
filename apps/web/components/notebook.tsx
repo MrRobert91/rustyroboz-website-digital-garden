@@ -204,14 +204,15 @@ export function InkStamp({
 
 // ---- Polaroid (real photo when `src` is given, otherwise a placeholder) ----
 export function Polaroid({
-  label = "PHOTO",
+  caption = "PHOTO",
+  alt,
   src,
   angle = -3,
   width = 200,
   height = 220,
   className,
   style,
-}: Common & { label?: string; src?: string; angle?: number; width?: number; height?: number }) {
+}: Common & { caption?: string; alt?: string; src?: string; angle?: number; width?: number; height?: number }) {
   return (
     <div
       className={className}
@@ -242,7 +243,7 @@ export function Polaroid({
       >
         {src ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img alt={label} src={src} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img alt={alt ?? ""} src={src} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         ) : (
           <span
             className="font-mono"
@@ -255,12 +256,12 @@ export function Polaroid({
               padding: "4px 8px",
             }}
           >
-            {label}
+            {caption}
           </span>
         )}
       </div>
       <span className="font-hand" style={{ position: "absolute", bottom: 8, left: 14, fontSize: 16, color: "#5a4426" }}>
-        {label.toLowerCase()}
+        {caption.toLowerCase()}
       </span>
     </div>
   );

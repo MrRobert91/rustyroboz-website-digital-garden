@@ -97,7 +97,7 @@ function PrototypeCard({
         {item.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            alt={item.title}
+            alt=""
             className="absolute inset-0 size-full object-cover"
             loading="lazy"
             src={item.coverImage}

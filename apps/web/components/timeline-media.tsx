@@ -54,7 +54,7 @@ export function TimelineMedia({ items, title }: { items: TimelineMediaItem[]; ti
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              alt={item.title ?? title}
+              alt=""
               className="size-full object-cover"
               loading="lazy"
               src={`https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`}
