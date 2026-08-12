@@ -13,7 +13,7 @@ const components = {
     if (props.download) {
       return (
         <a
-          className="font-medium text-accent underline underline-offset-4 hover:text-accent/80"
+          className="text-link"
           download={props.download}
           href={href}
         >
@@ -24,14 +24,14 @@ const components = {
 
     if (href.startsWith("http")) {
       return (
-        <a className="font-medium text-accent underline-offset-4 hover:underline" href={href} rel="noreferrer" target="_blank">
+        <a className="text-link" href={href} rel="noreferrer" target="_blank">
           {props.children}
         </a>
       );
     }
 
     return (
-      <Link className="font-medium text-accent underline-offset-4 hover:underline" href={href}>
+      <Link className="text-link" href={href}>
         {props.children}
       </Link>
     );

@@ -35,7 +35,7 @@ export function SiteFooter() {
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-6 pb-8 lg:px-10">
         <Doodle color="hsl(var(--accent-deep))" kind="gear" size={26} />
         <span className="font-serif text-sm text-muted-foreground">© 2026 — Rusty Roboz Labs · drawn in Madrid</span>
-        <Link className="interactive-link font-mono text-sm font-semibold uppercase tracking-[0.08em] text-accent-deep transition-colors hover:text-accent" href="/lab">
+        <Link className="text-link font-mono text-sm uppercase tracking-[0.08em]" href="/lab">
           · visit the lab bench →
         </Link>
       </div>

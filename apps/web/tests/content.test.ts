@@ -13,6 +13,16 @@ describe("content loader", () => {
     );
   });
 
+  it("assigns canonical project and experiment codes from the full catalog", async () => {
+    const projects = await getCollection("projects");
+    const learningFactory = projects.find((project) => project.slug === "learning-ai-factory");
+    const qiskitPrep = projects.find((project) => project.slug === "qiskit-certification-prep");
+
+    expect(learningFactory?.catalogCode).toBe("PROJ-15");
+    expect(qiskitPrep?.catalogCode).toBe("EXP-15");
+    expect(new Set(projects.map((project) => project.catalogCode)).size).toBe(projects.length);
+  });
+
   it("resolves content by slug", async () => {
     const article = await getItemBySlug("articles", "de-mvp-cogiendo-polvo-a-google-play-la-resurreccion-de-cartastrofe");
     expect(article.title).toContain("Cartastrofe");

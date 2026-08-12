@@ -138,6 +138,21 @@
     background-color: hsl(var(--background));
   }
 
+  /* Inline/textual links keep a visible non-color cue and the site's rust ink. */
+  .text-link {
+    color: hsl(var(--accent-deep));
+    font-weight: 700;
+    text-decoration-line: underline;
+    text-decoration-color: hsl(var(--accent) / 0.65);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+
+  .text-link:hover {
+    color: hsl(var(--accent));
+    text-decoration-color: currentColor;
+  }
+
   .bg-hero-texture {
     background-image:
       radial-gradient(circle at top left, hsl(var(--accent) / 0.1), transparent 32%),

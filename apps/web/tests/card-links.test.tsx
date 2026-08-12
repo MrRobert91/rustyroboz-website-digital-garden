@@ -7,6 +7,7 @@ import type { ContentItem } from "@/lib/content";
 function item(slug: string, title: string): ContentItem {
   return {
     body: "",
+    catalogCode: `PROJ-${slug === "first" ? "01" : "02"}`,
     collection: "projects",
     coverImage: `/images/${slug}.jpg`,
     description: "A concise project description.",

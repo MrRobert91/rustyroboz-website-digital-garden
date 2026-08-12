@@ -27,7 +27,7 @@ export function LogbookTimeline() {
         </div>
 
         <Link
-          className="interactive-link mt-6 inline-block font-mono text-sm font-semibold uppercase tracking-[0.08em] text-accent-deep hover:text-accent sm:ml-12"
+          className="text-link mt-6 inline-block font-mono text-sm uppercase tracking-[0.08em] sm:ml-12"
           href="/timeline"
         >
           → see the full timeline

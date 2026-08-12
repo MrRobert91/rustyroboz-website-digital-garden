@@ -80,7 +80,7 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
         </div>
 
         <div className="mt-10">
-          <Link className="interactive-link font-mono text-sm font-semibold uppercase tracking-[0.08em] text-accent-deep hover:text-accent" href="/articles">
+          <Link className="text-link font-mono text-sm uppercase tracking-[0.08em]" href="/articles">
             Read all articles →
           </Link>
         </div>

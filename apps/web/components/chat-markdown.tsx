@@ -16,7 +16,7 @@ const components = {
   strong: ({ children }: { children?: ReactNode }) => <strong className="font-semibold text-foreground">{children}</strong>,
   em: ({ children }: { children?: ReactNode }) => <em className="font-serif italic">{children}</em>,
   a: ({ href, children }: { href?: string; children?: ReactNode }) => (
-    <a className="text-accent-deep underline decoration-accent/50 underline-offset-2 transition-colors hover:text-accent" href={href} rel="noreferrer" target={href?.startsWith("/") ? undefined : "_blank"}>
+    <a className="text-link" href={href} rel="noreferrer" target={href?.startsWith("/") ? undefined : "_blank"}>
       {children}
     </a>
   ),
