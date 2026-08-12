@@ -113,8 +113,8 @@ export function WorkshopClock() {
         )}
       </svg>
       <div>
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Madrid bench</p>
-        <p className="mt-1 flex items-center gap-2 font-hand text-xl text-foreground">
+        <p className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">Madrid bench</p>
+        <p className="mt-1 flex items-center gap-2 font-serif text-lg text-foreground">
           <span
             aria-hidden
             className={open ? "inline-block size-2 rounded-full bg-accent" : "inline-block size-2 rounded-full border border-muted-foreground"}

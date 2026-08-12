@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ContentCard } from "@/components/content-card";
 import { SectionHeading } from "@/components/section-heading";
 import { getEntriesByTag, getTagIndex } from "@/lib/content";
@@ -11,6 +12,14 @@ export async function generateStaticParams() {
   return [...tags.keys()].map((tag) => ({ tag }));
 }
 
+export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
+  const { tag } = await params;
+  return {
+    title: `Tag: ${tag}`,
+    description: `Projects, articles, and notes tagged ${tag}.`,
+  };
+}
+
 export default async function TagPage({ params }: TagPageProps) {
   const { tag } = await params;
   const items = await getEntriesByTag(tag);
@@ -20,6 +29,7 @@ export default async function TagPage({ params }: TagPageProps) {
       <SectionHeading
         description="A cross-section of projects, articles, and notes related by topic."
         eyebrow="Tags"
+        headingLevel={1}
         title={`Tag: ${tag}`}
       />
       <div className="mt-12 grid gap-6 lg:grid-cols-2">

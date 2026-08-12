@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Squiggle, Tape } from "@/components/notebook";
 import { Reveal } from "@/components/reveal";
@@ -5,11 +6,16 @@ import { BlochSphere } from "@/components/widgets/bloch-sphere";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+export const metadata: Metadata = {
+  title: "AI Lab",
+  description: "Interactive AI and computing experiments from the Rusty Roboz workbench.",
+};
+
 export default async function LabPage() {
   return (
     <section className="dotted-paper relative overflow-hidden border-b border-border/70">
-      <div className="mx-auto max-w-5xl px-6 py-16 lg:px-10 lg:py-24">
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Bench demos</p>
+      <div className="reading-surface mx-auto max-w-5xl px-6 py-16 lg:px-10 lg:py-24">
+        <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">Bench demos</p>
         <h1 className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-6xl">
           AI Lab <span className="font-hand font-normal text-accent">(the bench)</span>
         </h1>
@@ -27,7 +33,7 @@ export default async function LabPage() {
               <h2 className="font-display text-2xl font-bold tracking-tight text-foreground">
                 Qubit on the bench
               </h2>
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              <span className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
                 Fig. Q1 — Bloch sphere
               </span>
             </div>
@@ -42,7 +48,7 @@ export default async function LabPage() {
         </Reveal>
 
         <div className="relative mt-10 border border-border bg-paper-2/60 p-6 sm:p-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">Active MVP</p>
+          <p className="font-mono text-sm uppercase tracking-[0.22em] text-accent">Active MVP</p>
           <p className="mt-4 max-w-2xl font-serif text-base leading-7 text-muted-foreground">
             The personal chat already works with local retrieval and streaming. The next phase will harden ingestion,
             reindexing, and knowledge traceability.

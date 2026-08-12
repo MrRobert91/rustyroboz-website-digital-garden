@@ -14,7 +14,7 @@ export function Hero() {
       <Tape angle={-4} className="hidden sm:block" height={24} style={{ top: -6, left: 80 }} width={120} />
       <Tape angle={3} className="hidden sm:block" height={24} style={{ top: -6, right: 80 }} width={120} />
 
-      <div className="mx-auto max-w-6xl px-6 pb-20 pt-16 lg:px-16 lg:pb-28 lg:pt-24">
+      <div className="reading-surface mx-auto max-w-6xl px-6 pb-20 pt-16 lg:px-16 lg:pb-28 lg:pt-24">
         {/* headline */}
         <Reveal className="relative">
           <p className="font-hand text-5xl text-accent -rotate-1 sm:text-6xl lg:text-7xl">Hi, I&apos;m David,</p>
@@ -64,9 +64,9 @@ export function Hero() {
             <Doodle className="animate-float" color="hsl(var(--accent-deep))" kind="gear" size={44} />
             <Doodle className="animate-float" color="hsl(var(--accent))" kind="bolt" size={32} style={{ animationDelay: "-1.6s" }} />
             <Doodle className="animate-float" color="hsl(var(--accent-deep))" kind="spark" size={28} style={{ animationDelay: "-3.1s" }} />
-            <span className="font-hand text-lg text-muted-foreground -rotate-1">ai · robots · prototypes · notes</span>
+            <span className="font-mono text-sm text-muted-foreground">AI · robots · prototypes · notes</span>
           </div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">PG. 01 / COVER ↓</p>
+          <p className="font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">PG. 01 / COVER ↓</p>
         </div>
       </div>
 

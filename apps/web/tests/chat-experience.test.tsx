@@ -23,6 +23,7 @@ describe("ChatExperience", () => {
     render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
     expect(screen.getByLabelText(/question/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /send/i })).toBeInTheDocument();
+    expect(screen.getByRole("log", { name: /conversation with roboz/i })).toHaveAttribute("aria-live", "polite");
   });
 
   it("handles a successful streaming response", async () => {
@@ -42,6 +43,7 @@ describe("ChatExperience", () => {
     fireEvent.click(screen.getByRole("button", { name: /send/i }));
 
     expect(screen.getByRole("button", { name: /asking/i })).toBeDisabled();
+    expect(screen.getByRole("log", { name: /conversation with roboz/i })).toHaveAttribute("aria-busy", "true");
 
     await waitFor(() => {
       expect(screen.getByText(/practicing interviews/i)).toBeInTheDocument();
@@ -51,6 +53,8 @@ describe("ChatExperience", () => {
       "href",
       "/projects/technical-interview-chatbot",
     );
+    expect(screen.getByRole("log", { name: /conversation with roboz/i })).toHaveAttribute("aria-busy", "false");
+    expect(screen.getByText("Response ready.")).toHaveAttribute("aria-live", "polite");
   });
 
   it("shows an error state when the request fails", async () => {
@@ -67,9 +71,10 @@ describe("ChatExperience", () => {
     fireEvent.change(screen.getByLabelText(/question/i), { target: { value: "hello" } });
     fireEvent.click(screen.getByRole("button", { name: /send/i }));
 
-    await waitFor(() => {
-      expect(screen.getByText(/backend failure/i)).toBeInTheDocument();
-    });
+    const prompt = screen.getByLabelText(/question/i);
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/backend failure/i));
+    expect(prompt).toHaveAttribute("aria-invalid", "true");
+    expect(prompt).toHaveAttribute("aria-describedby", "chat-error");
   });
 
   it("shows stream errors emitted by the backend", async () => {
@@ -85,8 +90,6 @@ describe("ChatExperience", () => {
     fireEvent.change(screen.getByLabelText(/question/i), { target: { value: "hello" } });
     fireEvent.click(screen.getByRole("button", { name: /send/i }));
 
-    await waitFor(() => {
-      expect(screen.getByText(/rate limit/i)).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/rate limit/i));
   });
 });

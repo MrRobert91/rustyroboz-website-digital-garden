@@ -43,16 +43,19 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 sm:px-6 lg:px-10 lg:py-4">
         <Link className="flex items-baseline gap-2" href="/" onClick={() => setOpen(false)}>
           <span className="font-hand text-3xl font-semibold leading-none text-accent-deep">Rusty Roboz</span>
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Labs</span>
+          <span className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">Labs</span>
         </Link>
 
         {/* Desktop navigation */}
         <nav aria-label="Primary navigation" className="hidden items-center gap-1 md:flex">
           {siteConfig.navigation.map((item) => (
             <Link
+              aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
-                "rounded-full px-3.5 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors",
-                isActive(item.href) ? "bg-accent text-[#fdf6ea]" : "text-muted-foreground hover:text-accent",
+                "interactive-link rounded-full border px-3.5 py-2 font-mono text-sm uppercase tracking-[0.14em] transition-colors",
+                isActive(item.href)
+                  ? "border-accent-surface bg-accent-surface font-bold text-on-accent shadow-paper"
+                  : "border-transparent text-muted-foreground hover:border-control-border hover:text-accent",
               )}
               href={item.href}
               key={item.href}
@@ -72,7 +75,7 @@ export function SiteHeader() {
             aria-controls="mobile-nav"
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
-            className="-mr-1 grid size-11 place-items-center rounded-full text-foreground transition-colors hover:text-accent"
+            className="interactive-control -mr-1 grid size-11 place-items-center rounded-full border border-transparent text-foreground transition-colors hover:text-accent"
             onClick={() => setOpen((value) => !value)}
             type="button"
           >
@@ -95,22 +98,24 @@ export function SiteHeader() {
         <nav aria-label="Mobile navigation" className="mx-auto flex max-w-6xl flex-col px-5 py-3 sm:px-6">
           {siteConfig.navigation.map((item) => (
             <Link
+              aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
-                "flex items-center justify-between border-b border-dashed border-border/60 py-3.5 font-mono text-sm uppercase tracking-[0.16em] transition-colors last:border-b-0",
-                isActive(item.href) ? "text-accent" : "text-foreground/80 hover:text-accent",
+                "interactive-link my-1 flex items-center justify-between rounded-md border px-4 py-3.5 font-mono text-sm uppercase tracking-[0.16em] transition-colors",
+                isActive(item.href)
+                  ? "border-accent-surface bg-accent-surface font-bold text-on-accent shadow-paper"
+                  : "border-transparent text-foreground/80 hover:border-control-border hover:text-accent",
               )}
               href={item.href}
               key={item.href}
               onClick={() => setOpen(false)}
             >
               {item.label}
-              {isActive(item.href) ? <span aria-hidden className="text-accent">●</span> : null}
             </Link>
           ))}
           <div className="flex flex-wrap gap-x-5 gap-y-2 pb-4 pt-4">
             {siteConfig.socialLinks.map((link) => (
               <a
-                className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-accent"
+                className="interactive-link font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-accent"
                 href={link.href}
                 key={link.href}
                 rel="noreferrer"

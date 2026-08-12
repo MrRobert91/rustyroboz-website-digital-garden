@@ -45,7 +45,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
   const crossLinks = getCrossLinks(item);
 
   return (
-    <article className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20">
+    <article className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20" lang={item.language}>
       <div className="max-w-3xl">
         <div className="flex flex-wrap gap-2">
           <Badge>{item.collection}</Badge>
@@ -76,7 +76,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
           <MdxRenderer source={item.body} />
           {images.length ? (
             <div className="mt-14">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Gallery</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">Gallery</p>
               <TimelineMedia items={images} title={item.title} />
             </div>
           ) : null}
@@ -84,12 +84,12 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
         <aside className="space-y-6">
           {crossLinks.length ? (
             <div className="rounded-[2rem] border-[1.5px] border-accent/40 bg-accent/5 p-6 shadow-soft">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">
                 {item.collection === "projects" ? "Write-up" : "Project"}
               </p>
               <div className="mt-4 flex flex-col gap-3 text-sm">
                 {crossLinks.map((link) => (
-                  <Link className="font-medium text-foreground hover:text-accent" href={link.href} key={link.href}>
+                  <Link className="interactive-link font-medium text-foreground hover:text-accent" href={link.href} key={link.href}>
                     {link.label} →
                   </Link>
                 ))}
@@ -97,7 +97,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
             </div>
           ) : null}
           <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Metadata</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">Metadata</p>
             <dl className="mt-5 grid gap-3 text-sm text-muted-foreground">
               <div className="grid gap-1">
                 <dt className="font-medium text-foreground">Collection</dt>
@@ -121,7 +121,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
           </div>
           {isProjectItem(item) && item.links && Object.entries(item.links).filter(([, href]) => !isInternalCrossHref(href)).length ? (
             <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Links</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">Links</p>
               <div className="mt-5 flex flex-col gap-3 text-sm">
                 {Object.entries(item.links)
                   .filter(([, href]) => !isInternalCrossHref(href))
@@ -135,7 +135,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
           ) : null}
           {related.length ? (
             <div className="space-y-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Related</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">Related</p>
               {related.map((entry) => (
                 <ContentCard item={entry} key={`${entry.collection}-${entry.slug}`} />
               ))}

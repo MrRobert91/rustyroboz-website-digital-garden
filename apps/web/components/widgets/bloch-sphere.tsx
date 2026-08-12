@@ -9,6 +9,7 @@
 import { useCallback, useRef, useState } from "react";
 import { project, rotate, rotateAxis, normalize, type Vec3 } from "@/lib/wire3d";
 import { useSketchCanvas, type SketchInk, type SketchState } from "./use-sketch-canvas";
+import { AnimationToggle } from "./animation-toggle";
 
 const KET_0: Vec3 = [0, 1, 0];
 const ORTHO = 60; // near-orthographic camera distance
@@ -176,7 +177,12 @@ export function BlochSphere() {
     [],
   );
 
-  const canvasRef = useSketchCanvas(draw, { spin: 0.12, initialRx: -0.32, initialRy: 0.6, maxRx: 1.25 });
+  const { canvasRef, pause, paused, resume } = useSketchCanvas(draw, {
+    spin: 0.12,
+    initialRx: -0.32,
+    initialRy: 0.6,
+    maxRx: 1.25,
+  });
 
   const applyGate = (gate: Gate) => {
     queueRef.current.push({ axis: gate.axis, remaining: Math.PI });
@@ -192,7 +198,7 @@ export function BlochSphere() {
   };
 
   const chip =
-    "border border-border bg-paper-2 px-4 py-1.5 font-mono text-xs uppercase tracking-[0.14em] text-foreground shadow-paper transition-all duration-150 hover:border-accent/60 hover:text-accent active:translate-y-px";
+    "interactive-control border border-control-border bg-paper-2 px-4 py-1.5 font-mono text-sm uppercase tracking-[0.14em] text-foreground shadow-paper transition-all duration-150 hover:text-accent active:translate-y-px";
 
   return (
     <div className="w-full">
@@ -215,7 +221,8 @@ export function BlochSphere() {
         <button className={chip} onClick={reset} type="button">
           reset |0⟩
         </button>
-        <span className="ml-1 font-hand text-lg text-muted-foreground">← poke the gates</span>
+        <AnimationToggle className={chip} pause={pause} paused={paused} resume={resume} />
+        <span className="ml-1 font-serif text-base text-muted-foreground">← Use the gate controls</span>
       </div>
     </div>
   );

@@ -20,6 +20,11 @@ const config: Config = {
         border: "hsl(var(--border))",
         accent: "hsl(var(--accent))",
         "accent-deep": "hsl(var(--accent-deep))",
+        "accent-surface": "hsl(var(--accent-surface))",
+        "accent-surface-hover": "hsl(var(--accent-surface-hover))",
+        "on-accent": "hsl(var(--on-accent))",
+        "control-border": "hsl(var(--control-border))",
+        "disabled-foreground": "hsl(var(--disabled-foreground))",
         ring: "hsl(var(--ring))",
       },
       fontFamily: {

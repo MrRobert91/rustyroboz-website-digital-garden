@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContentDetailPage } from "@/components/content-detail-page";
 import { getCollection, getItemBySlug, getRelatedContent } from "@/lib/content";
@@ -9,6 +10,16 @@ type ProjectDetailProps = {
 export async function generateStaticParams() {
   const items = await getCollection("projects");
   return items.map((item) => ({ slug: item.slug }));
+}
+
+export async function generateMetadata({ params }: ProjectDetailProps): Promise<Metadata> {
+  const { slug } = await params;
+  try {
+    const item = await getItemBySlug("projects", slug);
+    return { title: item.title, description: item.description };
+  } catch {
+    return { title: "Project not found" };
+  }
 }
 
 export default async function ProjectDetailPage({ params }: ProjectDetailProps) {

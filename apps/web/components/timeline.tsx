@@ -16,7 +16,7 @@ import {
 
 const CARD_ROTATE = ["-rotate-[0.4deg]", "rotate-[0.5deg]", "-rotate-[0.3deg]", "rotate-[0.6deg]"];
 
-const ERA_LABEL_CLASS = "font-display text-2xl font-bold uppercase tracking-tight text-foreground/35 sm:text-3xl";
+const ERA_LABEL_CLASS = "font-display text-2xl font-bold uppercase tracking-tight text-muted-foreground sm:text-3xl";
 
 /** Compact "era" label drawn big and faded next to each entry. */
 function eraLabel(entry: TimelineEntry) {
@@ -40,7 +40,7 @@ function entryMinHeight(entry: TimelineEntry) {
 function TimelineLinkChip({ link }: { link: TimelineLink }) {
   const isInternal = link.href.startsWith("/");
   const className =
-    "inline-flex items-center gap-1 border border-dashed border-border px-3 py-1 font-mono text-[11px] uppercase tracking-[0.12em] text-foreground/70 transition-colors hover:border-accent hover:text-accent";
+    "interactive-link interactive-control inline-flex items-center gap-1 border border-control-border px-3 py-1 font-mono text-sm uppercase tracking-[0.12em] text-foreground/70 transition-colors hover:text-accent";
 
   if (isInternal) {
     return (
@@ -85,14 +85,14 @@ function TimelineCard({
 
   return (
     <div
-      className={`relative flex flex-col justify-between border border-border bg-paper-2/85 text-left shadow-paper ${
+      className={`relative flex flex-col justify-between border border-control-border bg-paper-2/85 text-left shadow-paper ${
         ranged ? "p-6 lg:p-7" : "p-5"
       } ${CARD_ROTATE[index % CARD_ROTATE.length]}`}
       style={minHeight ? { minHeight } : undefined}
     >
       <Tape angle={tapeSide === "right" ? 4 : -6} height={16} style={{ top: -9, [tapeSide]: 22 }} width={64} />
       <div>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">
           <span className="text-accent-deep">{kindLabel(entry.kind)}</span>
           <span aria-hidden>·</span>
           <span>{formatRange(entry)}</span>
@@ -107,7 +107,7 @@ function TimelineCard({
         <h3 className={`mt-3 font-display font-bold text-foreground ${ranged ? "text-2xl lg:text-3xl" : "text-2xl"}`}>
           {entry.title}
         </h3>
-        {entry.org ? <p className="mt-1 font-hand text-xl text-accent-deep">{entry.org}</p> : null}
+        {entry.org ? <p className="mt-1 font-serif text-lg font-semibold text-accent-deep">{entry.org}</p> : null}
         <p className="mt-2 font-serif text-base leading-relaxed text-foreground/75">{entry.description}</p>
         {entry.media?.length ? <TimelineMedia items={entry.media} title={entry.title} /> : null}
       </div>

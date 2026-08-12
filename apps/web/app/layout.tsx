@@ -31,7 +31,10 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: siteConfig.title,
+  title: {
+    default: siteConfig.title,
+    template: "%s | Rusty Roboz Labs",
+  },
   description: siteConfig.description,
 };
 
@@ -56,12 +59,15 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         className={`${spaceGrotesk.variable} ${plexSerif.variable} ${caveat.variable} ${jetbrainsMono.variable} font-display`}
       >
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+        <a className="skip-link" href="#main-content">
+          Skip to main content
+        </a>
         {/* overflow-x: clip (not hidden) keeps rotated cards from causing a
             horizontal scrollbar without turning this into a scroll container —
             which would break position: sticky on the timeline. */}
-        <div className="theme-fade min-h-screen overflow-x-clip bg-background bg-paper-grid">
+        <div className="theme-fade min-h-screen overflow-x-clip bg-background">
           <SiteHeader />
-          <main>{children}</main>
+          <main id="main-content" tabIndex={-1}>{children}</main>
           <SiteFooter />
         </div>
       </body>

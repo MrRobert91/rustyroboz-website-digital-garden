@@ -34,7 +34,7 @@ export function ContentHero({
     <section className="relative overflow-hidden border-b border-border/80 bg-hero-texture">
       <div className="mx-auto grid min-h-[calc(100svh-73px)] max-w-6xl items-end gap-12 px-6 py-16 lg:grid-cols-[1.2fr_0.8fr] lg:px-10 lg:py-20">
         <Reveal className="max-w-4xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">{eyebrow}</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent">{eyebrow}</p>
           <h1 className="mt-6 max-w-4xl font-manrope text-5xl font-semibold tracking-[-0.04em] text-foreground md:text-7xl">
             {title}
           </h1>

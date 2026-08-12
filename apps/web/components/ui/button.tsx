@@ -7,13 +7,13 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-foreground px-5 py-3 text-background hover:-translate-y-0.5",
-        outline: "border border-border bg-transparent px-5 py-3 text-foreground hover:border-accent hover:text-accent",
+        default: "hover-button-lift bg-foreground px-5 py-3 text-background",
+        outline: "interactive-control border border-control-border bg-transparent px-5 py-3 text-foreground hover:text-accent",
         ghost: "px-4 py-2 text-muted-foreground hover:text-foreground",
       },
       size: {
         default: "",
-        sm: "px-3 py-2 text-xs uppercase tracking-[0.18em]",
+        sm: "px-3 py-2 text-sm uppercase tracking-[0.18em]",
       },
     },
     defaultVariants: {
@@ -32,4 +32,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, va
 Button.displayName = "Button";
 
 export { Button };
-

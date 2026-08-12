@@ -166,7 +166,7 @@ export function Sticky({
         ...style,
       }}
     >
-      <span className="font-hand text-lg">{children}</span>
+      <span className="font-serif text-lg">{children}</span>
     </div>
   );
 }
@@ -185,13 +185,13 @@ export function InkStamp({
         border: "2px solid hsl(var(--accent))",
         color: "hsl(var(--accent))",
         padding: "6px 12px",
-        fontSize: 11,
+        fontSize: 14,
         letterSpacing: "0.2em",
         textTransform: "uppercase",
         fontWeight: 600,
         transform: `rotate(${angle}deg)`,
         display: "inline-block",
-        opacity: 0.82,
+        opacity: 1,
         backgroundImage: "radial-gradient(rgba(255,255,255,0.5) 1px, transparent 2px)",
         backgroundSize: "3px 3px",
         ...style,
@@ -204,14 +204,15 @@ export function InkStamp({
 
 // ---- Polaroid (real photo when `src` is given, otherwise a placeholder) ----
 export function Polaroid({
-  label = "PHOTO",
+  caption = "PHOTO",
+  alt,
   src,
   angle = -3,
   width = 200,
   height = 220,
   className,
   style,
-}: Common & { label?: string; src?: string; angle?: number; width?: number; height?: number }) {
+}: Common & { caption?: string; alt?: string; src?: string; angle?: number; width?: number; height?: number }) {
   return (
     <div
       className={className}
@@ -242,12 +243,12 @@ export function Polaroid({
       >
         {src ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img alt={label} src={src} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img alt={alt ?? ""} src={src} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         ) : (
           <span
             className="font-mono"
             style={{
-              fontSize: 10,
+              fontSize: 14,
               letterSpacing: "0.18em",
               color: "rgba(50,30,15,0.55)",
               textTransform: "uppercase",
@@ -255,12 +256,12 @@ export function Polaroid({
               padding: "4px 8px",
             }}
           >
-            {label}
+            {caption}
           </span>
         )}
       </div>
-      <span className="font-hand" style={{ position: "absolute", bottom: 8, left: 14, fontSize: 16, color: "#5a4426" }}>
-        {label.toLowerCase()}
+      <span className="font-hand" style={{ position: "absolute", bottom: 8, left: 14, fontSize: 16, color: "hsl(var(--foreground))" }}>
+        {caption.toLowerCase()}
       </span>
     </div>
   );

@@ -10,6 +10,7 @@ import { useCallback } from "react";
 import { Tape } from "@/components/notebook";
 import { boxEdges, jitter, project, rotate, type Seg, type Vec3 } from "@/lib/wire3d";
 import { useSketchCanvas, type SketchInk, type SketchState } from "./use-sketch-canvas";
+import { AnimationToggle } from "./animation-toggle";
 import { cn } from "@/lib/utils";
 
 // ---- Model (unit space, head centered on origin, y up) ----
@@ -136,7 +137,11 @@ export function WireframeRoboz({ className }: { className?: string }) {
     [],
   );
 
-  const canvasRef = useSketchCanvas(draw, { spin: 0.32, initialRx: -0.16, initialRy: 0.45 });
+  const { canvasRef, pause, paused, resume } = useSketchCanvas(draw, {
+    spin: 0.32,
+    initialRx: -0.16,
+    initialRy: 0.45,
+  });
 
   return (
     <div className={cn("relative w-[300px] max-w-full", className)}>
@@ -149,11 +154,19 @@ export function WireframeRoboz({ className }: { className?: string }) {
           role="img"
           style={{ touchAction: "pan-y" }}
         />
-        <div className="mt-2 flex items-baseline justify-between gap-2 border-t border-dashed border-border/70 pt-2">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-dashed border-border/70 pt-2">
+          <span className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
             Fig. 00 — Roboz MK-1
           </span>
-          <span className="font-hand text-base text-accent-deep">drag to spin ↻</span>
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-sm text-accent-deep">Drag to spin ↻</span>
+            <AnimationToggle
+              className="min-h-11 border border-control-border bg-background px-3 font-mono text-sm uppercase tracking-[0.12em] text-foreground"
+              pause={pause}
+              paused={paused}
+              resume={resume}
+            />
+          </div>
         </div>
       </div>
     </div>

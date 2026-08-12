@@ -54,13 +54,13 @@ export function TimelineMedia({ items, title }: { items: TimelineMediaItem[]; ti
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              alt={item.title ?? title}
+              alt=""
               className="size-full object-cover"
               loading="lazy"
               src={`https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`}
             />
             <span className="absolute inset-0 grid place-items-center bg-foreground/25 transition-colors group-hover/play:bg-foreground/35">
-              <span className="grid size-14 place-items-center rounded-full bg-accent text-background shadow-lg transition-transform group-hover/play:scale-110">
+              <span className="grid size-14 place-items-center rounded-full bg-accent-surface text-on-accent shadow-lg transition-transform group-hover/play:scale-110">
                 <Play className="size-6 translate-x-0.5 fill-current" />
               </span>
             </span>
@@ -76,7 +76,7 @@ export function TimelineMedia({ items, title }: { items: TimelineMediaItem[]; ti
           <button aria-label="Next" className={`${NAV_BUTTON} right-2`} onClick={() => move(1)} type="button">
             <ChevronRight className="size-4" />
           </button>
-          <span className="absolute right-2 top-2 rounded-full bg-background/85 px-2 py-0.5 font-mono text-[10px] text-foreground/70">
+          <span className="absolute right-2 top-2 rounded-full bg-background/85 px-2 py-0.5 font-mono text-sm text-foreground/70">
             {index + 1}/{items.length}
           </span>
           <div className="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center gap-1.5">

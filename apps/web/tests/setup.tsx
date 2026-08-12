@@ -3,6 +3,10 @@ import React from "react";
 import { vi } from "vitest";
 
 vi.mock("next/font/google", () => ({
+  Space_Grotesk: () => ({ className: "font-display", variable: "--font-display" }),
+  IBM_Plex_Serif: () => ({ className: "font-serif", variable: "--font-serif" }),
+  Caveat: () => ({ className: "font-hand", variable: "--font-hand" }),
+  JetBrains_Mono: () => ({ className: "font-mono", variable: "--font-mono" }),
   Manrope: () => ({ className: "font-manrope", variable: "--font-manrope" }),
   Newsreader: () => ({ className: "font-newsreader", variable: "--font-newsreader" }),
 }));
@@ -19,6 +23,11 @@ vi.mock("next/image", () => ({
   default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} alt={props.alt ?? ""} />,
 }));
 
+vi.mock("next/navigation", () => ({
+  notFound: vi.fn(),
+  usePathname: vi.fn(() => "/"),
+}));
+
 vi.mock("next-mdx-remote/rsc", () => ({
   MDXRemote: ({ source }: { source: string }) => <div data-testid="mdx-content">{source}</div>,
 }));
@@ -33,6 +42,18 @@ class MockIntersectionObserver {
 }
 
 vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
+
+const canvasContext = new Proxy(
+  {},
+  {
+    get: () => vi.fn(),
+    set: () => true,
+  },
+) as CanvasRenderingContext2D;
+Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
+  configurable: true,
+  value: vi.fn(() => canvasContext),
+});
 
 // jsdom does not implement Element scrolling APIs (chat auto-scroll uses them).
 Element.prototype.scrollTo = Element.prototype.scrollTo ?? (() => {});
