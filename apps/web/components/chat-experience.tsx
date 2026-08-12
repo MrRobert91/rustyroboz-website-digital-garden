@@ -470,7 +470,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                           </span>
                           {message.citations.map((citation) => (
                             <Link
-                              className="interactive-link interactive-control inline-flex items-center gap-1 border border-control-border bg-paper-2 px-2 py-0.5 font-mono text-sm text-accent-deep transition-colors hover:text-accent"
+                              className="text-link interactive-control inline-flex items-center gap-1 border border-control-border bg-paper-2 px-2 py-0.5 font-mono text-sm transition-colors"
                               href={citation.href}
                               key={`${message.id}-${citation.collection}-${citation.slug}`}
                             >

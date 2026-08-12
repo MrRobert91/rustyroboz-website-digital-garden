@@ -63,6 +63,8 @@ export type ContentItem = ContentFrontmatter & {
   collection: CollectionName;
   sourcePath: string;
   excerpt: string;
+  /** Stable catalog label calculated from the complete projects collection. */
+  catalogCode?: `${"PROJ" | "EXP"}-${string}`;
 };
 
 function getContentRoot() {
@@ -240,9 +242,30 @@ export async function getCollection<T extends CollectionName>(collection: T): Pr
     }),
   );
 
-  return items
+  const sorted = items
     .filter((item) => !item.draft)
-    .sort((left, right) => new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime());
+    .sort((left, right) => {
+      const dateDifference = new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime();
+      return dateDifference || left.slug.localeCompare(right.slug);
+    });
+
+  if (collection !== "projects") {
+    return sorted;
+  }
+
+  const totals = { project: 0, experiment: 0 };
+  for (const item of sorted) {
+    totals[(item as ProjectFrontmatter).type] += 1;
+  }
+
+  const remaining = { ...totals };
+  return sorted.map((item) => {
+    const type = (item as ProjectFrontmatter).type;
+    const prefix = type === "project" ? "PROJ" : "EXP";
+    const number = String(remaining[type]).padStart(2, "0");
+    remaining[type] -= 1;
+    return { ...item, catalogCode: `${prefix}-${number}` };
+  });
 }
 
 export async function getItemBySlug<T extends CollectionName>(collection: T, slug: string) {

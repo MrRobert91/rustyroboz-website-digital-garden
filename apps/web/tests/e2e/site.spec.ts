@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const PUBLIC_ROUTES = ["/", "/about", "/projects", "/articles", "/contact", "/chat"];
+const PUBLIC_ROUTES = ["/", "/about", "/timeline", "/projects", "/articles", "/contact", "/chat"];
 
 test("home page exposes English primary navigation and a single h1", async ({ page }) => {
   await page.goto("/");

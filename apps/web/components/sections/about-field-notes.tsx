@@ -19,7 +19,7 @@ export function AboutFieldNotes({ paragraphs, photos, headingLevel = 2 }: AboutF
     ["formats", "projects · articles · notes · experiments"],
     [
       "cv",
-      <a className="text-accent-deep underline-offset-4 hover:text-accent hover:underline" href="/cv-david-robert.pdf" key="cv" rel="noreferrer" target="_blank">
+      <a className="text-link" href="/cv-david-robert.pdf" key="cv" rel="noreferrer" target="_blank">
         download PDF ↗
       </a>,
     ],

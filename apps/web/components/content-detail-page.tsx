@@ -89,7 +89,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
               </p>
               <div className="mt-4 flex flex-col gap-3 text-sm">
                 {crossLinks.map((link) => (
-                  <Link className="interactive-link font-medium text-foreground hover:text-accent" href={link.href} key={link.href}>
+                  <Link className="text-link" href={link.href} key={link.href}>
                     {link.label} →
                   </Link>
                 ))}
@@ -126,7 +126,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
                 {Object.entries(item.links)
                   .filter(([, href]) => !isInternalCrossHref(href))
                   .map(([label, href]) => (
-                    <Link className="text-accent underline-offset-4 hover:underline" href={href} key={href} rel="noreferrer" target="_blank">
+                    <Link className="text-link" href={href} key={href} rel="noreferrer" target="_blank">
                       {label}
                     </Link>
                   ))}

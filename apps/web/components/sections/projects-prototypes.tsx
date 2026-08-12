@@ -18,38 +18,19 @@ type ProjectsPrototypesProps = {
   headingLevel?: 1 | 2;
 };
 
-/**
- * Number each item within its own type so projects read PROJ-01.. and
- * experiments EXP-01.., oldest first. Items arrive newest-first.
- */
-function buildTypeNumbers(items: CardItem[]) {
-  const numbers = new Map<string, { prefix: "PROJ" | "EXP"; num: string }>();
-  for (const type of ["project", "experiment"] as const) {
-    const ofType = items.filter((item) => (item.type ?? "experiment") === type);
-    ofType.forEach((item, index) => {
-      numbers.set(`${item.collection}:${item.slug}`, {
-        prefix: type === "project" ? "PROJ" : "EXP",
-        num: String(ofType.length - index).padStart(2, "0"),
-      });
-    });
-  }
-  return numbers;
-}
-
 function PrototypeCard({
   item,
   index,
-  prefix,
-  num,
+  catalogCode,
   headingLevel,
 }: {
   item: CardItem;
   index: number;
-  prefix: "PROJ" | "EXP";
-  num: string;
+  catalogCode: NonNullable<ContentItem["catalogCode"]>;
   headingLevel: 2 | 3;
 }) {
   const isProject = (item.type ?? "experiment") === "project";
+  const num = catalogCode.split("-")[1];
   // Status stamp is independent of the project/experiment tag; skip it if unset.
   const stamp = item.status ? projectStatusStamp[item.status] : undefined;
   const tags = item.tech?.length ? item.tech : item.tags;
@@ -71,7 +52,7 @@ function PrototypeCard({
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
           <span className="font-mono text-sm font-semibold uppercase tracking-[0.18em] text-accent">
-            {prefix}-{num}
+            {catalogCode}
           </span>
           {isProject ? (
             <span className="bg-accent-surface px-2 py-0.5 font-mono text-sm font-semibold uppercase tracking-[0.16em] text-on-accent">
@@ -133,7 +114,6 @@ function PrototypeCard({
 
 export function ProjectsPrototypes({ items, withHeader = true, headingLevel = 2 }: ProjectsPrototypesProps) {
   const cards = items as CardItem[];
-  const numbers = buildTypeNumbers(cards);
   const Heading = headingLevel === 1 ? "h1" : "h2";
 
   return (
@@ -173,15 +153,16 @@ export function ProjectsPrototypes({ items, withHeader = true, headingLevel = 2 
 
         <div className="mt-12 grid gap-7 md:grid-cols-2">
           {cards.map((item, index) => {
-            const meta = numbers.get(`${item.collection}:${item.slug}`) ?? { prefix: "EXP" as const, num: "00" };
+            if (!item.catalogCode) {
+              throw new Error(`Missing canonical catalog code for project ${item.slug}`);
+            }
             return (
               <Reveal delay={(index % 2) * 0.06} key={`${item.collection}-${item.slug}`}>
                 <PrototypeCard
                   headingLevel={headingLevel === 1 ? 2 : 3}
                   index={index}
                   item={item}
-                  num={meta.num}
-                  prefix={meta.prefix}
+                  catalogCode={item.catalogCode}
                 />
               </Reveal>
             );

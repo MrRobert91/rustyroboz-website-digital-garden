@@ -15,6 +15,7 @@ export default async function ArticlesPage() {
       description="Essays and long-form writing on software delivery, applied AI, ethics, and system design."
       eyebrow="Blog"
       items={items}
+      notebookFrame
       title="Articles"
     />
   );

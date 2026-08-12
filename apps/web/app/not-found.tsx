@@ -13,7 +13,7 @@ export default function NotFound() {
       <p className="mt-4 text-lg leading-8 text-muted-foreground">
         Puede que el contenido se haya movido o que el slug no exista todavía.
       </p>
-      <Link className="mt-8 inline-flex text-accent hover:underline" href="/">
+      <Link className="text-link mt-8 inline-flex" href="/">
         Volver al inicio
       </Link>
     </div>

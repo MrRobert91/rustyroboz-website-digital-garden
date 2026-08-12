@@ -5,7 +5,8 @@ export type TimelineKind =
   | "certification"
   | "course"
   | "award"
-  | "project";
+  | "project"
+  | "experiment";
 
 export type TimelineLink = {
   label: string;
@@ -41,6 +42,7 @@ const KIND_LABELS: Record<TimelineKind, string> = {
   course: "Course",
   award: "Award",
   project: "Project",
+  experiment: "Experiment",
 };
 
 export function kindLabel(kind: TimelineKind) {
@@ -206,7 +208,46 @@ export const timeline: TimelineEntry[] = [
     end: "present",
     description:
       "Designing and delivering intensive AI bootcamps — 6 editions and 5,000+ hours so far, training several hundred students in NLP, LLMs, Computer Vision and applied Deep Learning, and building RAG systems and AI agents with LangChain and CrewAI.",
-    links: [{ label: "Sample project", href: "/projects/technical-interview-chatbot" }],
+    links: [{ label: "Factoría F5", href: "https://factoriaf5.org/" }],
+  },
+  {
+    id: "qiskit-certification-prep",
+    kind: "experiment",
+    title: "Qiskit Certification Prep",
+    start: "2026-08",
+    description:
+      "An interactive study lab for the IBM Qiskit v2.x Developer certification, combining illustrated lessons, quantum widgets, circuit practice, hands-on exercises and weighted mock exams.",
+    media: [
+      {
+        type: "image",
+        src: "/images/projects/quantum-computing-guide/01-study-dashboard.png",
+        alt: "Qiskit Certification Prep dashboard",
+      },
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/MrRobert91/QuantumComputingGuide" },
+      { label: "Case study", href: "/projects/qiskit-certification-prep" },
+    ],
+  },
+  {
+    id: "learning-ai-factory",
+    kind: "project",
+    title: "AI Learning Factory",
+    start: "2026-08",
+    description:
+      "An agent-driven educational content factory that turns a rough idea into researched lessons, slides, voice, video and publication packages with versioning, cost tracking and human approval gates.",
+    media: [
+      {
+        type: "image",
+        src: "/images/projects/learning-ai-factory/01-projects-dashboard.png",
+        alt: "AI Learning Factory projects dashboard",
+      },
+    ],
+    links: [
+      { label: "Live app", href: "https://frontend-gczzuw.sliplane.app/" },
+      { label: "GitHub", href: "https://github.com/MrRobert91/Learning-AI-Factory" },
+      { label: "Case study", href: "/projects/learning-ai-factory" },
+    ],
   },
   {
     id: "sharedbrain",
@@ -232,7 +273,7 @@ export const timeline: TimelineEntry[] = [
   },
   {
     id: "topokarts",
-    kind: "project",
+    kind: "experiment",
     title: "TopoKarts",
     start: "2026-06",
     description:
@@ -274,7 +315,7 @@ export const timeline: TimelineEntry[] = [
   },
   {
     id: "apolo-vs-zeus",
-    kind: "project",
+    kind: "experiment",
     title: "Apolo vs Zeus",
     start: "2026-05",
     description:
@@ -301,7 +342,7 @@ export const timeline: TimelineEntry[] = [
   },
   {
     id: "thor-runner",
-    kind: "project",
+    kind: "experiment",
     title: "Thor Runner",
     start: "2026-04",
     description:
@@ -354,7 +395,7 @@ export const timeline: TimelineEntry[] = [
   },
   {
     id: "technical-interview-chatbot",
-    kind: "project",
+    kind: "experiment",
     title: "Technical Interview Chatbot",
     start: "2024-12",
     description:
@@ -365,6 +406,22 @@ export const timeline: TimelineEntry[] = [
       { label: "GitHub", href: "https://github.com/MrRobert91/StreamlitLLMChatbot" },
       { label: "Case study", href: "/projects/technical-interview-chatbot" },
     ],
+  },
+  {
+    id: "susbeer-vr-experience",
+    kind: "experiment",
+    title: "Susbeer VR Experience",
+    start: "2024-11",
+    description:
+      "A personal Meta Quest 2 experience built in Unity with an explorable forest, a maze, AI-generated music and real locations captured as 3D scans.",
+    media: [
+      {
+        type: "image",
+        src: "/images/projects/susbeer-vr-experience/image-01.png",
+        alt: "Susbeer VR Experience",
+      },
+    ],
+    links: [{ label: "Case study", href: "/projects/susbeer-vr-experience" }],
   },
   {
     id: "azure-ai-engineer",
@@ -434,7 +491,7 @@ export const timeline: TimelineEntry[] = [
   },
   {
     id: "finetuning-sd-face",
-    kind: "project",
+    kind: "experiment",
     title: "Fine-tuning Stable Diffusion with my face",
     start: "2022-11",
     description:
@@ -444,6 +501,10 @@ export const timeline: TimelineEntry[] = [
       {
         label: "Article",
         href: "https://medium.com/@rustyroboz/genera-im%C3%A1genes-de-tu-cara-con-stable-diffusion-y-dreambooth-b93e9c6dafe",
+      },
+      {
+        label: "Case study",
+        href: "/projects/genera-imagenes-de-tu-cara-con-stable-diffusion-y-dreambooth",
       },
     ],
   },
@@ -468,7 +529,7 @@ export const timeline: TimelineEntry[] = [
   },
   {
     id: "crazy-ride",
-    kind: "project",
+    kind: "experiment",
     title: "Crazy Ride",
     start: "2022-11",
     description:
@@ -486,7 +547,7 @@ export const timeline: TimelineEntry[] = [
   },
   {
     id: "nasa-hackathon",
-    kind: "project",
+    kind: "experiment",
     title: "Space Art AI — NASA Space Apps Hackathon",
     start: "2022-09",
     description:
@@ -626,8 +687,25 @@ export const timeline: TimelineEntry[] = [
     ],
   },
   {
+    id: "quantum-random-number-generator",
+    kind: "experiment",
+    title: "Quantum Random Number Generator",
+    start: "2021-08",
+    description:
+      "A Qiskit experiment that puts five qubits into superposition, measures them and maps the resulting bit string to random NFT prices generated by quantum events.",
+    media: [
+      { type: "youtube", id: "q_oOZxcR1NA", title: "Quantum Random Number Generator" },
+      {
+        type: "image",
+        src: "/images/projects/quantum-random-number-generator/image-01.png",
+        alt: "Quantum Random Number Generator",
+      },
+    ],
+    links: [{ label: "Case study", href: "/projects/quantum-random-number-generator" }],
+  },
+  {
     id: "art-made-with-ai",
-    kind: "project",
+    kind: "experiment",
     title: "Art Made with Artificial Intelligence",
     start: "2021-08",
     description:
@@ -641,8 +719,21 @@ export const timeline: TimelineEntry[] = [
     ],
   },
   {
+    id: "toxic-adventure",
+    kind: "experiment",
+    title: "Toxic Adventure",
+    start: "2021-05",
+    description:
+      "A compact Unity platform game for Android where radioactive-waste barrels appear around the level and the player must collect all 50 without falling.",
+    media: [
+      { type: "youtube", id: "gillrGqszC0", title: "Toxic Adventure" },
+      { type: "image", src: "/images/projects/toxic-adventure/image-01.jpg", alt: "Toxic Adventure" },
+    ],
+    links: [{ label: "Case study", href: "/projects/toxic-adventure" }],
+  },
+  {
     id: "rpi-console",
-    kind: "project",
+    kind: "experiment",
     title: "RPI Console",
     start: "2021-01",
     description:
@@ -654,6 +745,16 @@ export const timeline: TimelineEntry[] = [
       { type: "image", src: "/images/projects/rpi-console/image-04.jpg", alt: "RPI Console 4" },
     ],
     links: [{ label: "Case study", href: "/projects/rpi-console" }],
+  },
+  {
+    id: "face-recognition-and-tracking-with-opencv",
+    kind: "experiment",
+    title: "Face Recognition and Tracking with OpenCV",
+    start: "2019-02",
+    description:
+      "A small computer-vision experiment combining OpenCV face detection, face recognition and live tracking from a camera feed.",
+    media: [{ type: "youtube", id: "8ga6g6btSH0", title: "Face recognition and tracking with OpenCV" }],
+    links: [{ label: "Case study", href: "/projects/face-recognition-and-tracking-with-opencv" }],
   },
   {
     id: "stratio",
@@ -694,6 +795,23 @@ export const timeline: TimelineEntry[] = [
     description: "Final project (TFG) on training convolutional neural networks.",
   },
   {
+    id: "arduino-safe-brake-ligths",
+    kind: "experiment",
+    title: "Arduino Safe Brake Lights",
+    start: "2018-04",
+    description:
+      "A hardware prototype for adaptive car brake lights: an Arduino and pressure sensor illuminate more LEDs as braking intensity increases.",
+    media: [
+      { type: "youtube", id: "8dDxJtqwpl8", title: "Arduino safe brake lights" },
+      {
+        type: "image",
+        src: "/images/projects/arduino-safe-brake-ligths/image-01.jpg",
+        alt: "Arduino Safe Brake Lights prototype",
+      },
+    ],
+    links: [{ label: "Case study", href: "/projects/arduino-safe-brake-ligths" }],
+  },
+  {
     id: "drone-programming-course",
     kind: "course",
     title: "Advanced University Course in Drone Programming",
@@ -709,7 +827,7 @@ export const timeline: TimelineEntry[] = [
   },
   {
     id: "drone-contest",
-    kind: "award",
+    kind: "project",
     title: "1st place — Programarobot Drone Contest",
     org: "URJC ETSIT",
     start: "2017-07",

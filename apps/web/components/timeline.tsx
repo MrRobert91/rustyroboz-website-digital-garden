@@ -40,7 +40,7 @@ function entryMinHeight(entry: TimelineEntry) {
 function TimelineLinkChip({ link }: { link: TimelineLink }) {
   const isInternal = link.href.startsWith("/");
   const className =
-    "interactive-link interactive-control inline-flex items-center gap-1 border border-control-border px-3 py-1 font-mono text-sm uppercase tracking-[0.12em] text-foreground/70 transition-colors hover:text-accent";
+    "text-link interactive-control inline-flex items-center gap-1 border border-control-border px-3 py-1 font-mono text-sm uppercase tracking-[0.12em] transition-colors";
 
   if (isInternal) {
     return (
@@ -73,15 +73,18 @@ function TimelineCard({
   entry,
   index,
   tapeSide = "left",
+  headingLevel = 3,
 }: {
   entry: TimelineEntry;
   index: number;
   tapeSide?: "left" | "right";
+  headingLevel?: 2 | 3;
 }) {
   const ranged = Boolean(entry.end);
   const ongoing = isOngoing(entry);
   const duration = formatDuration(entry);
   const minHeight = entryMinHeight(entry);
+  const Heading = headingLevel === 2 ? "h2" : "h3";
 
   return (
     <div
@@ -104,9 +107,9 @@ function TimelineCard({
           ) : null}
           {ongoing ? <span className="font-semibold text-accent">● now</span> : null}
         </div>
-        <h3 className={`mt-3 font-display font-bold text-foreground ${ranged ? "text-2xl lg:text-3xl" : "text-2xl"}`}>
+        <Heading className={`mt-3 font-display font-bold text-foreground ${ranged ? "text-2xl lg:text-3xl" : "text-2xl"}`}>
           {entry.title}
-        </h3>
+        </Heading>
         {entry.org ? <p className="mt-1 font-serif text-lg font-semibold text-accent-deep">{entry.org}</p> : null}
         <p className="mt-2 font-serif text-base leading-relaxed text-foreground/75">{entry.description}</p>
         {entry.media?.length ? <TimelineMedia items={entry.media} title={entry.title} /> : null}
@@ -189,7 +192,7 @@ function EraRow({ era, index }: { era: TimelineEra; index: number }) {
             <div className="pl-12 sm:pl-0 sm:pr-12 sm:text-right">
               <p className={ERA_LABEL_CLASS}>{eraLabel(exp)}</p>
               <Reveal className="mt-3 block">
-                <TimelineCard entry={exp} index={index} tapeSide="right" />
+                <TimelineCard entry={exp} headingLevel={2} index={index} tapeSide="right" />
               </Reveal>
             </div>
           </div>
@@ -208,7 +211,7 @@ function EraRow({ era, index }: { era: TimelineEra; index: number }) {
               />
               <p className={ERA_LABEL_CLASS}>{eraLabel(event)}</p>
               <Reveal className="mt-3 block">
-                <TimelineCard entry={event} index={eventIndex} tapeSide="left" />
+                <TimelineCard entry={event} headingLevel={2} index={eventIndex} tapeSide="left" />
               </Reveal>
             </div>
           ))}

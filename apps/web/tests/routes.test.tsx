@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import AboutPage from "@/app/about/page";
 import ArticlesPage from "@/app/articles/page";
@@ -23,6 +23,21 @@ describe("public routes", () => {
     expect(screen.queryByText(/^signal$/i)).not.toBeInTheDocument();
   });
 
+  it("keeps canonical catalog codes in selected work and the full projects page", async () => {
+    const home = render(await HomePage());
+    const homeFactory = screen.getByRole("heading", { name: /ai learning factory/i }).closest("article");
+    const homeQiskit = screen.getByRole("heading", { name: /qiskit certification prep/i }).closest("article");
+    expect(within(homeFactory as HTMLElement).getByText("PROJ-15")).toBeInTheDocument();
+    expect(within(homeQiskit as HTMLElement).getByText("EXP-15")).toBeInTheDocument();
+    home.unmount();
+
+    render(await ProjectsPage());
+    const projectsFactory = screen.getByRole("heading", { name: /ai learning factory/i }).closest("article");
+    const projectsQiskit = screen.getByRole("heading", { name: /qiskit certification prep/i }).closest("article");
+    expect(within(projectsFactory as HTMLElement).getByText("PROJ-15")).toBeInTheDocument();
+    expect(within(projectsQiskit as HTMLElement).getByText("EXP-15")).toBeInTheDocument();
+  });
+
   it("renders the about and contact pages in english", async () => {
     const about = render(await AboutPage());
     expect(screen.getByRole("heading", { level: 1, name: /about/i })).toBeInTheDocument();
@@ -38,10 +53,13 @@ describe("public routes", () => {
   });
 
   it("renders the timeline page with ranged experience and recent projects", () => {
-    render(<TimelinePage />);
+    const view = render(<TimelinePage />);
     expect(screen.getByRole("heading", { name: /^timeline$/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /lead ai instructor/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /ml engineer \/ data scientist/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /factoría f5/i })).toHaveAttribute("href", "https://factoriaf5.org/");
+    expect(screen.queryByRole("link", { name: /sample project/i })).not.toBeInTheDocument();
+    expect(view.container.querySelector(".reading-surface")).toHaveClass("max-w-6xl");
     expect(screen.getAllByText(/factoría f5/i).length).toBeGreaterThan(0);
   });
 
@@ -53,10 +71,12 @@ describe("public routes", () => {
     const articles = render(await ArticlesPage());
     expect(screen.getByRole("heading", { level: 1, name: /articles/i })).toBeInTheDocument();
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+    expect(articles.container.querySelector(".dotted-paper .reading-surface")).toHaveClass("max-w-6xl");
     articles.unmount();
-    render(await NotesPage());
+    const notes = render(await NotesPage());
     expect(screen.getByRole("heading", { level: 1, name: /digital garden/i })).toBeInTheDocument();
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+    expect(notes.container.querySelector(".dotted-paper")).not.toBeInTheDocument();
   });
 
   it("renders a project detail route from slug", async () => {
