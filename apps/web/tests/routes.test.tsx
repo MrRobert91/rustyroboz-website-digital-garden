@@ -112,6 +112,20 @@ describe("public routes", () => {
     );
   });
 
+  it("renders The Last Observation case study with local and YouTube video", async () => {
+    render(await ProjectDetailPage({ params: Promise.resolve({ slug: "the-last-observation" }) }));
+    expect(screen.getByRole("heading", { name: /^the last observation$/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/twenty seconds inside the observable world/i)).toHaveAttribute(
+      "src",
+      "/videos/the-last-observation/observable-world-gameplay.webm",
+    );
+    expect(screen.getByRole("link", { name: "Play on itch.io" })).toHaveAttribute(
+      "href",
+      "https://rustyroboz.itch.io/the-last-observation",
+    );
+    expect(screen.getByTestId("mdx-content")).toHaveTextContent("Wave Function Collapse, but scheduled by attention");
+  });
+
   it("filters content by tag", async () => {
     render(await TagPage({ params: Promise.resolve({ tag: "ai-art" }) }));
     expect(screen.getByRole("heading", { name: /tag: ai-art/i })).toBeInTheDocument();

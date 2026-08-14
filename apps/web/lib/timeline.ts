@@ -211,6 +211,33 @@ export const timeline: TimelineEntry[] = [
     links: [{ label: "Factoría F5", href: "https://factoriaf5.org/" }],
   },
   {
+    id: "the-last-observation",
+    kind: "project",
+    title: "The Last Observation",
+    start: "2026-08",
+    description:
+      "A ten-minute first-person browser game where attention drives an observable Wave Function Collapse system, built end to end through an issue- and PR-based agentic workflow.",
+    media: [
+      {
+        type: "image",
+        src: "/images/projects/the-last-observation/cover.webp",
+        alt: "The Last Observation retro game cover",
+      },
+      {
+        type: "youtube",
+        id: "gC1lo8776QU",
+        title: "The Last Observation — Game Trailer 2",
+      },
+    ],
+    links: [
+      { label: "Play", href: "https://rustyroboz.itch.io/the-last-observation" },
+      { label: "Jam submission", href: "https://itch.io/jam/ai-jam-4/rate/4891217" },
+      { label: "Live build", href: "https://la-ultima-observacion-web.sliplane.app/" },
+      { label: "GitHub", href: "https://github.com/MrRobert91/AI-Browser-Game-Jam-4" },
+      { label: "Case study", href: "/projects/the-last-observation" },
+    ],
+  },
+  {
     id: "qiskit-certification-prep",
     kind: "experiment",
     title: "Qiskit Certification Prep",

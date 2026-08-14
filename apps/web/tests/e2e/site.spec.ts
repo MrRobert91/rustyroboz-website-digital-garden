@@ -1,7 +1,16 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const PUBLIC_ROUTES = ["/", "/about", "/timeline", "/projects", "/articles", "/contact", "/chat"];
+const PUBLIC_ROUTES = [
+  "/",
+  "/about",
+  "/timeline",
+  "/projects",
+  "/projects/the-last-observation",
+  "/articles",
+  "/contact",
+  "/chat",
+];
 
 test("home page exposes English primary navigation and a single h1", async ({ page }) => {
   await page.goto("/");
@@ -56,6 +65,7 @@ test("contact form has labeled fields and an announced error summary", async ({ 
 
 for (const theme of ["light", "dark"] as const) {
   test(`public routes pass axe and reflow checks in ${theme} mode`, async ({ page }) => {
+    test.setTimeout(60_000);
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.addInitScript((selectedTheme) => localStorage.setItem("theme", selectedTheme), theme);
     await page.setViewportSize({ width: 320, height: 800 });
