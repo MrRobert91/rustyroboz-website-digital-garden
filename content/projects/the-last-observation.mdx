@@ -1,0 +1,134 @@
+---
+title: "The Last Observation"
+description: "A ten-minute first-person game in which attention drives an observable Wave Function Collapse system—and an experiment in building, testing, deploying and promoting a complete game with coding agents."
+slug: "the-last-observation"
+language: "en"
+type: "project"
+publishedAt: "2026-08-14"
+updatedAt: "2026-08-14"
+tags: ["ai-agents", "game-development", "wave-function-collapse", "threejs", "procedural-generation"]
+draft: false
+featured: true
+coverImage: "/images/projects/the-last-observation/cover.webp"
+readingTime: "11 min"
+status: "completed"
+tech: ["TypeScript", "Three.js", "WebGL2", "Vite", "Rapier", "Vitest", "Playwright", "FFmpeg", "OpenRouter", "Docker", "Sliplane"]
+links:
+  Play on itch.io: "https://rustyroboz.itch.io/the-last-observation"
+  AI Jam 4 submission: "https://itch.io/jam/ai-jam-4/rate/4891217"
+  Live Sliplane build: "https://la-ultima-observacion-web.sliplane.app/"
+  GitHub: "https://github.com/MrRobert91/AI-Browser-Game-Jam-4"
+  Gameplay trailer: "https://www.youtube.com/watch?v=gC1lo8776QU"
+media:
+  - type: video
+    src: /videos/the-last-observation/observable-world-gameplay.webm
+    poster: /images/projects/the-last-observation/observed-world.webp
+    title: "Twenty seconds inside the observable world"
+  - type: youtube
+    id: gC1lo8776QU
+    title: "The Last Observation — Game Trailer 2"
+  - type: youtube
+    id: UY-b1d4fjo0
+    title: "The Last Observation — Game Trailer"
+  - type: video
+    src: /videos/the-last-observation/mission-finale-and-card.webm
+    poster: /images/projects/the-last-observation/agency-finale.webp
+    title: "Mission finale and observed-world record"
+  - type: image
+    src: /images/projects/the-last-observation/gameplay-01-collapse.gif
+    alt: "The player holds the reticle over unresolved terrain while red consciousness bombs wait nearby"
+  - type: image
+    src: /images/projects/the-last-observation/gameplay-02-frontier.gif
+    alt: "A newly observed frontier resolving into water, vegetation, rocks and hazards"
+  - type: image
+    src: /images/projects/the-last-observation/gameplay-03-forest.gif
+    alt: "The player advances through a forest as the observation window runs out"
+  - type: image
+    src: /images/projects/the-last-observation/gameplay-04-observation.gif
+    alt: "A close view of fixed terrain, trees, rocks and still unresolved cells"
+---
+
+**The world does not exist until you look at it.**
+
+That sentence began as the design constraint for **The Last Observation**, a browser game I made for [AI Browser Game Jam 4](https://itch.io/jam/ai-jam-4/rate/4891217). It also became the rule that kept a deliberately ambitious experiment coherent: could I direct coding agents through the complete production of a game—not merely a prototype, but a playable release with an original mechanic, narrative, audio, video, automated QA and a public deployment?
+
+The result is a ten-minute first-person expedition across a planet that has not decided what it is yet. You can [play it on itch.io](https://rustyroboz.itch.io/the-last-observation), launch the [live Sliplane build](https://la-ultima-observacion-web.sliplane.app/) or inspect the complete [TypeScript repository](https://github.com/MrRobert91/AI-Browser-Game-Jam-4).
+
+![The Last Observation presented as a retro game release](/images/projects/the-last-observation/cover.webp)
+
+## A walking game where looking is the verb
+
+You play the last certified **Collapser**, connected to a replaceable field body inside an Agency Silence Chamber. Beyond your attention, the landscape remains a cold, translucent superposition: several possible terrains and objects occupy the same cell. Walk towards it, hold the reticle steady and the candidates disappear until one compatible result becomes solid beneath your feet.
+
+The observation window lasts ten minutes. Four **Possibility Seeds** unlock water, forest, ruins and storm in that order, expanding the generator's vocabulary for parts of the world that have not yet been initialized. Red consciousness bombs are the only enemy. They do not just cost a life; they fracture a thirty-metre region of already observed terrain, leaving a permanent scar that can no longer count towards coverage.
+
+There is no combat, crafting tree or inventory to distract from the premise. The game is a loop of walking, looking, committing and deciding what deserves the remaining time. At the end, the camera rises above the unique surviving world and turns coverage, risk, revisits and gaze duration into an attention portrait, a local haiku and a reproducible seed.
+
+![A completed run records the world, four recovered Seeds and the player's deaths](/images/projects/the-last-observation/final-world-card.webp)
+
+## Wave Function Collapse, but scheduled by attention
+
+The generator is based on Maxim Gumin's [Wave Function Collapse](https://github.com/mxgmn/WaveFunctionCollapse) **Simple Tiled Model**. It is a procedural constraint solver, not a simulation of quantum mechanics. The game borrows the language of superposition and observation as a visual and narrative metaphor; its underlying operation is very concrete.
+
+The world is a 64 × 64 grid with two synchronized 2D layers. `TerrainLayer` decides ground, water, paths and ruin bases. `FeatureLayer` decides vegetation, rocks, columns, Seeds and hazards. Each unresolved cell holds a domain of legal variants represented by two 32-bit integers, enough for 64 possibilities without allocating a `Set` in the hot path.
+
+Every tile declares which sockets can touch its north, east, south and west edges. Hard constraints—walkability, coast transitions, height and structural support—remove incompatible bits from a domain. Soft preferences never resurrect an illegal tile; they only alter the weight of candidates that remain. The effective weight combines an authored base weight, a distance curve, neighbouring tags, progression and a small deterministic noise term. Water can therefore cluster with water and forest with forest without turning either preference into an impossible global rule.
+
+Entropy measures how undecided a legal domain still is:
+
+```text
+H = log(sum(w)) - sum(w × log(w)) / sum(w)
+```
+
+The unusual part is who chooses the next cell. Camera input is sampled at a fixed 10 Hz. For cells within twenty metres, the system combines alignment with the camera, proximity and line of sight into an attention value. Attention charges while the gaze is held and decays when it moves away. Once a cell passes an entropy-dependent threshold, its priority is:
+
+```text
+priority = 4.0 × observation charge
+         + 1.5 × frontier continuity
+         - 0.8 × normalized entropy
+         + deterministic tie-breaking noise
+```
+
+In a conventional WFC demo, the solver often picks the lowest-entropy cell itself. Here, **the player's gaze schedules the solver**. You choose the intervention—where to walk and what to observe—but not the exact answer. That separation is the mechanic.
+
+## Collapse without rewriting the past
+
+Selecting a candidate is only provisional. The solver assigns it to the target cell, then propagates the consequences through the four cardinal neighbours using a reusable FIFO queue. Each neighbour intersects its domain with the union of variants compatible with the sender. A changed neighbour is re-enqueued; an empty domain is a contradiction.
+
+Each observed collapse runs as a local transaction over a radius-three mutable region. The solver snapshots only cells that are not fixed, tries up to eight weighted candidates and restores the snapshot after a contradiction. Only a candidate whose propagation reaches a stable state can emit a visual reveal. If the authored candidates fail, bridge and universal walkable tiles provide controlled fallbacks. A fixed cell is never part of rollback and can never be silently rerolled.
+
+The algorithm runs in a Web Worker with a four-millisecond work budget. If the budget expires, the transaction continues on the next tick instead of blocking rendering or changing the outcome. Commits are rate-limited, deterministic streams use Mulberry32, and a canonical FNV-based world hash makes equal seed, route and unlock history reproducible. The release gate exercised 10,000 seeds and the browser journey without empty domains, divergent hashes or the emergency debug tile.
+
+Rendering makes that state machine visible. Up to three low-poly candidates flicker before resolution; the confirmed result materializes over 225–350 ms; its physics collider joins at 70%; and a boundary wave announces that the tile is now immutable. Chunks may unload their 3D view, but their domains, fixed cells, borders and `paletteEpoch` remain. A Seed changes what future chunks may become, never what the player already saw.
+
+![An observed world generated from seed D5F2-A0D3](/images/projects/the-last-observation/observed-world.webp)
+
+## Treating agents as a production team
+
+I used this game to test an agentic development workflow at a scale where coordination mattered. I began with a product source of truth: rules, constants, public contracts, performance budgets, work packages and explicit human gates. Codex then helped turn that plan into a dependency graph of GitHub issues and deliver it incrementally.
+
+The repository now records **94 issues, 93 closed issues and 29 merged pull requests**. Early PRs isolated the foundations—[public worker contracts](https://github.com/MrRobert91/AI-Browser-Game-Jam-4/pull/59), [bitset domains](https://github.com/MrRobert91/AI-Browser-Game-Jam-4/pull/62), [deterministic entropy](https://github.com/MrRobert91/AI-Browser-Game-Jam-4/pull/64) and [FIFO propagation](https://github.com/MrRobert91/AI-Browser-Game-Jam-4/pull/65). Larger cumulative PRs assembled the [solver and 3D foundations](https://github.com/MrRobert91/AI-Browser-Game-Jam-4/pull/66), the [observable vertical slice](https://github.com/MrRobert91/AI-Browser-Game-Jam-4/pull/68), the [bilingual prologue](https://github.com/MrRobert91/AI-Browser-Game-Jam-4/pull/95), the [second-generation WFC gameplay](https://github.com/MrRobert91/AI-Browser-Game-Jam-4/pull/104) and the [special mission-complete ending](https://github.com/MrRobert91/AI-Browser-Game-Jam-4/pull/113).
+
+The loop was consistent: synchronize `dev`, claim a ready issue, create a dedicated branch, implement and test, capture reproducible evidence, open a PR back to `dev`, wait for remote CI and only then promote the next dependency. Agents could work quickly because architectural boundaries were explicit; they could not reinterpret a constant, fabricate a playtest or erase an unresolved human gate to make a dashboard look green.
+
+Codex also handled the operational path. It built the Docker image, created and updated the Sliplane preview, inspected logs and health endpoints, and used the deployed application for browser smoke tests and real gameplay capture. A green TypeScript build was never treated as proof of a working container, and an HTTP 200 for an asset was never treated as proof that the correct phase, audio or interaction had happened.
+
+## Giving Codex a media budget, not a blank cheque
+
+The game's multimedia pipeline was another agentic experiment. I provided Codex with an OpenRouter API key and a hard production ceiling of **$5**. Repository scripts perform a price preflight and abort if the estimated or cumulative cost crosses that limit. The final manifest records a total of **$4.573846**, including approved assets and rejected generations rather than hiding discarded work.
+
+Codex submitted asynchronous `google/veo-3.1-lite` jobs through OpenRouter, polled them, downloaded the results and used FFmpeg to assemble a fifty-second Agency briefing and a separate mission-complete film. Visual QA rejected shots containing accidental text, so they were regenerated within the same cumulative budget. Approved footage was converted to local VP9 WebM, accompanied by fallback stills and checked for codec, duration, dimensions, hashes and browser playback.
+
+Voices followed the same rule: generate once, validate, package locally. English uses MAI Voice 2 / Harper; Spanish uses Gemini 3.1 Flash TTS / Kore. The fictional system voice, **The Measure**, began with the appeal of GLaDOS in *Portal*—calm authority, institutional absurdity and dry sarcasm—but the production direction explicitly avoided imitating an existing character or performer. What emerged is a different bureaucratic personality that classifies danger as informed enthusiasm and treats a second body as an administrative convenience.
+
+The runtime never calls an AI model. Speech, video, ambience, procedural textures, WFC and the final haiku all work from bundled assets after the initial download. That decision keeps the game playable offline, makes costs finite and turns provenance into part of the build rather than a vague footnote.
+
+![The Agency plays back the successful mission before filing the final record](/images/projects/the-last-observation/agency-finale.webp)
+
+## What the experiment taught me
+
+Agentic development was most useful when the work was made legible: small contracts, executable acceptance criteria, issue dependencies, deterministic replays and evidence that another agent—or a human—could inspect. The agents accelerated implementation, testing, deployment and media production, but product judgment still lived in the constraints: what the game was about, which shortcuts would betray it and which results required an actual person to evaluate.
+
+That is why **The Last Observation** feels like the right project for this experiment. Its fiction says that attention turns possibility into experience. Its development process did something similar: a large space of possible features became a finished game because every issue, PR, test, budget and review decided what was allowed to become real.
+
+Watch [Game Trailer 2](https://www.youtube.com/watch?v=gC1lo8776QU) or the [original gameplay trailer](https://www.youtube.com/watch?v=UY-b1d4fjo0), read the [source and development history](https://github.com/MrRobert91/AI-Browser-Game-Jam-4), visit the [AI Jam 4 submission](https://itch.io/jam/ai-jam-4/rate/4891217), or [play The Last Observation](https://rustyroboz.itch.io/the-last-observation) in your browser.
