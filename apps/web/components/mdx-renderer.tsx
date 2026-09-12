@@ -1,4 +1,4 @@
-import type { AnchorHTMLAttributes, HTMLAttributes, ImgHTMLAttributes } from "react";
+import type { AnchorHTMLAttributes, HTMLAttributes, ImgHTMLAttributes, VideoHTMLAttributes } from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import Link from "next/link";
@@ -49,6 +49,13 @@ const components = {
       className="mt-8 w-full rounded-[1.75rem] border border-border object-cover shadow-soft"
       loading="lazy"
       src={props.src}
+    />
+  ),
+  video: (props: VideoHTMLAttributes<HTMLVideoElement>) => (
+    <video
+      {...props}
+      className="mt-8 w-full rounded-[1.75rem] border border-border bg-black object-contain shadow-soft"
+      preload={props.preload ?? "metadata"}
     />
   ),
   ul: (props: HTMLAttributes<HTMLUListElement>) => <ul className="body-copy mt-5 list-disc space-y-3 pl-6 text-foreground/88" {...props} />,

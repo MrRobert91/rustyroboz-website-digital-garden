@@ -148,6 +148,10 @@ describe("public routes", () => {
       "href",
       "https://github.com/MrRobert91/QuantumComputingGuide",
     );
+    expect(screen.getByRole("link", { name: "Live app" })).toHaveAttribute(
+      "href",
+      "https://quantumcomputingguide-k4il6s.sliplane.app/",
+    );
     expect(screen.getByTestId("mdx-content")).toHaveTextContent(
       "A Bell circuit executed on Qiskit Aer",
     );
@@ -156,15 +160,42 @@ describe("public routes", () => {
   it("renders The Last Observation case study with local and YouTube video", async () => {
     render(await ProjectDetailPage({ params: Promise.resolve({ slug: "the-last-observation" }) }));
     expect(screen.getByRole("heading", { name: /^the last observation$/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/twenty seconds inside the observable world/i)).toHaveAttribute(
-      "src",
-      "/videos/the-last-observation/observable-world-gameplay.webm",
-    );
+    expect(
+      screen.getByRole("button", { name: /play video: the last observation — game trailer 2/i }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Play on itch.io" })).toHaveAttribute(
       "href",
       "https://rustyroboz.itch.io/the-last-observation",
     );
-    expect(screen.getByTestId("mdx-content")).toHaveTextContent("Wave Function Collapse, but scheduled by attention");
+    const articleBody = screen.getByTestId("mdx-content");
+    expect(articleBody).toHaveTextContent("GitHub repository");
+    expect(articleBody).toHaveTextContent("https://github.com/MrRobert91/AI-Browser-Game-Jam-4");
+    expect(articleBody).toHaveTextContent("Twenty seconds inside the observable world");
+    expect(articleBody).toHaveTextContent("/videos/the-last-observation/observable-world-gameplay.webm");
+    expect(articleBody).toHaveTextContent("Wave Function Collapse, but scheduled by attention");
+    expect(articleBody).toHaveTextContent("revisits and gaze duration into an attention portrait.");
+    expect(articleBody).not.toHaveTextContent("a local haiku and a reproducible seed");
+    expect(screen.queryByRole("img", { name: /a completed run records the world/i })).not.toBeInTheDocument();
+  });
+
+  it("renders TopoKarts with both playable release links", async () => {
+    render(await ProjectDetailPage({ params: Promise.resolve({ slug: "topokarts" }) }));
+    expect(screen.getByRole("heading", { name: /^topokarts$/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Play on itch.io" })).toHaveAttribute(
+      "href",
+      "https://rustyroboz.itch.io/topokarts",
+    );
+    expect(screen.getByRole("link", { name: "Live game" })).toHaveAttribute(
+      "href",
+      "https://topokarts.sliplane.app/",
+    );
+  });
+
+  it("shows complete images in project detail galleries without cropping them", async () => {
+    const view = render(await ProjectDetailPage({ params: Promise.resolve({ slug: "thor-runner" }) }));
+    expect(view.container.querySelector("img[alt='Original hand-coloured drawing of Loki and Thor']")).toHaveClass(
+      "object-contain",
+    );
   });
 
   it("filters content by tag", async () => {

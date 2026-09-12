@@ -5,14 +5,14 @@ slug: "cuentee"
 language: "en"
 type: "project"
 publishedAt: "2025-07-01"
-updatedAt: "2026-05-01"
+updatedAt: "2026-09-12"
 tags: ["generative-ai", "react", "kids", "storytelling"]
 draft: false
 featured: false
 coverImage: "/images/projects/cuentee/image-01.png"
-readingTime: "1 min"
+readingTime: "3 min"
 status: "completed"
-tech: ["React", "StoryBook"]
+tech: ["Next.js", "FastAPI", "Celery", "Redis", "LangGraph", "Supabase"]
 links:
   Website: "https://www.cuentee.com/"
   GitHub: "https://github.com/MrRobert91/StoryBookUI"
@@ -20,7 +20,25 @@ links:
 media:
   - type: image
     src: /images/projects/cuentee/image-01.png
-    alt: Cuentee
+    alt: Cuentee home page for creating personalised illustrated stories
+  - type: image
+    src: /images/projects/cuentee/product-tour.gif
+    alt: Animated tour through the Cuentee story-creation experience
+  - type: image
+    src: /images/projects/cuentee/guided-creation.webp
+    alt: Cuentee offers open and guided story-creation modes
+  - type: image
+    src: /images/projects/cuentee/generated-story.webp
+    alt: A generated Cuentee story about a crocodile artist with its illustration
+  - type: image
+    src: /images/projects/cuentee/story-gallery.webp
+    alt: Cuentee gallery containing illustrated stories created by the community
 ---
 
-Custom illustrated children's stories, generated on demand and ready to download, with a React / StoryBook UI.
+Cuentee turns a child's interests into an original illustrated story. A prompt can include their name, favourite animal or a topic they are learning about; within a few minutes the application produces a multi-chapter tale with a cover and an illustration for every scene. Stories remain available in the user's gallery and can be downloaded as a PDF.
+
+There are two creation paths. Open mode accepts a free-form idea, typed or dictated by voice. Guided mode structures the request around an age group, protagonist, educational theme and mission, making it possible to combine a real narrative with subjects such as space, emotions or the water cycle. The application supports several visual styles and languages, and its downloadable books use OpenDyslexic to improve readability.
+
+The generation pipeline first writes the complete story, then extracts a precise visual profile for every character and reuses those descriptions unchanged in each image prompt. That intermediate character sheet is what keeps details such as hair, clothing and species recognisable from one chapter to the next. Text, images and PDF generation run asynchronously so the interface does not remain blocked while the book is assembled.
+
+The project also includes a child-safety evaluation layer. Its prompts establish an age-appropriate tone, while batches of generated stories are reviewed against criteria such as violence, adult material and disturbing content. The evaluation acts as an early-warning system for quality regressions rather than pretending that any automated safeguard is infallible.

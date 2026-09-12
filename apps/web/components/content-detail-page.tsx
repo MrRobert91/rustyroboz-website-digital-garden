@@ -77,7 +77,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
           {images.length ? (
             <div className="mt-14">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">Gallery</p>
-              <TimelineMedia items={images} title={item.title} />
+              <TimelineMedia imageFit="contain" items={images} title={item.title} />
             </div>
           ) : null}
         </div>

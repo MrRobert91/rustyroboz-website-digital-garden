@@ -7,7 +7,15 @@ import type { TimelineMediaItem } from "@/lib/timeline";
 const NAV_BUTTON =
   "absolute top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-background/85 text-foreground shadow transition-colors hover:bg-background";
 
-export function TimelineMedia({ items, title }: { items: TimelineMediaItem[]; title: string }) {
+export function TimelineMedia({
+  items,
+  title,
+  imageFit = "cover",
+}: {
+  items: TimelineMediaItem[];
+  title: string;
+  imageFit?: "cover" | "contain";
+}) {
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
 
@@ -26,7 +34,12 @@ export function TimelineMedia({ items, title }: { items: TimelineMediaItem[]; ti
       <div className="relative aspect-video w-full">
         {item.type === "image" ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img alt={item.alt ?? title} className="size-full object-cover" loading="lazy" src={item.src} />
+          <img
+            alt={item.alt ?? title}
+            className={`size-full ${imageFit === "contain" ? "bg-background/80 object-contain" : "object-cover"}`}
+            loading="lazy"
+            src={item.src}
+          />
         ) : item.type === "video" ? (
           <video
             aria-label={item.title ?? title}

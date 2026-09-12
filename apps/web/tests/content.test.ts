@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { getCollection, getItemBySlug, getRelatedContent, getTagIndex } from "@/lib/content";
 
 describe("content loader", () => {
@@ -79,6 +81,48 @@ describe("content loader", () => {
     expect(project.coverImage).toContain("quantum-computing-guide/01-study-dashboard.png");
     expect(project.body).toContain("68-question mock exam");
     expect(project.body).toContain("04-circuit-playground.png");
+  });
+
+  it("loads the enriched project links, stories and local galleries", async () => {
+    const [apolo, miraLink, socraticGemma, cuentee, thorRunner] = await Promise.all([
+      getItemBySlug("projects", "apolo-vs-zeus"),
+      getItemBySlug("projects", "mira-link"),
+      getItemBySlug("projects", "socratic-gemma"),
+      getItemBySlug("projects", "cuentee"),
+      getItemBySlug("projects", "thor-runner"),
+    ]);
+
+    expect((apolo.links as Record<string, string>).GitHub).toBe(
+      "https://github.com/MrRobert91/juego_zeus_y_apolo",
+    );
+    expect(apolo.media?.filter((item) => item.type === "image")).toHaveLength(4);
+    expect(apolo.body).toContain("two five-year-old children");
+
+    expect((miraLink.links as Record<string, string>).GitHub).toBe("https://github.com/MrRobert91/MiraLink");
+    expect(miraLink.media?.filter((item) => item.type === "image")).toHaveLength(4);
+
+    expect((socraticGemma.links as Record<string, string>)["Live app"]).toBe(
+      "https://socraticgemma-js7p6v.sliplane.app/",
+    );
+
+    expect(cuentee.media?.filter((item) => item.type === "image")).toHaveLength(5);
+    expect(cuentee.body).toContain("character sheet");
+    expect(cuentee.body).toContain("child-safety evaluation layer");
+
+    expect((thorRunner.links as Record<string, string>)["Play on itch.io"]).toBe(
+      "https://rustyroboz.itch.io/thor-runner",
+    );
+    expect((thorRunner.links as Record<string, string>).GitHub).toBe("https://github.com/MrRobert91/JuegoThor");
+    expect(thorRunner.media?.filter((item) => item.type === "image")).toHaveLength(14);
+    expect(thorRunner.body).toContain("two five-year-old children");
+
+    for (const project of [apolo, miraLink, cuentee, thorRunner]) {
+      for (const item of project.media ?? []) {
+        if (item.type === "image" && item.src.startsWith("/")) {
+          expect(existsSync(path.join(process.cwd(), "public", item.src.slice(1))), item.src).toBe(true);
+        }
+      }
+    }
   });
 
   it("builds a tag index across collections", async () => {
