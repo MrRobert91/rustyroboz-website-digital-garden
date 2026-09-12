@@ -121,6 +121,13 @@
     font-family: var(--font-serif), Georgia, serif;
   }
 
+  /* Shared long-form body copy across pages and published content. */
+  .body-copy {
+    font-family: var(--font-serif), Georgia, serif;
+    font-size: 1.125rem;
+    line-height: 2rem;
+  }
+
   /* Dotted grid (graph-paper) — the site-wide paper texture */
   .dotted-paper {
     background-color: hsl(var(--card));

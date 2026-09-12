@@ -42,7 +42,7 @@ const components = {
   h3: (props: HTMLAttributes<HTMLHeadingElement>) => (
     <h3 className="mt-10 font-manrope text-2xl font-semibold tracking-tight text-foreground" {...props} />
   ),
-  p: (props: HTMLAttributes<HTMLParagraphElement>) => <p className="mt-5 text-lg leading-8 text-foreground/88" {...props} />,
+  p: (props: HTMLAttributes<HTMLParagraphElement>) => <p className="body-copy mt-5 text-foreground/88" {...props} />,
   img: (props: ImgHTMLAttributes<HTMLImageElement>) => (
     <img
       alt={props.alt ?? ""}
@@ -51,8 +51,8 @@ const components = {
       src={props.src}
     />
   ),
-  ul: (props: HTMLAttributes<HTMLUListElement>) => <ul className="mt-5 list-disc space-y-3 pl-6 text-lg leading-8 text-foreground/88" {...props} />,
-  ol: (props: HTMLAttributes<HTMLOListElement>) => <ol className="mt-5 list-decimal space-y-3 pl-6 text-lg leading-8 text-foreground/88" {...props} />,
+  ul: (props: HTMLAttributes<HTMLUListElement>) => <ul className="body-copy mt-5 list-disc space-y-3 pl-6 text-foreground/88" {...props} />,
+  ol: (props: HTMLAttributes<HTMLOListElement>) => <ol className="body-copy mt-5 list-decimal space-y-3 pl-6 text-foreground/88" {...props} />,
   blockquote: (props: HTMLAttributes<HTMLElement>) => (
     <blockquote className="mt-8 border-l-2 border-accent pl-6 font-newsreader text-2xl italic leading-9 text-foreground/85" {...props} />
   ),

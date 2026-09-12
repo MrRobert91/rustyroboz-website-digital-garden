@@ -144,7 +144,7 @@ export function ProjectsPrototypes({ items, withHeader = true, headingLevel = 2 
           </div>
         ) : (
           <div>
-            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">Selected work</p>
+            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">Latest work</p>
             <Heading className="mt-2 font-display text-4xl font-bold tracking-tight text-foreground lg:text-5xl">
               Projects <span className="font-hand font-normal text-accent">&amp; Experiments</span>
             </Heading>
@@ -168,6 +168,14 @@ export function ProjectsPrototypes({ items, withHeader = true, headingLevel = 2 
             );
           })}
         </div>
+
+        {!withHeader ? (
+          <div className="mt-10">
+            <Link className="text-link font-mono text-sm uppercase tracking-[0.08em]" href="/projects">
+              See all projects →
+            </Link>
+          </div>
+        ) : null}
       </div>
     </section>
   );

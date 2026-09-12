@@ -17,7 +17,7 @@ export function Bitacora({ items }: { items: ContentItem[] }) {
             Writing <span className="font-hand font-normal text-accent">(notes)</span>
           </h2>
           <Squiggle className="mt-3" color="hsl(var(--accent))" height={12} seed={7} strokeWidth={2.5} width={280} />
-          <p className="mt-4 font-serif text-lg leading-relaxed text-foreground/75">
+          <p className="body-copy mt-4 text-foreground/75">
             Write-ups on applied AI, ML systems and lessons from shipping real projects.
           </p>
         </div>

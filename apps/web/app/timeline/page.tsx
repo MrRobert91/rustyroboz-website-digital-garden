@@ -18,7 +18,7 @@ export default function TimelinePage() {
             <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§05 — Logbook</p>
             <h1 className="mt-2 font-display text-6xl font-bold tracking-tight text-foreground lg:text-8xl">Timeline</h1>
             <p className="mt-4 font-serif text-xl text-accent-deep">The whole thing, most recent first ↓</p>
-            <p className="mt-5 font-serif text-lg leading-relaxed text-foreground/80">
+            <p className="body-copy mt-5 text-foreground/80">
               Roles, certifications, studies and personal projects. Longer roles take up more space, so you can see at a
               glance how the years line up.
             </p>

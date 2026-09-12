@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 /** Strip light markdown so MDX prose can render as plain notebook paragraphs. */
 function toParagraphs(body: string): string[] {
   return body
-    .split(/\n{2,}/)
+    .split(/\r?\n\s*\r?\n/)
     .map((block) =>
       block
         .replace(/^!\[.*?\]\(.*?\)\s*$/gm, "") // drop image lines

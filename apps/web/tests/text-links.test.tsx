@@ -14,6 +14,15 @@ describe("text link treatment", () => {
     expect(rule).toContain("text-decoration-line: underline");
   });
 
+  it("defines one shared serif scale for long-form body copy", () => {
+    const css = readFileSync(resolve(process.cwd(), "app/globals.css"), "utf8");
+    const rule = css.match(/\.body-copy\s*\{([\s\S]*?)\}/)?.[1] ?? "";
+
+    expect(rule).toContain("font-family: var(--font-serif)");
+    expect(rule).toContain("font-size: 1.125rem");
+    expect(rule).toContain("line-height: 2rem");
+  });
+
   it("applies the shared style to long-form and chatbot links", () => {
     const mdxRenderer = readFileSync(resolve(process.cwd(), "components/mdx-renderer.tsx"), "utf8");
     expect(mdxRenderer.match(/className="text-link"/g)).toHaveLength(3);
