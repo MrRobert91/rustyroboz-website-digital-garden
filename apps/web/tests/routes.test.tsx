@@ -191,6 +191,13 @@ describe("public routes", () => {
     );
   });
 
+  it("shows complete images in project detail galleries without cropping them", async () => {
+    const view = render(await ProjectDetailPage({ params: Promise.resolve({ slug: "thor-runner" }) }));
+    expect(view.container.querySelector("img[alt='Original hand-coloured drawing of Loki and Thor']")).toHaveClass(
+      "object-contain",
+    );
+  });
+
   it("filters content by tag", async () => {
     render(await TagPage({ params: Promise.resolve({ tag: "ai-art" }) }));
     expect(screen.getByRole("heading", { name: /tag: ai-art/i })).toBeInTheDocument();
