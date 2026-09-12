@@ -17,10 +17,35 @@ describe("public routes", () => {
   it("renders the home page hero with english navigation and a bio panel", async () => {
     render(await HomePage());
     expect(screen.getByRole("link", { name: /view projects/i })).toHaveAttribute("href", "/projects");
+    expect(screen.getByText(/latest work/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /see all projects/i })).toHaveAttribute("href", "/projects");
     expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getAllByText(/currently interested in/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/^signal$/i)).not.toBeInTheDocument();
+  });
+
+  it("shows the four most recent projects and articles on the home page", async () => {
+    render(await HomePage());
+
+    const latestWork = screen.getByText(/latest work/i).closest("section");
+    const latestArticles = screen.getByText(/^writing$/i, { selector: "p" }).closest("section");
+    expect(latestWork).not.toBeNull();
+    expect(latestArticles).not.toBeNull();
+
+    expect(within(latestWork as HTMLElement).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent)).toEqual([
+      "The Last Observation",
+      "Qiskit Certification Prep: an interactive quantum study lab",
+      "AI Learning Factory: from a vague idea to a publishable course",
+      "SharedBrain",
+    ]);
+    expect(within(latestWork as HTMLElement).queryByText(/susbeer vr experience/i)).not.toBeInTheDocument();
+    expect(within(latestArticles as HTMLElement).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent?.replace("↗", "").trim())).toEqual([
+      "Cuando los humanos trabajan para los agentes: cómo nació El autor material",
+      "Hermes Agent en un VPS de Hetzner con OpenRouter",
+      "12 Testers, 14 Days, and a Subreddit: How I Published My First App on Google Play",
+      "From Dusty MVP to Google Play: Bringing Cartastrofe Back",
+    ]);
   });
 
   it("keeps canonical catalog codes in selected work and the full projects page", async () => {
@@ -43,12 +68,23 @@ describe("public routes", () => {
     expect(screen.getByRole("heading", { level: 1, name: /about/i })).toBeInTheDocument();
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getAllByText(/ai engineer and computer engineer based in madrid/i).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/Lead AI Instructor/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/ship the rusty thing/i)).not.toBeInTheDocument();
+    expect(screen.getByText("AI adoption consulting")).toBeInTheDocument();
+    expect(screen.getByText("Custom AI workflow automation")).toBeInTheDocument();
     about.unmount();
 
     render(await ContactPage());
     expect(screen.getByRole("heading", { level: 1, name: /let's build/i })).toBeInTheDocument();
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
-    expect(screen.getByText(/quick brief/i)).toBeInTheDocument();
+    expect(screen.queryByText(/quick brief/i)).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /davidrobertnunez@gmail.com/i })).toHaveAttribute(
+      "href",
+      "mailto:davidrobertnunez@gmail.com",
+    );
+    const mediumRow = screen.getByText("Medium").closest("li");
+    expect(within(mediumRow as HTMLElement).getByText("@rustyroboz")).toBeInTheDocument();
+    expect(screen.queryByText("@@rustyroboz")).not.toBeInTheDocument();
     expect(screen.getByText(/instagram/i)).toBeInTheDocument();
   });
 
@@ -58,6 +94,11 @@ describe("public routes", () => {
     expect(screen.getByRole("heading", { name: /lead ai instructor/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /ml engineer \/ data scientist/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /factoría f5/i })).toHaveAttribute("href", "https://factoriaf5.org/");
+    expect(screen.getByRole("link", { name: /^the last observation$/i })).toHaveAttribute(
+      "href",
+      "/projects/the-last-observation",
+    );
+    expect(screen.queryByRole("link", { name: /case study/i })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /sample project/i })).not.toBeInTheDocument();
     expect(view.container.querySelector(".reading-surface")).toHaveClass("max-w-6xl");
     expect(screen.getAllByText(/factoría f5/i).length).toBeGreaterThan(0);

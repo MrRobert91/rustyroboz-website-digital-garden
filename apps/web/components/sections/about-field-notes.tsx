@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/reveal";
-import { CoffeeRing, HandCheck, InkStamp, Polaroid, Sticky } from "@/components/notebook";
+import { CoffeeRing, HandCheck, InkStamp, Polaroid } from "@/components/notebook";
 import { siteConfig } from "@/lib/site-config";
 
 type AboutFieldNotesProps = {
@@ -45,20 +45,11 @@ export function AboutFieldNotes({ paragraphs, photos, headingLevel = 2 }: AboutF
             <div className="flex flex-wrap items-start gap-6 lg:hidden">
               <Polaroid alt="David Robert standing in front of a glass building." angle={-4} caption="WORKSHOP" height={300} src={photos?.first} width={260} />
               <Polaroid alt="David Robert giving a talk beside a screen showing a robotic hand." angle={5} caption="ROBOT-04" height={280} src={photos?.second} width={230} />
-              <Sticky angle={-3} color="#ffd9c4" style={{ width: 240 }}>
-                remember: <span className="font-semibold text-[#6b2d1a]">&quot;ship the rusty thing,</span> polish later&quot;
-              </Sticky>
             </div>
             {/* desktop: scrapbook collage */}
-            <div className="relative hidden h-[680px] lg:block">
+            <div className="relative hidden h-[580px] lg:block">
               <Polaroid alt="David Robert standing in front of a glass building." angle={-5} caption="WORKSHOP" height={330} src={photos?.first} style={{ position: "absolute", top: 20, left: 0 }} width={300} />
               <Polaroid alt="David Robert giving a talk beside a screen showing a robotic hand." angle={6} caption="ROBOT-04" height={290} src={photos?.second} style={{ position: "absolute", top: 270, left: 140 }} width={250} />
-              <Sticky angle={-4} color="#ffd9c4" style={{ position: "absolute", top: 560, left: 20, width: 240 }}>
-                remember: <br />
-                <span className="font-semibold text-[#6b2d1a]">&quot;ship the rusty thing,</span>
-                <br />
-                polish later&quot;
-              </Sticky>
               <div className="absolute right-6 top-0">
                 <InkStamp angle={4} label="LAB · MADRID" />
               </div>
@@ -69,7 +60,7 @@ export function AboutFieldNotes({ paragraphs, photos, headingLevel = 2 }: AboutF
           <div>
             {paragraphs.map((p, i) => (
               <p
-                className={`font-serif leading-relaxed text-foreground/85 ${i === 0 ? "text-xl" : "mt-5 text-lg"}`}
+                className={`body-copy text-foreground/85 ${i === 0 ? "" : "mt-5"}`}
                 key={i}
               >
                 {p}

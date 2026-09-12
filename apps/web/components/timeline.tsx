@@ -56,6 +56,11 @@ function TimelineLinkChip({ link }: { link: TimelineLink }) {
   );
 }
 
+/** The first internal content link is the page represented by the entry title. */
+function entryPageLink(entry: TimelineEntry) {
+  return entry.links?.find((link) => link.href.startsWith("/"));
+}
+
 /** Inked dot drawn on the timeline rail. */
 function EntryDot({ entry, index, className }: { entry: TimelineEntry; index: number; className?: string }) {
   const ranged = Boolean(entry.end);
@@ -85,6 +90,8 @@ function TimelineCard({
   const duration = formatDuration(entry);
   const minHeight = entryMinHeight(entry);
   const Heading = headingLevel === 2 ? "h2" : "h3";
+  const pageLink = entryPageLink(entry);
+  const secondaryLinks = entry.links?.filter((link) => link.href !== pageLink?.href);
 
   return (
     <div
@@ -108,15 +115,21 @@ function TimelineCard({
           {ongoing ? <span className="font-semibold text-accent">● now</span> : null}
         </div>
         <Heading className={`mt-3 font-display font-bold text-foreground ${ranged ? "text-2xl lg:text-3xl" : "text-2xl"}`}>
-          {entry.title}
+          {pageLink ? (
+            <Link className="text-link" href={pageLink.href}>
+              {entry.title}
+            </Link>
+          ) : (
+            entry.title
+          )}
         </Heading>
         {entry.org ? <p className="mt-1 font-serif text-lg font-semibold text-accent-deep">{entry.org}</p> : null}
         <p className="mt-2 font-serif text-base leading-relaxed text-foreground/75">{entry.description}</p>
         {entry.media?.length ? <TimelineMedia items={entry.media} title={entry.title} /> : null}
       </div>
-      {entry.links?.length ? (
+      {secondaryLinks?.length ? (
         <div className="mt-5 flex flex-wrap gap-2">
-          {entry.links.map((link) => (
+          {secondaryLinks.map((link) => (
             <TimelineLinkChip key={`${entry.id}-${link.href}`} link={link} />
           ))}
         </div>

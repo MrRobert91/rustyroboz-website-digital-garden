@@ -56,7 +56,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
           ))}
         </div>
         <h1 className="mt-6 font-manrope text-4xl font-semibold tracking-tight text-foreground md:text-6xl">{item.title}</h1>
-        <p className="mt-5 text-lg leading-8 text-muted-foreground">{item.description}</p>
+        <p className="body-copy mt-5 text-muted-foreground">{item.description}</p>
         <div className="mt-8 flex flex-wrap items-center gap-4 text-sm uppercase tracking-[0.16em] text-muted-foreground">
           <span>{new Date(item.publishedAt).toLocaleDateString("en-US")}</span>
           <span>{item.readingTime}</span>

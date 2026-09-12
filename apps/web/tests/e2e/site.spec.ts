@@ -54,13 +54,16 @@ test("continuous illustrations can be paused and resumed", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Resume animation" }).first()).toHaveAttribute("aria-pressed", "true");
 });
 
-test("contact form has labeled fields and an announced error summary", async ({ page }) => {
+test("contact page exposes direct channels without a brief form", async ({ page }) => {
   await page.goto("/contact");
-  await expect(page.getByLabel(/name \(required\)/i)).toBeVisible();
-  await expect(page.getByLabel(/email \(required\)/i)).toBeVisible();
-  await page.getByRole("button", { name: /send message/i }).click();
-  await expect(page.locator('[role="alert"][tabindex="-1"]')).toBeFocused();
-  await expect(page.getByLabel(/name \(required\)/i)).toHaveAttribute("aria-invalid", "true");
+  await expect(page.getByRole("link", { name: /davidrobertnunez@gmail.com/i })).toHaveAttribute(
+    "href",
+    "mailto:davidrobertnunez@gmail.com",
+  );
+  await expect(page.locator("form")).toHaveCount(0);
+  const medium = page.getByRole("link", { name: "Medium @rustyroboz OPEN ↗" });
+  await expect(medium).toContainText("@rustyroboz");
+  await expect(medium).not.toContainText("@@rustyroboz");
 });
 
 for (const theme of ["light", "dark"] as const) {

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ContactForm } from "@/components/contact-form";
 import { InkStamp, Polaroid, Squiggle } from "@/components/notebook";
 import { siteConfig } from "@/lib/site-config";
 
@@ -9,7 +8,8 @@ function handleFor(href: string, label: string) {
     const { hostname, pathname } = new URL(href);
     const path = pathname.replace(/\/$/, "");
     const atStyle = /instagram|medium|x\.com|twitter/.test(hostname);
-    return atStyle ? `@${path.split("/").filter(Boolean).pop()}` : path || hostname;
+    const handle = path.split("/").filter(Boolean).pop()?.replace(/^@+/, "");
+    return atStyle && handle ? `@${handle}` : path || hostname;
   } catch {
     return label;
   }
@@ -46,17 +46,16 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
           </div>
         </div>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-2">
-          {/* left: pitch + channels */}
+        <div className="mt-14 max-w-3xl">
           <div>
-            <p className="font-serif text-xl leading-relaxed text-foreground/85">
+            <p className="body-copy text-foreground/85">
               Got an AI-related project? I run consulting sessions to guide companies and teams through adopting
               generative AI — for every kind of profile, developers and non-developers alike. I also deliver AI
               trainings, technical consulting where you walk me through your case and I advise you, or hands-on
               development projects. Right now I&apos;m especially into building LLM-based AI agents, but I&apos;m also up
               for smaller projects of other kinds — VR, web apps, Android apps, computer vision, data science, and more.
             </p>
-            <p className="mt-5 font-serif text-xl leading-relaxed text-foreground/85">
+            <p className="body-copy mt-5 text-foreground/85">
               The easiest way to start is a quick email — tell me a bit about what you have in mind and I&apos;ll get
               back to you.
             </p>
@@ -93,7 +92,6 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
             </div>
           </div>
 
-          <ContactForm />
         </div>
       </div>
     </section>

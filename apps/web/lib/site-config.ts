@@ -75,6 +75,8 @@ export const siteConfig = {
     "Computer vision modules",
     "VR / Unity prototypes",
     "AI classes for all audiences",
+    "AI adoption consulting",
+    "Custom AI workflow automation",
   ],
 };
 

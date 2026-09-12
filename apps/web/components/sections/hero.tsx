@@ -39,7 +39,7 @@ export function Hero() {
         {/* subhead + CTAs + interactive mascot */}
         <div className="mt-14 grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
           <div>
-            <p className="max-w-xl font-serif text-xl leading-relaxed text-foreground/80">
+            <p className="body-copy max-w-xl text-foreground/80">
               Currently interested in Machine Learning, Computer Vision, Agentic AI, Quantum Computing, Robotics, Game
               Development and Technology in general.
             </p>
