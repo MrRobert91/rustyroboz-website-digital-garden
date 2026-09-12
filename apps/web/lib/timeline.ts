@@ -402,19 +402,29 @@ export const timeline: TimelineEntry[] = [
   {
     id: "cartastrofe",
     kind: "project",
-    title: "Cartastrofe → Google Play",
+    title: "Cartastrofe",
     start: "2025-02",
     end: "2026-02",
     description:
       "A card game for couples built in Flutter, revived from a dusty MVP and taken through the full Google Play release pipeline — signed App Bundle, store listing, privacy policy and a closed-beta waitlist with MailerLite.",
-    media: [{ type: "image", src: "/images/projects/cartastrofe/image-01.png", alt: "Cartastrofe" }],
+    media: [
+      { type: "image", src: "/images/projects/cartastrofe/image-01.png", alt: "Cartastrofe promotional artwork" },
+      { type: "image", src: "/images/projects/cartastrofe/image-02.webp", alt: "Cartastrofe listing on Google Play" },
+      { type: "image", src: "/images/projects/cartastrofe/image-03.webp", alt: "Cartastrofe main menu on Android" },
+      { type: "image", src: "/images/projects/cartastrofe/image-04.webp", alt: "Cartastrofe card-selection screen" },
+      { type: "image", src: "/images/projects/cartastrofe/image-05.webp", alt: "Cartastrofe in-game tutorial" },
+    ],
     links: [
       { label: "Google Play", href: "https://play.google.com/store/apps/details?id=com.susbeerginman.cartastrofe&hl=es" },
       { label: "Website", href: "https://www.cartastrofe.com/" },
       { label: "itch.io", href: "https://rustyroboz.itch.io/cartastrofe" },
       { label: "GitHub", href: "https://github.com/MrRobert91/juego_cartas" },
       {
-        label: "Article",
+        label: "Medium — revival",
+        href: "https://medium.com/@rustyroboz/de-mvp-cogiendo-polvo-a-google-play-la-resurrecci%C3%B3n-de-cartastrofe-21f1f6760aec",
+      },
+      {
+        label: "Medium — launch",
         href: "https://medium.com/@rustyroboz/12-testers-14-d%C3%ADas-y-un-subreddit-as%C3%AD-publiqu%C3%A9-mi-primera-app-en-google-play-79cece838e02",
       },
       { label: "Case study", href: "/projects/cartastrofe" },
@@ -426,7 +436,7 @@ export const timeline: TimelineEntry[] = [
     title: "Technical Interview Chatbot",
     start: "2024-12",
     description:
-      "An LLM chatbot that simulates a technical interviewer — asks questions based on your experience, gives feedback and exports a PDF. Built with LangChain, Groq (Llama 3.1 70B) and Streamlit.",
+      "A proof of concept for practising technical interviews with an LLM that asks follow-up questions, gives feedback and keeps the conversation in context.",
     media: [{ type: "image", src: "/images/projects/technical-interview-chatbot/image-01.png", alt: "Technical Interview Chatbot" }],
     links: [
       { label: "Live demo", href: "https://chatbot-llm-interview.streamlit.app/" },
@@ -590,6 +600,10 @@ export const timeline: TimelineEntry[] = [
     ],
     links: [
       { label: "GitHub", href: "https://github.com/MrRobert91/NASASpaceApp_Challenge_2022" },
+      {
+        label: "Slides (PDF)",
+        href: "https://github.com/MrRobert91/NASASpaceApp_Challenge_2022/blob/develop/space_artai_documents/Space%20Artai.pdf",
+      },
       { label: "Case study", href: "/projects/nasa-hackathon" },
     ],
   },

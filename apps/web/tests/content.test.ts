@@ -125,6 +125,39 @@ describe("content loader", () => {
     }
   });
 
+  it("loads the refreshed Cartastrofe, NASA, Susbeer and interview project pages", async () => {
+    const [cartastrofe, nasa, susbeer, interview] = await Promise.all([
+      getItemBySlug("projects", "cartastrofe"),
+      getItemBySlug("projects", "nasa-hackathon"),
+      getItemBySlug("projects", "susbeer-vr-experience"),
+      getItemBySlug("projects", "technical-interview-chatbot"),
+    ]);
+
+    expect(cartastrofe.title).toBe("Cartastrofe");
+    expect(cartastrofe.media?.filter((item) => item.type === "image")).toHaveLength(5);
+    expect((cartastrofe.links as Record<string, string>)["Medium — From Dusty MVP to Google Play"]).toContain(
+      "medium.com/@rustyroboz/de-mvp-cogiendo-polvo",
+    );
+    expect((cartastrofe.links as Record<string, string>)["Medium — 12 Testers, 14 Days"]).toContain(
+      "medium.com/@rustyroboz/12-testers-14-d",
+    );
+
+    expect((nasa.links as Record<string, string>)["Slides (PDF)"]).toContain("Space%20Artai.pdf");
+    expect(nasa.body.match(/\/images\/projects\/nasa-hackathon\//g)).toHaveLength(14);
+
+    expect(susbeer.media?.filter((item) => item.type === "image")).toHaveLength(23);
+    expect(interview.description).toContain("proof of concept");
+    expect(interview.body.length).toBeLessThan(1_000);
+
+    for (const project of [cartastrofe, susbeer]) {
+      for (const item of project.media ?? []) {
+        if (item.type === "image" && item.src.startsWith("/")) {
+          expect(existsSync(path.join(process.cwd(), "public", item.src.slice(1))), item.src).toBe(true);
+        }
+      }
+    }
+  });
+
   it("builds a tag index across collections", async () => {
     const tags = await getTagIndex();
     expect(tags.get("ai-art")).toBeDefined();
