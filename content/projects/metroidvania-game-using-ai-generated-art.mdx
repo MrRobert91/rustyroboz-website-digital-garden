@@ -8,7 +8,7 @@ slug: metroidvania-game-using-ai-generated-art
 language: "en"
 type: "project"
 publishedAt: '2023-03-20'
-updatedAt: '2023-03-20'
+updatedAt: '2026-09-13'
 tags:
   - game-development
   - ai-art
@@ -27,31 +27,13 @@ tech:
   - DALL·E 2
   - Krita
 links:
-  Write-up: "/articles/metroidvania-game-using-ai-generated-art"
-  video: 'https://www.youtube.com/watch?v=oZpgsd9Fb7I'
-  demo: 'https://rustyroboz.itch.io/who-is-moloch'
+  itch.io: 'https://rustyroboz.itch.io/who-is-moloch'
+  Medium article: 'https://medium.com/@rustyroboz/metroidvania-game-using-ai-generated-art-101d4c3ef6c7'
+  Video: 'https://www.youtube.com/watch?v=oZpgsd9Fb7I'
 media:
   - type: youtube
     id: oZpgsd9Fb7I
     title: Who is Moloch
-  - type: image
-    src: /images/projects/metroidvania-game-using-ai-generated-art/image-01.png
-    alt: Metroidvania game using AI ART image 1
-  - type: image
-    src: /images/projects/metroidvania-game-using-ai-generated-art/image-02.png
-    alt: Metroidvania game using AI ART image 2
-  - type: image
-    src: /images/projects/metroidvania-game-using-ai-generated-art/image-03.png
-    alt: Metroidvania game using AI ART image 3
-  - type: image
-    src: /images/projects/metroidvania-game-using-ai-generated-art/image-04.png
-    alt: Metroidvania game using AI ART image 4
-  - type: image
-    src: /images/projects/metroidvania-game-using-ai-generated-art/image-05.png
-    alt: Metroidvania game using AI ART image 5
-  - type: image
-    src: /images/projects/metroidvania-game-using-ai-generated-art/image-06.png
-    alt: Metroidvania game using AI ART image 6
 ---
 Ever since image-generative AIs started coming out, I’ve thought they have enormous potential for use in creating game assets, especially for people who, like me, have rusty artistic skills and are not used to using photoshop or other image editing programs.
 
@@ -61,7 +43,9 @@ As the game is a metroidvania one, we are going to have a 2D game, in which you 
 
 To make our work easier, we use a [free template from the Unity asset store](https://assetstore.unity.com/packages/2d/characters/metroidvania-controller-166731), which contains the main mechanics that we will need for our metroidvania, that is, a character that can jump, attack and shoot among other things. Although we ended up modifying it to suit our needs, it’s a great starting point.
 
+![Metroidvania controller template running in Unity](/images/projects/metroidvania-game-using-ai-generated-art/image-01.png)
 
+![Early robot sprite-sheet experiment generated with AI](/images/projects/metroidvania-game-using-ai-generated-art/image-02.png)
 
 Once we have the basic mechanics, the first thing we have to do is a main character, in our case a little robot.
 
@@ -71,6 +55,7 @@ Since the creation of sprites has not gone too well, we decided to make an anima
 
 For this we use Midjorney to create the character, and we remove the background with an [AI application that automatically removes the background](https://www.remove.bg/) to make an animation using bones, we use krita to cut the different extremities and create a layer for each bone/extremity that we want to move separately and export it as a psd file (if you are using Krita, change the extension from.psd to.psb so that unity can read it correctly, as it is the format that Unity recognizes). Once in unity we use the Sprite editor to create the bones of our character, and create the different animations with them. I have followed [this tutorial](https://www.youtube.com/watch?v=Qd8TXelVnJ4) to do it.
 
+![Robot character rigged with bones in Unity's Sprite Editor](/images/projects/metroidvania-game-using-ai-generated-art/image-03.png)
 
 Once we have the main character with animations of the different actions (run, jump, attack, etc.), it’s time to create the backgrounds.
 
@@ -80,7 +65,9 @@ For the backgrounds I have tried to keep the part of the style of the prompt sim
 
 The workflow that I have followed is to generate images with midjourney, once we find a background that we like, we make 4 variations of that image directly with the midjourney button. We chose two or three of them and used Dalle2’s Inpainting tool to merge the two images as well as to remove unwanted parts, such as the presence of humans or other characters or objects. Finally we Upscale the images so that they have more definition. We do this with this website ([https://imgupscaler.com/](https://imgupscaler.com/)), which is the one that accepts base images with the highest resolution, and increases them by up to 400%, and lets you upscale 5 free images a week.
 
+![Midjourney background variations used for the game](/images/projects/metroidvania-game-using-ai-generated-art/image-04.png)
 
+![DALL-E 2 inpainting workflow for merging and cleaning backgrounds](/images/projects/metroidvania-game-using-ai-generated-art/image-05.png)
 
 Although the results are not entirely professional and some integration work is still needed so that they do not look like a collage of different origins, especially in the areas where several different backgrounds come together. Perhaps with a better handling of Krita/photoshop the different backgrounds could be better integrated.
 
@@ -92,5 +79,6 @@ It is a concept that I found very interesting because I believe that it underlie
 
 As an easter egg to recognize the source of inspiration for the story, at the end you talk to Liv, whose image is also generated with Midjourney.
 
+![Liv Boeree character generated with Midjourney](/images/projects/metroidvania-game-using-ai-generated-art/image-06.png)
 
 And that’s all, in the end there is a small prototype that still needs to be polished, you can try the game for free [here](https://rustyroboz.itch.io/who-is-moloch).
