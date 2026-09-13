@@ -164,11 +164,62 @@ describe("content loader", () => {
     expect(tags.get("ai-art")?.length).toBeGreaterThan(1);
   });
 
-  it("returns related content across projects and articles", async () => {
+  it("does not return the removed duplicate Metroidvania write-up", async () => {
     const item = await getItemBySlug("projects", "metroidvania-game-using-ai-generated-art");
     const related = await getRelatedContent(item, 3);
-    expect(related.some((entry) => entry.collection === "articles" && entry.slug === "metroidvania-game-using-ai-generated-art")).toBe(
-      true,
+    expect(related.some((entry) => entry.slug === "metroidvania-game-using-ai-generated-art")).toBe(false);
+  });
+
+  it("loads the refreshed legacy projects without duplicate articles", async () => {
+    const [metroidvania, virtualReality, brainInterface, moreThings, aiArt, crazyRide, toxicAdventure, articles] =
+      await Promise.all([
+        getItemBySlug("projects", "metroidvania-game-using-ai-generated-art"),
+        getItemBySlug("projects", "virtual-reality-game"),
+        getItemBySlug("projects", "brain-computer-interface-project"),
+        getItemBySlug("projects", "there-are-more-things"),
+        getItemBySlug("projects", "art-made-with-artificial-intelligence"),
+        getItemBySlug("projects", "crazy-ride"),
+        getItemBySlug("projects", "toxic-adventure"),
+        getCollection("articles"),
+      ]);
+
+    expect((metroidvania.links as Record<string, string>)["itch.io"]).toBe(
+      "https://rustyroboz.itch.io/who-is-moloch",
     );
+    expect((metroidvania.links as Record<string, string>)["Medium article"]).toContain("101d4c3ef6c7");
+    expect(metroidvania.media?.filter((item) => item.type === "image")).toHaveLength(0);
+    expect(metroidvania.body.match(/metroidvania-game-using-ai-generated-art\/image-\d{2}\.png/g)).toHaveLength(6);
+
+    expect((virtualReality.links as Record<string, string>)["itch.io"]).toBe(
+      "https://rustyroboz.itch.io/13-bullets-in-hyperspace",
+    );
+    expect((virtualReality.links as Record<string, string>).GitHub).toBe(
+      "https://github.com/MrRobert91/13BulletsInHyperspace",
+    );
+
+    expect((brainInterface.links as Record<string, string>)["Medium article"]).toContain("professor-x-project");
+    expect(brainInterface.media?.filter((item) => item.type === "youtube")).toEqual([
+      expect.objectContaining({ id: "ubpXxSRDCY0" }),
+    ]);
+    expect(brainInterface.body).toContain('<YouTube id="RVfkDpz1krE"');
+
+    expect((moreThings.links as Record<string, string>)["Juego en itch.io"]).toBe(
+      "https://rustyroboz.itch.io/there-are-more-things",
+    );
+    expect((crazyRide.links as Record<string, string>)["itch.io"]).toBe("https://rustyroboz.itch.io/crazy-ride");
+    expect(crazyRide.body).not.toContain("Start menu");
+    expect(crazyRide.body).not.toContain("New level with velociraptors!");
+    expect(toxicAdventure.body).not.toContain("Just Starting");
+    expect(toxicAdventure.body).not.toContain("Unity Engine");
+
+    const aiArtImagePaths = aiArt.body.match(/\/images\/projects\/art-made-with-artificial-intelligence\/[\w.-]+/g) ?? [];
+    expect(aiArtImagePaths).toHaveLength(18);
+    expect(aiArt.body.match(/<YouTube /g)).toHaveLength(4);
+    for (const imagePath of aiArtImagePaths) {
+      expect(existsSync(path.join(process.cwd(), "public", imagePath.slice(1))), imagePath).toBe(true);
+    }
+
+    expect(articles.some((article) => article.slug === "metroidvania-game-using-ai-generated-art")).toBe(false);
+    expect(articles.some((article) => article.slug === "art-made-with-artificial-intelligence")).toBe(false);
   });
 });

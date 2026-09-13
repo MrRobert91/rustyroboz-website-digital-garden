@@ -201,7 +201,7 @@ describe("public routes", () => {
   it("filters content by tag", async () => {
     render(await TagPage({ params: Promise.resolve({ tag: "ai-art" }) }));
     expect(screen.getByRole("heading", { name: /tag: ai-art/i })).toBeInTheDocument();
-    expect(screen.getAllByText(/metroidvania game using ai generated art/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/metroidvania game using ai art/i).length).toBeGreaterThan(0);
   });
 
   it("renders the lab and chat pages in english", async () => {

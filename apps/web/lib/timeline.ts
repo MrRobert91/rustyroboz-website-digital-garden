@@ -503,7 +503,7 @@ export const timeline: TimelineEntry[] = [
       { type: "image", src: "/images/projects/metroidvania-game-using-ai-generated-art/image-06.png", alt: "Who is Moloch 6" },
     ],
     links: [
-      { label: "Play", href: "https://itch.io/jam/metroidvania-month-19/rate/1970974" },
+      { label: "Play on itch.io", href: "https://rustyroboz.itch.io/who-is-moloch" },
       { label: "Article", href: "https://medium.com/@rustyroboz/metroidvania-game-using-ai-generated-art-101d4c3ef6c7" },
       { label: "Case study", href: "/projects/metroidvania-game-using-ai-generated-art" },
     ],
@@ -623,7 +623,8 @@ export const timeline: TimelineEntry[] = [
       { type: "image", src: "/images/projects/virtual-reality-game/image-05.png", alt: "13 Bullets 5" },
     ],
     links: [
-      { label: "Play", href: "https://itch.io/jam/vrjam2022/rate/1652625" },
+      { label: "Play on itch.io", href: "https://rustyroboz.itch.io/13-bullets-in-hyperspace" },
+      { label: "GitHub", href: "https://github.com/MrRobert91/13BulletsInHyperspace" },
       { label: "Case study", href: "/projects/virtual-reality-game" },
     ],
   },
@@ -754,8 +755,7 @@ export const timeline: TimelineEntry[] = [
     media: [{ type: "youtube", id: "u7vk3WKPUgQ", title: "Art Made with AI" }],
     links: [
       { label: "Article", href: "https://medium.com/@rustyroboz/art-made-with-artificial-intelligence-db088e722532" },
-      { label: "Gallery", href: "https://sites.google.com/view/rustyroboz/projects/art-made-with-artificial-intelligence" },
-      { label: "Instagram", href: "https://www.instagram.com/rustyroboz/" },
+      { label: "Instagram", href: "https://www.instagram.com/ai_art_roboz/" },
       { label: "Case study", href: "/projects/art-made-with-artificial-intelligence" },
     ],
   },

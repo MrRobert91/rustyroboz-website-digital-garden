@@ -7,6 +7,46 @@ type MdxRendererProps = {
   source: string;
 };
 
+type YouTubeProps = {
+  id: string;
+  title: string;
+};
+
+type ImageFigureProps = {
+  alt: string;
+  caption: string;
+  src: string;
+};
+
+function ImageFigure({ alt, caption, src }: ImageFigureProps) {
+  return (
+    <figure className="mt-8">
+      <img
+        alt={alt}
+        className="w-full rounded-[1.75rem] border border-border object-cover shadow-soft"
+        loading="lazy"
+        src={src}
+      />
+      <figcaption className="mt-3 text-center text-sm text-muted">{caption}</figcaption>
+    </figure>
+  );
+}
+
+function YouTube({ id, title }: YouTubeProps) {
+  return (
+    <div className="mt-8 aspect-video overflow-hidden rounded-[1.75rem] border border-border bg-black shadow-soft">
+      <iframe
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+        className="h-full w-full"
+        loading="lazy"
+        src={`https://www.youtube-nocookie.com/embed/${id}`}
+        title={title}
+      />
+    </div>
+  );
+}
+
 const components = {
   a: (props: AnchorHTMLAttributes<HTMLAnchorElement>) => {
     const href = props.href ?? "#";
@@ -69,6 +109,8 @@ const components = {
   pre: (props: HTMLAttributes<HTMLPreElement>) => (
     <pre className="mt-6 overflow-x-auto rounded-[1.5rem] bg-foreground px-5 py-4 text-sm text-background" {...props} />
   ),
+  ImageFigure,
+  YouTube,
 };
 
 export function MdxRenderer({ source }: MdxRendererProps) {
