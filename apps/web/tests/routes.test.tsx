@@ -12,6 +12,7 @@ import ProjectDetailPage from "@/app/projects/[slug]/page";
 import ProjectsPage from "@/app/projects/page";
 import TagPage from "@/app/tags/[tag]/page";
 import TimelinePage from "@/app/timeline/page";
+import { getItemBySlug } from "@/lib/content";
 
 describe("public routes", () => {
   it("renders the home page hero with english navigation and a bio panel", async () => {
@@ -34,10 +35,10 @@ describe("public routes", () => {
     expect(latestArticles).not.toBeNull();
 
     expect(within(latestWork as HTMLElement).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent)).toEqual([
+      "Metamorfosis — El Valle de los Colosos",
+      "Moloch Arena",
       "The Last Observation",
       "Qiskit Certification Prep: an interactive quantum study lab",
-      "AI Learning Factory: from a vague idea to a publishable course",
-      "SharedBrain",
     ]);
     expect(within(latestWork as HTMLElement).queryByText(/susbeer vr experience/i)).not.toBeInTheDocument();
     expect(within(latestArticles as HTMLElement).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent?.replace("↗", "").trim())).toEqual([
@@ -49,17 +50,19 @@ describe("public routes", () => {
   });
 
   it("keeps canonical catalog codes in selected work and the full projects page", async () => {
+    const moloch = await getItemBySlug("projects", "moloch-arena");
+    expect(moloch.catalogCode).toMatch(/^EXP-\d+$/);
     const home = render(await HomePage());
-    const homeFactory = screen.getByRole("heading", { name: /ai learning factory/i }).closest("article");
+    const homeMoloch = screen.getByRole("heading", { name: /moloch arena/i }).closest("article");
     const homeQiskit = screen.getByRole("heading", { name: /qiskit certification prep/i }).closest("article");
-    expect(within(homeFactory as HTMLElement).getByText("PROJ-15")).toBeInTheDocument();
+    expect(within(homeMoloch as HTMLElement).getByText(moloch.catalogCode!)).toBeInTheDocument();
     expect(within(homeQiskit as HTMLElement).getByText("EXP-15")).toBeInTheDocument();
     home.unmount();
 
     render(await ProjectsPage());
-    const projectsFactory = screen.getByRole("heading", { name: /ai learning factory/i }).closest("article");
+    const projectsMoloch = screen.getByRole("heading", { name: /moloch arena/i }).closest("article");
     const projectsQiskit = screen.getByRole("heading", { name: /qiskit certification prep/i }).closest("article");
-    expect(within(projectsFactory as HTMLElement).getByText("PROJ-15")).toBeInTheDocument();
+    expect(within(projectsMoloch as HTMLElement).getByText(moloch.catalogCode!)).toBeInTheDocument();
     expect(within(projectsQiskit as HTMLElement).getByText("EXP-15")).toBeInTheDocument();
   });
 

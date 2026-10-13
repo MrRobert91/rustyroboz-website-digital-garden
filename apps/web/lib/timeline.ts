@@ -200,6 +200,34 @@ export function groupTimelineByEra(entries: TimelineEntry[]): TimelineEra[] {
  */
 export const timeline: TimelineEntry[] = [
   {
+    id: "moloch-arena",
+    kind: "experiment",
+    title: "Moloch Arena",
+    start: "2026-10",
+    description:
+      "A game-based LLM benchmark exploring safety decisions in AI development races, with live OpenRouter runs, 3D replays and traceable results.",
+    media: [{ type: "image", src: "/images/projects/moloch-arena/cover.png", alt: "Moloch Arena live benchmark interface" }],
+    links: [
+      { label: "Live app", href: "https://moloch-frontend.sliplane.app/" },
+      { label: "GitHub", href: "https://github.com/MrRobert91/Benchmark-llm-games" },
+      { label: "Case study", href: "/projects/moloch-arena" },
+    ],
+  },
+  {
+    id: "metamorfosis",
+    kind: "experiment",
+    title: "Metamorfosis — El Valle de los Colosos",
+    start: "2026-10",
+    description:
+      "A 3D browser platforming adventure where five monster forms change how you move, fight and explore, with desktop and touch controls.",
+    media: [{ type: "image", src: "/images/projects/metamorfosis/cover.png", alt: "Metamorfosis browser game" }],
+    links: [
+      { label: "Play", href: "https://ai-game-test.sliplane.app/" },
+      { label: "GitHub", href: "https://github.com/MrRobert91/AI-Game-Test" },
+      { label: "Case study", href: "/projects/metamorfosis" },
+    ],
+  },
+  {
     id: "factoria-f5",
     kind: "experience",
     title: "Lead AI Instructor",

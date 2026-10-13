@@ -1,0 +1,43 @@
+---
+title: "Moloch Arena"
+description: "A game-based LLM benchmark exploring safety decisions in AI development races, with live runs, 3D replays and traceable results."
+slug: "moloch-arena"
+language: "en"
+type: "experiment"
+publishedAt: "2026-10-13"
+updatedAt: "2026-10-13"
+tags: ["llm", "ai-safety", "benchmark", "game-theory"]
+draft: false
+featured: false
+coverImage: "/images/projects/moloch-arena/cover.png"
+readingTime: "3 min"
+status: "active"
+tech: ["Next.js", "FastAPI", "SQLite", "OpenRouter", "Docker", "Sliplane"]
+links:
+  Live app: "https://moloch-frontend.sliplane.app/"
+  GitHub: "https://github.com/MrRobert91/Benchmark-llm-games"
+media:
+  - type: image
+    src: /images/projects/moloch-arena/cover.png
+    alt: "Moloch Arena live benchmark interface"
+---
+
+**What happens when AI models compete to develop faster while choosing how much safety to preserve?** Moloch Arena turns that question into a reproducible, game-based benchmark.
+
+Between two and five models make simultaneous SAFE or UNSAFE decisions in an AI development race with an uncertain horizon. Faster development can improve competitive position, while unsafe actions increase the risk of a private setback at the end of the race.
+
+The web interface runs models through OpenRouter, follows races live and replays decisions round by round in 3D. Persisted results include model and provider information, costs, actions and outcomes, making it possible to inspect individual runs as well as aggregate metrics.
+
+The Results page compares published research with an exploratory reconstruction. It keeps those results separate from the live leaderboard; it does not claim an exact replication of unpublished author prompts or endpoints.
+
+## From a coordination game to a research reconstruction
+
+The first design explored failed coordination through public promises and private actions: models could promise SAFE and then choose FAST. It used a collective catastrophe and a promise-keeping metric. That original game was useful for exploring behaviour, but its rules were different from the published AI race experiments.
+
+An audit led to a new V1 engine with simultaneous SAFE/UNSAFE actions, an uncertain race length, stage payoffs and private terminal setbacks. The interface and replay infrastructure remained, while the benchmark rules and historical results were kept distinct. The active protocol is identified as `published-reconstruction-v1.1`.
+
+Invalid model output is treated as an evaluation issue. Unreadable responses and fallback decisions remain inspectable, but affected races are excluded from comparable averages. Seeds, versioned manifests, provider traces and a shared budget make runs easier to reproduce and audit.
+
+The project was developed with coding agents under human supervision. Its central lesson is methodological: an attractive replay only becomes a useful benchmark when the rules, parsing failures and limits of the comparison are explicit.
+
+[Explore Moloch Arena](https://moloch-frontend.sliplane.app/) or inspect the [source code and methodology](https://github.com/MrRobert91/Benchmark-llm-games).
