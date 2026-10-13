@@ -3,6 +3,8 @@
   "min_hit_rate": 0.75,
   "top_k": 5,
   "cases": [
+    { "question": "Moloch Arena LLM safety benchmark live races and 3D replays", "expected_slug": "moloch-arena" },
+    { "question": "Metamorfosis browser game with five monster forms", "expected_slug": "metamorfosis" },
     { "question": "Tell me about the technical interview chatbot", "expected_slug": "technical-interview-chatbot" },
     { "question": "How did David deploy the Hermes agent on a Hetzner VPS with OpenRouter?", "expected_slug": "hermes-agent-en-un-vps-de-hetzner-con-openrouter" },
     { "question": "What is the metroidvania game made with AI generated art?", "expected_slug": "metroidvania-game-using-ai-generated-art" },

@@ -1,0 +1,51 @@
+---
+title: "Metamorfosis — El Valle de los Colosos"
+description: "A 3D browser platforming adventure where five monster forms change how you move, fight and explore, with desktop and touch controls."
+slug: "metamorfosis"
+language: "en"
+type: "experiment"
+publishedAt: "2026-10-13"
+updatedAt: "2026-10-13"
+tags: ["game-development", "threejs", "browser", "3d"]
+draft: false
+featured: false
+coverImage: "/images/projects/metamorfosis/cover.png"
+readingTime: "3 min"
+status: "active"
+tech: ["Three.js", "JavaScript", "HTML", "CSS", "nginx", "Sliplane"]
+links:
+  Play: "https://ai-game-test.sliplane.app/"
+  GitHub: "https://github.com/MrRobert91/AI-Game-Test"
+media:
+  - type: image
+    src: /images/projects/metamorfosis/cover.png
+    alt: "Metamorfosis — El Valle de los Colosos browser game"
+---
+
+**One adventure, five monster forms.** Metamorfosis is a 3D platforming game played directly in the browser, built in a single HTML file with CSS, JavaScript and Three.js.
+
+In the original Valley of the Colossi level, the player transforms every ten seconds. The HUD previews the next form, turning the transformation timer into a route-planning mechanic.
+
+- The werewolf is fast and can double-jump.
+- The spider climbs rock walls and uses silk anchors.
+- The bear breaks cracked rock and delivers seismic attacks.
+- The dragon breathes fire and glides.
+- The yeti freezes water and creates ice pillars.
+
+## Eleven levels, different rules
+
+Six Metamorfosis levels reuse those forms with different transformation rules: the original ten-second timer, coloured zones in Catedral de Vitral, enemy defeats in Coliseo de Tinta, masks in Teatro de Papel, one life per monster in Espiral de Neón and a rewritable musical sequence in Templo del Pulso.
+
+Five separate challenges explore jet-ski racing, a dragon flight time trial, an avalanche sled escape, silk swinging and a marble course. Best times and medals are stored in the browser.
+
+Desktop players use WASD, the mouse and ability keys. Mobile players get a floating joystick, touch camera controls and dedicated action buttons.
+
+## Built with Claude Code
+
+The game grew through six requests implemented with Claude Code and delivered as pull requests: the original adventure, Docker deployment, performance work, touch controls, challenge modes and new transformation rules.
+
+Visuals and audio are procedural. Canvas draws textures, code constructs and animates creatures, and Web Audio synthesises sound and music. Each transformation level adds its own visual treatment, from stained glass and ink to paper, neon and art déco.
+
+Automated Chromium runs, traversal bots and desktop/mobile screenshots helped detect unreachable platforms and checkpoint traps during development. Those checks do not establish human playtesting: difficulty and medal times remain estimates pending deeper player feedback.
+
+[Play Metamorfosis](https://ai-game-test.sliplane.app/) or explore the [source code and controls](https://github.com/MrRobert91/AI-Game-Test).

@@ -25,3 +25,15 @@ docker build -f apps/web/Dockerfile .
 docker build -f apps/api/Dockerfile .
 docker compose up -d --build
 ```
+
+## Publicar cambios de contenido
+
+Al publicar proyectos o artículos, despliega tanto la web como la API desde el
+mismo commit. `apps/api/Dockerfile` copia `content/` durante el build: reiniciar
+una imagen antigua no incorpora los nuevos archivos. En Sliplane, redespliega el
+servicio API con el commit publicado y comprueba `/health` hasta que
+`storage.faiss` sea `ready`; al arrancar se comparan los checksums y se
+actualizan SQLite, FTS y FAISS. En local, usa `docker compose up -d --build api web`.
+
+Para esta incorporación, comprueba además que el chatbot recupera
+`/projects/moloch-arena` y `/projects/metamorfosis` tras el despliegue.
