@@ -206,7 +206,13 @@ export const timeline: TimelineEntry[] = [
     start: "2026-10",
     description:
       "A game-based LLM benchmark exploring safety decisions in AI development races, with live OpenRouter runs, 3D replays and traceable results.",
-    media: [{ type: "image", src: "/images/projects/moloch-arena/cover.png", alt: "Moloch Arena live benchmark interface" }],
+    media: [
+      { type: "image", src: "/images/projects/moloch-arena/replay-five-labs.gif", alt: "Animated replay of five laboratories revealing their decisions" },
+      { type: "image", src: "/images/projects/moloch-arena/replay-second-race.gif", alt: "Animated replay of a second saved race" },
+      { type: "image", src: "/images/projects/moloch-arena/replay-five-labs.webp", alt: "Five robot participants in the 3D arena" },
+      { type: "image", src: "/images/projects/moloch-arena/replay-second-race.webp", alt: "Decisions in a second saved race" },
+      { type: "image", src: "/images/projects/moloch-arena/replay-outcome.webp", alt: "Final race outcome and payoffs" },
+    ],
     links: [
       { label: "Live app", href: "https://moloch-frontend.sliplane.app/" },
       { label: "GitHub", href: "https://github.com/MrRobert91/Benchmark-llm-games" },
@@ -220,7 +226,13 @@ export const timeline: TimelineEntry[] = [
     start: "2026-10",
     description:
       "A 3D browser platforming adventure where five monster forms change how you move, fight and explore, with desktop and touch controls.",
-    media: [{ type: "image", src: "/images/projects/metamorfosis/cover.png", alt: "Metamorfosis browser game" }],
+    media: [
+      { type: "image", src: "/images/projects/metamorfosis/valley-gameplay.gif", alt: "Animated gameplay in El Valle de los Colosos" },
+      { type: "image", src: "/images/projects/metamorfosis/stained-glass-gameplay.gif", alt: "Animated gameplay in Catedral de Vitral" },
+      { type: "image", src: "/images/projects/metamorfosis/valley-gameplay.webp", alt: "El Valle de los Colosos during gameplay" },
+      { type: "image", src: "/images/projects/metamorfosis/stained-glass-gameplay.webp", alt: "The stained-glass world during gameplay" },
+      { type: "image", src: "/images/projects/metamorfosis/paper-world.webp", alt: "The paper and cardboard world during gameplay" },
+    ],
     links: [
       { label: "Play", href: "https://ai-game-test.sliplane.app/" },
       { label: "GitHub", href: "https://github.com/MrRobert91/AI-Game-Test" },
