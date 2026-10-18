@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -51,12 +52,33 @@ def parse_mdx_document(path: Path, collection: str) -> ContentDocument:
 
 def load_content_documents(content_root: Path) -> list[ContentDocument]:
     items: list[ContentDocument] = []
+    translations = {}
+    for locale in ("en", "es"):
+        catalog = content_root / "translations" / f"{locale}.json"
+        if catalog.exists():
+            translations[locale] = json.loads(catalog.read_text(encoding="utf-8"))
     for collection in SUPPORTED_COLLECTIONS:
         directory = content_root / collection
         if not directory.exists():
             continue
         for path in sorted(directory.glob("*.mdx")):
-            items.append(parse_mdx_document(path, collection))
+            document = parse_mdx_document(path, collection)
+            # Keep one canonical document/href; index both languages so queries
+            # retrieve the same project regardless of the selected language.
+            variants = []
+            for locale, catalog in translations.items():
+                variant = catalog.get(f"{collection}/{document.slug}")
+                if variant:
+                    variants.append((locale, variant))
+            if variants:
+                document.body = "\n\n".join(
+                    f"## {variant['title']} ({locale})\n\n{variant['description']}\n\n{variant['body']}"
+                    for locale, variant in variants
+                )
+                document.checksum = hashlib.sha256(
+                    (document.checksum + json.dumps(variants, ensure_ascii=False, sort_keys=True)).encode("utf-8")
+                ).hexdigest()
+            items.append(document)
     return items
 
 

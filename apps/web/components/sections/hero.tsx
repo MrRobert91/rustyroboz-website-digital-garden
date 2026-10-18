@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslation } from "@/components/language-provider";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
@@ -8,6 +12,7 @@ import { cn } from "@/lib/utils";
 
 /** Screen 01 — Cover / Hero. Notebook front page. */
 export function Hero() {
+  const { t } = useTranslation();
   return (
     <section className="dotted-paper relative overflow-hidden border-b border-border/80">
       {/* taped corners */}
@@ -17,11 +22,11 @@ export function Hero() {
       <div className="reading-surface mx-auto max-w-6xl px-6 pb-20 pt-16 lg:px-16 lg:pb-28 lg:pt-24">
         {/* headline */}
         <Reveal className="relative">
-          <p className="font-hand text-5xl text-accent -rotate-1 sm:text-6xl lg:text-7xl">Hi, I&apos;m David,</p>
+          <p className="font-hand text-5xl text-accent -rotate-1 sm:text-6xl lg:text-7xl">{t("Hi, I'm David,")}</p>
           <h1 className="mt-3 font-display text-4xl font-bold leading-[0.95] tracking-[-0.03em] text-foreground sm:text-5xl lg:text-6xl">
-            an AI{" "}
+            {t("an AI")}{" "}
             <span className="relative inline-block">
-              <span className="font-serif italic font-normal text-accent">engineer</span>
+              <span className="font-serif italic font-normal text-accent">{t("engineer")}</span>
               <span className="absolute -bottom-3 left-0 hidden sm:block">
                 <Squiggle animate color="hsl(var(--accent))" height={14} seed={3} strokeWidth={3} width={260} />
               </span>
@@ -31,7 +36,7 @@ export function Hero() {
           {/* annotations (desktop only) */}
           <div className="absolute right-0 top-8 hidden rotate-3 lg:block">
             <Sticky angle={6} color="#fde58a" style={{ whiteSpace: "nowrap" }}>
-              <span className="text-2xl">↳ &quot;shipped &gt; perfect&quot;</span>
+              <span className="text-2xl">{t('↳ "shipped > perfect"')}</span>
             </Sticky>
           </div>
         </Reveal>
@@ -40,16 +45,23 @@ export function Hero() {
         <div className="mt-14 grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
           <div>
             <p className="body-copy max-w-xl text-foreground/80">
-              Currently interested in Machine Learning, Computer Vision, Agentic AI, Quantum Computing, Robotics, Game
-              Development and Technology in general.
+              {t(
+                "Currently interested in Machine Learning, Computer Vision, Agentic AI, Quantum Computing, Robotics, Game Development and Technology in general.",
+              )}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-              <Link className={cn(buttonVariants({ variant: "default" }), "w-full justify-center sm:w-auto")} href="/projects">
-                View Projects
+              <Link
+                className={cn(buttonVariants({ variant: "default" }), "w-full justify-center sm:w-auto")}
+                href="/projects"
+              >
+                {t("View Projects")}
                 <ArrowRight className="ml-2 size-4" />
               </Link>
-              <Link className={cn(buttonVariants({ variant: "outline" }), "w-full justify-center sm:w-auto")} href="/articles">
-                Read Articles
+              <Link
+                className={cn(buttonVariants({ variant: "outline" }), "w-full justify-center sm:w-auto")}
+                href="/articles"
+              >
+                {t("Read Articles")}
               </Link>
             </div>
           </div>
@@ -62,11 +74,23 @@ export function Hero() {
         <div className="mt-16 flex flex-wrap items-center justify-between gap-6">
           <div className="flex items-center gap-5">
             <Doodle className="animate-float" color="hsl(var(--accent-deep))" kind="gear" size={44} />
-            <Doodle className="animate-float" color="hsl(var(--accent))" kind="bolt" size={32} style={{ animationDelay: "-1.6s" }} />
-            <Doodle className="animate-float" color="hsl(var(--accent-deep))" kind="spark" size={28} style={{ animationDelay: "-3.1s" }} />
-            <span className="font-mono text-sm text-muted-foreground">AI · robots · prototypes · notes</span>
+            <Doodle
+              className="animate-float"
+              color="hsl(var(--accent))"
+              kind="bolt"
+              size={32}
+              style={{ animationDelay: "-1.6s" }}
+            />
+            <Doodle
+              className="animate-float"
+              color="hsl(var(--accent-deep))"
+              kind="spark"
+              size={28}
+              style={{ animationDelay: "-3.1s" }}
+            />
+            <span className="font-mono text-sm text-muted-foreground">{t("AI · robots · prototypes · notes")}</span>
           </div>
-          <p className="font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">PG. 01 / COVER ↓</p>
+          <p className="font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">{t("PG. 01 / COVER ↓")}</p>
         </div>
       </div>
 

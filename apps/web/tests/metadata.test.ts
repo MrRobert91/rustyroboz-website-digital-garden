@@ -1,13 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { metadata as rootMetadata } from "@/app/layout";
-import { metadata as aboutMetadata } from "@/app/about/page";
-import { metadata as articlesMetadata } from "@/app/articles/page";
+import { generateMetadata as getRootMetadata } from "@/app/layout";
+import { generateMetadata as getAboutMetadata } from "@/app/about/page";
+import { generateMetadata as getArticlesMetadata } from "@/app/articles/page";
 import { generateMetadata as articleMetadata } from "@/app/articles/[slug]/page";
 import { generateMetadata as projectMetadata } from "@/app/projects/[slug]/page";
 import { generateMetadata as tagMetadata } from "@/app/tags/[tag]/page";
 
 describe("route metadata", () => {
-  it("defines a branded title template and specific static titles", () => {
+  it("defines a branded title template and specific static titles", async () => {
+    const [rootMetadata, aboutMetadata, articlesMetadata] = await Promise.all([
+      getRootMetadata(),
+      getAboutMetadata(),
+      getArticlesMetadata(),
+    ]);
     expect(rootMetadata.title).toEqual({
       default: "David Robert | AI Engineer · Computer Engineer",
       template: "%s | Rusty Roboz Labs",
@@ -22,7 +27,7 @@ describe("route metadata", () => {
     });
     const project = await projectMetadata({ params: Promise.resolve({ slug: "technical-interview-chatbot" }) });
 
-    expect(article.title).toMatch(/Cuando los humanos trabajan/);
+    expect(article.title).toMatch(/When humans work/);
     expect(project.title).toBe("Technical Interview Chatbot");
   });
 

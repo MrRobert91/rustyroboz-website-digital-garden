@@ -7,7 +7,10 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: "npm run dev --workspace @rustyroboz/web -- --port 43119",
+    command:
+      process.env.E2E_PRODUCTION === "1"
+        ? "node scripts/start-e2e.cjs"
+        : "npm run dev --workspace @rustyroboz/web -- --port 43119",
     url: "http://127.0.0.1:43119",
     reuseExistingServer: false,
     timeout: 120_000,

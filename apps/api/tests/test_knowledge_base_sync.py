@@ -66,3 +66,29 @@ def test_new_published_content_invalidates_and_rebuilds_the_persisted_index(tmp_
     assert rebuilt_meta["signature"] != initial_meta["signature"]
     assert rebuilt.vector_store.size > initial_size
     assert any(document["slug"] == slug and document["collection"] == collection for document in rebuilt.catalog())
+
+
+def test_translation_edit_invalidates_index_without_duplicate_documents(tmp_path: Path):
+    content_root = tmp_path / "content"
+    write_document(content_root, "projects", "robot", "A robot prototype.")
+    translations = content_root / "translations"
+    translations.mkdir()
+    catalog = translations / "es.json"
+    variant = {"title": "Robot", "description": "Prototipo de robot", "body": "Control del robot mediante sensores."}
+    catalog.write_text(json.dumps({"projects/robot": variant}), encoding="utf-8")
+    settings = Settings(
+        SQLITE_PATH=tmp_path / "site.db", FAISS_INDEX_PATH=tmp_path / "faiss.index",
+        FAISS_META_PATH=tmp_path / "index_meta.json", CONTENT_ROOT=content_root,
+        EMBEDDINGS_BACKEND="hash", FAISS_DIMENSION=64,
+    )
+    first = build_knowledge_base(settings)
+    initial_signature = json.loads(settings.faiss_meta_path.read_text())["signature"]
+    assert len(first.documents) == 1
+    assert "sensores" in first.documents[0].body
+    variant["body"] = "Control del robot mediante reconocimiento de voz."
+    catalog.write_text(json.dumps({"projects/robot": variant}), encoding="utf-8")
+    restarted = build_knowledge_base(settings)
+    assert json.loads(settings.faiss_meta_path.read_text())["signature"] != initial_signature
+    assert len(restarted.documents) == 1
+    assert "reconocimiento de voz" in restarted.documents[0].body
+    assert restarted.search("reconocimiento de voz", limit=1)[0].href == "/projects/robot"

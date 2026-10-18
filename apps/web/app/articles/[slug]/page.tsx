@@ -1,3 +1,4 @@
+import { getTranslation } from "@/lib/i18n/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContentDetailPage } from "@/components/content-detail-page";
@@ -8,17 +9,18 @@ type ArticleDetailProps = {
 };
 
 export async function generateStaticParams() {
-  const items = await getCollection("articles");
+  const items = await getCollection("articles", "en");
   return items.map((item) => ({ slug: item.slug }));
 }
 
 export async function generateMetadata({ params }: ArticleDetailProps): Promise<Metadata> {
+  const t = await getTranslation();
   const { slug } = await params;
   try {
     const item = await getItemBySlug("articles", slug);
     return { title: item.title, description: item.description };
   } catch {
-    return { title: "Article not found" };
+    return { title: t("Article not found") };
   }
 }
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "@/components/language-provider";
+
 /**
  * Day workshop / night workshop switch. The .dark palette already lives in
  * globals.css — this just flips the class on <html> and remembers the choice.
@@ -9,6 +11,7 @@ import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
 export function ThemeToggle() {
+  const { t } = useTranslation();
   const [isDark, setIsDark] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -32,11 +35,11 @@ export function ThemeToggle() {
 
   return (
     <button
-      aria-label={isDark === null ? "Change color theme" : isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={t(isDark === null ? "Change color theme" : isDark ? "Switch to light mode" : "Switch to dark mode")}
       aria-pressed={isDark ?? undefined}
       className="interactive-control grid size-11 shrink-0 place-items-center rounded-full border border-control-border text-muted-foreground transition-colors hover:text-accent"
       onClick={toggle}
-      title={isDark ? "Use light theme" : "Use dark theme"}
+      title={t(isDark ? "Use light theme" : "Use dark theme")}
       type="button"
     >
       <Moon aria-hidden className="size-4 dark:hidden" />

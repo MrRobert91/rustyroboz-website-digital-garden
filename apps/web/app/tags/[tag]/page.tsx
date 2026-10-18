@@ -1,3 +1,4 @@
+import { getTranslation } from "@/lib/i18n/server";
 import type { Metadata } from "next";
 import { ContentCard } from "@/components/content-card";
 import { SectionHeading } from "@/components/section-heading";
@@ -8,19 +9,21 @@ type TagPageProps = {
 };
 
 export async function generateStaticParams() {
-  const tags = await getTagIndex();
+  const tags = await getTagIndex("en");
   return [...tags.keys()].map((tag) => ({ tag }));
 }
 
 export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
+  const t = await getTranslation();
   const { tag } = await params;
   return {
-    title: `Tag: ${tag}`,
-    description: `Projects, articles, and notes tagged ${tag}.`,
+    title: `${t("Tag:")} ${tag}`,
+    description: `${t("Projects, articles, and notes tagged")} ${tag}.`,
   };
 }
 
 export default async function TagPage({ params }: TagPageProps) {
+  const t = await getTranslation();
   const { tag } = await params;
   const items = await getEntriesByTag(tag);
 
@@ -30,7 +33,7 @@ export default async function TagPage({ params }: TagPageProps) {
         description="A cross-section of projects, articles, and notes related by topic."
         eyebrow="Tags"
         headingLevel={1}
-        title={`Tag: ${tag}`}
+        title={`${t("Tag:")} ${tag}`}
       />
       <div className="mt-12 grid gap-6 lg:grid-cols-2">
         {items.map((item) => (

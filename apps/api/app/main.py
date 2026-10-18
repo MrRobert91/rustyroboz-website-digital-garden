@@ -1,6 +1,7 @@
 import time
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
+from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,6 +19,7 @@ from .vector_index import FaissVectorStore
 class ChatRequest(BaseModel):
     message: str
     session_id: str | None = None
+    language: Literal["en", "es"] | None = None
 
 
 class RateLimiter:
@@ -147,14 +149,14 @@ def create_app(settings=None) -> FastAPI:
     async def chat(payload: ChatRequest, request: Request):
         check_request(request, payload)
         try:
-            return await chat_service.ask(payload.message, payload.session_id)
+            return await chat_service.ask(payload.message, payload.session_id, payload.language)
         except RuntimeError as exc:
             raise HTTPException(status_code=502, detail=str(exc)) from exc
 
     @app.post("/api/v1/chat/stream")
     async def chat_stream(payload: ChatRequest, request: Request):
         check_request(request, payload)
-        return StreamingResponse(chat_service.stream(payload.message, payload.session_id), media_type="text/event-stream")
+        return StreamingResponse(chat_service.stream(payload.message, payload.session_id, payload.language), media_type="text/event-stream")
 
     return app
 

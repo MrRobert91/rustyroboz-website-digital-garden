@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "@/components/language-provider";
+
 /**
  * Qubit on the bench — a hand-drawn Bloch sphere on canvas (same tiny
  * wireframe engine as the hero robot, no three.js). The state vector
@@ -55,6 +57,7 @@ function circlePoints(kind: "equator" | "xy" | "yz", steps = 56): Vec3[] {
 const CIRCLES = [circlePoints("equator"), circlePoints("xy"), circlePoints("yz")];
 
 export function BlochSphere() {
+  const { t } = useTranslation();
   // Live vector mutates inside the draw loop; queued gates animate as arcs.
   const vecRef = useRef<Vec3>(KET_0);
   const queueRef = useRef<{ axis: Vec3; remaining: number }[]>([]);
@@ -203,26 +206,28 @@ export function BlochSphere() {
   return (
     <div className="w-full">
       <canvas
-        aria-label="Interactive hand-drawn Bloch sphere showing a qubit state vector. Drag to rotate the view; use the gate buttons to apply quantum gates."
+        aria-label={t(
+          "Interactive hand-drawn Bloch sphere showing a qubit state vector. Drag to rotate the view; use the gate buttons to apply quantum gates.",
+        )}
         className="h-72 w-full cursor-grab active:cursor-grabbing"
         ref={canvasRef}
         role="img"
         style={{ touchAction: "pan-y" }}
       />
       <p aria-live="polite" className="mt-3 text-center font-mono text-sm text-accent-deep">
-        {readout}
+        {t(readout)}
       </p>
       <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
         {GATES.map((gate) => (
-          <button className={chip} key={gate.label} onClick={() => applyGate(gate)} title={gate.hint} type="button">
-            {gate.label}
+          <button className={chip} key={gate.label} onClick={() => applyGate(gate)} title={t(gate.hint)} type="button">
+            {t(gate.label)}
           </button>
         ))}
         <button className={chip} onClick={reset} type="button">
-          reset |0⟩
+          {t("reset |0⟩")}
         </button>
         <AnimationToggle className={chip} pause={pause} paused={paused} resume={resume} />
-        <span className="ml-1 font-serif text-base text-muted-foreground">← Use the gate controls</span>
+        <span className="ml-1 font-serif text-base text-muted-foreground">{t("← Use the gate controls")}</span>
       </div>
     </div>
   );

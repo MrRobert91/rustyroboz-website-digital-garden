@@ -1,18 +1,23 @@
+"use client";
+
+import { useTranslation } from "@/components/language-provider";
+
 import Link from "next/link";
 import { Doodle } from "@/components/notebook";
 import { WorkshopClock } from "@/components/widgets/workshop-clock";
 import { siteConfig } from "@/lib/site-config";
 
 export function SiteFooter() {
+  const { t } = useTranslation();
   return (
     <footer className="border-t border-border/80 bg-card/40">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-12 lg:flex-row lg:items-end lg:justify-between lg:px-10">
         <div className="max-w-xl">
           <p className="font-serif text-3xl italic text-foreground">
-            Projects, articles, and experiments by {siteConfig.name}.
+            {t("Projects, articles, and experiments by")} {t(siteConfig.name)}.
           </p>
           <p className="mt-3 font-serif text-sm leading-6 text-muted-foreground">
-            A personal site for software, AI systems, games, and technical writing.
+            {t("A personal site for software, AI systems, games, and technical writing.")}
           </p>
         </div>
         <div className="flex flex-col gap-5 lg:items-end">
@@ -26,7 +31,7 @@ export function SiteFooter() {
                 rel="noreferrer"
                 target="_blank"
               >
-                {link.label}
+                {t(link.label)}
               </Link>
             ))}
           </div>
@@ -34,9 +39,11 @@ export function SiteFooter() {
       </div>
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-6 pb-8 lg:px-10">
         <Doodle color="hsl(var(--accent-deep))" kind="gear" size={26} />
-        <span className="font-serif text-sm text-muted-foreground">© 2026 — Rusty Roboz Labs · drawn in Madrid</span>
+        <span className="font-serif text-sm text-muted-foreground">
+          {t("© 2026 — Rusty Roboz Labs · drawn in Madrid")}
+        </span>
         <Link className="text-link font-mono text-sm uppercase tracking-[0.08em]" href="/lab">
-          · visit the lab bench →
+          {t("· visit the lab bench →")}
         </Link>
       </div>
     </footer>

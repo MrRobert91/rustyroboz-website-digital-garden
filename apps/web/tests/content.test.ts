@@ -26,7 +26,10 @@ describe("content loader", () => {
   });
 
   it("resolves content by slug", async () => {
-    const article = await getItemBySlug("articles", "de-mvp-cogiendo-polvo-a-google-play-la-resurreccion-de-cartastrofe");
+    const article = await getItemBySlug(
+      "articles",
+      "de-mvp-cogiendo-polvo-a-google-play-la-resurreccion-de-cartastrofe",
+    );
     expect(article.title).toContain("Cartastrofe");
     expect(article.tags).toContain("google-play-store");
   });
@@ -38,7 +41,7 @@ describe("content loader", () => {
     );
 
     expect(article.title).toContain("El autor material");
-    expect(article.language).toBe("es");
+    expect(article.language).toBe("en");
     expect(article.coverImage).toContain("el-autor-material.webp");
     expect(article.body).toContain("/downloads/el-autor-material.pdf");
   });
@@ -54,9 +57,9 @@ describe("content loader", () => {
 
     expect(entries.length).toBeGreaterThan(0);
     expect(entries.every((entry) => entry.language === "en" || entry.language === "es")).toBe(true);
-    expect(
-      entries.find((entry) => entry.slug === "hermes-agent-en-un-vps-de-hetzner-con-openrouter")?.language,
-    ).toBe("es");
+    expect(entries.find((entry) => entry.slug === "hermes-agent-en-un-vps-de-hetzner-con-openrouter")?.language).toBe(
+      "en",
+    );
   });
 
   it("loads the Learning AI Factory case study with its local video sample", async () => {
@@ -92,9 +95,7 @@ describe("content loader", () => {
       getItemBySlug("projects", "thor-runner"),
     ]);
 
-    expect((apolo.links as Record<string, string>).GitHub).toBe(
-      "https://github.com/MrRobert91/juego_zeus_y_apolo",
-    );
+    expect((apolo.links as Record<string, string>).GitHub).toBe("https://github.com/MrRobert91/juego_zeus_y_apolo");
     expect(apolo.media?.filter((item) => item.type === "image")).toHaveLength(4);
     expect(apolo.body).toContain("two five-year-old children");
 
@@ -183,9 +184,7 @@ describe("content loader", () => {
         getCollection("articles"),
       ]);
 
-    expect((metroidvania.links as Record<string, string>)["itch.io"]).toBe(
-      "https://rustyroboz.itch.io/who-is-moloch",
-    );
+    expect((metroidvania.links as Record<string, string>)["itch.io"]).toBe("https://rustyroboz.itch.io/who-is-moloch");
     expect((metroidvania.links as Record<string, string>)["Medium article"]).toContain("101d4c3ef6c7");
     expect(metroidvania.media?.filter((item) => item.type === "image")).toHaveLength(0);
     expect(metroidvania.body.match(/metroidvania-game-using-ai-generated-art\/image-\d{2}\.png/g)).toHaveLength(6);
@@ -212,7 +211,8 @@ describe("content loader", () => {
     expect(toxicAdventure.body).not.toContain("Just Starting");
     expect(toxicAdventure.body).not.toContain("Unity Engine");
 
-    const aiArtImagePaths = aiArt.body.match(/\/images\/projects\/art-made-with-artificial-intelligence\/[\w.-]+/g) ?? [];
+    const aiArtImagePaths =
+      aiArt.body.match(/\/images\/projects\/art-made-with-artificial-intelligence\/[\w.-]+/g) ?? [];
     expect(aiArtImagePaths).toHaveLength(18);
     expect(aiArt.body.match(/<YouTube /g)).toHaveLength(4);
     for (const imagePath of aiArtImagePaths) {

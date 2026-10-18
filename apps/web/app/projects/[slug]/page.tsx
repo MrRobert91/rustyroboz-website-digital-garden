@@ -1,3 +1,4 @@
+import { getTranslation } from "@/lib/i18n/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContentDetailPage } from "@/components/content-detail-page";
@@ -8,17 +9,18 @@ type ProjectDetailProps = {
 };
 
 export async function generateStaticParams() {
-  const items = await getCollection("projects");
+  const items = await getCollection("projects", "en");
   return items.map((item) => ({ slug: item.slug }));
 }
 
 export async function generateMetadata({ params }: ProjectDetailProps): Promise<Metadata> {
+  const t = await getTranslation();
   const { slug } = await params;
   try {
     const item = await getItemBySlug("projects", slug);
     return { title: item.title, description: item.description };
   } catch {
-    return { title: "Project not found" };
+    return { title: t("Project not found") };
   }
 }
 

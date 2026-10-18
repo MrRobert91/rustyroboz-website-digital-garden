@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "@/components/language-provider";
+
 /**
  * Hand-drawn analog clock showing live Madrid time in the footer.
  * Ticks only while visible (IntersectionObserver gates the interval);
@@ -38,6 +40,7 @@ const SIZE = 88;
 const C = SIZE / 2;
 
 export function WorkshopClock() {
+  const { t } = useTranslation();
   const [time, setTime] = useState<Time | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
@@ -80,8 +83,23 @@ export function WorkshopClock() {
 
   return (
     <div className="flex items-center gap-4" ref={wrapRef}>
-      <svg aria-label={time ? `Madrid time ${String(time.h).padStart(2, "0")}:${String(time.m).padStart(2, "0")}` : "Madrid clock"} height={SIZE} role="img" style={{ overflow: "visible" }} width={SIZE}>
-        <path d={wobblyCircle(C, C, C - 4, 7)} fill="hsl(var(--paper-2))" stroke="hsl(var(--foreground))" strokeWidth="1.6" />
+      <svg
+        aria-label={t(
+          time
+            ? `${t("Madrid time")} ${String(time.h).padStart(2, "0")}:${String(time.m).padStart(2, "0")}`
+            : "Madrid clock",
+        )}
+        height={SIZE}
+        role="img"
+        style={{ overflow: "visible" }}
+        width={SIZE}
+      >
+        <path
+          d={wobblyCircle(C, C, C - 4, 7)}
+          fill="hsl(var(--paper-2))"
+          stroke="hsl(var(--foreground))"
+          strokeWidth="1.6"
+        />
         {/* tick marks — coords rounded so server/client float math can't
             drift in the last digit and trip hydration */}
         {Array.from({ length: 12 }, (_, i) => {
@@ -103,9 +121,36 @@ export function WorkshopClock() {
         })}
         {time ? (
           <g>
-            <line stroke="hsl(var(--foreground))" strokeLinecap="round" strokeWidth="2.6" transform={`rotate(${hourAngle} ${C} ${C})`} x1={C} x2={C} y1={C + 3} y2={C - 18} />
-            <line stroke="hsl(var(--foreground))" strokeLinecap="round" strokeWidth="1.8" transform={`rotate(${minAngle} ${C} ${C})`} x1={C} x2={C} y1={C + 4} y2={C - 27} />
-            <line stroke="hsl(var(--accent))" strokeLinecap="round" strokeWidth="1.2" transform={`rotate(${secAngle} ${C} ${C})`} x1={C} x2={C} y1={C + 7} y2={C - 30} />
+            <line
+              stroke="hsl(var(--foreground))"
+              strokeLinecap="round"
+              strokeWidth="2.6"
+              transform={`rotate(${hourAngle} ${C} ${C})`}
+              x1={C}
+              x2={C}
+              y1={C + 3}
+              y2={C - 18}
+            />
+            <line
+              stroke="hsl(var(--foreground))"
+              strokeLinecap="round"
+              strokeWidth="1.8"
+              transform={`rotate(${minAngle} ${C} ${C})`}
+              x1={C}
+              x2={C}
+              y1={C + 4}
+              y2={C - 27}
+            />
+            <line
+              stroke="hsl(var(--accent))"
+              strokeLinecap="round"
+              strokeWidth="1.2"
+              transform={`rotate(${secAngle} ${C} ${C})`}
+              x1={C}
+              x2={C}
+              y1={C + 7}
+              y2={C - 30}
+            />
             <circle cx={C} cy={C} fill="hsl(var(--accent))" r="2.6" />
           </g>
         ) : (
@@ -113,13 +158,17 @@ export function WorkshopClock() {
         )}
       </svg>
       <div>
-        <p className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">Madrid bench</p>
+        <p className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">{t("Madrid bench")}</p>
         <p className="mt-1 flex items-center gap-2 font-serif text-lg text-foreground">
           <span
             aria-hidden
-            className={open ? "inline-block size-2 rounded-full bg-accent" : "inline-block size-2 rounded-full border border-muted-foreground"}
+            className={
+              open
+                ? "inline-block size-2 rounded-full bg-accent"
+                : "inline-block size-2 rounded-full border border-muted-foreground"
+            }
           />
-          {time ? (open ? "workshop open" : "lights off") : "winding up…"}
+          {t(time ? (open ? "workshop open" : "lights off") : "winding up…")}
         </p>
       </div>
     </div>

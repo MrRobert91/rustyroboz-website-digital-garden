@@ -146,6 +146,7 @@ TOOLS: list[dict[str, Any]] = [
 
 class AgentState(TypedDict, total=False):
     user_message: str
+    language: str | None
     history: list[dict[str, str]]
     messages: list[dict[str, Any]]
     verdict: str
@@ -298,6 +299,8 @@ class ChatAgent:
     async def _refuse(self, state: AgentState) -> AgentState:
         writer = _writer()
         refusal = state.get("refusal") or _static_refusal(state["user_message"])
+        if state.get("language") in {"en", "es"}:
+            refusal = STATIC_REFUSAL_ES if state["language"] == "es" else STATIC_REFUSAL_EN
         writer({"type": "chunk", "delta": refusal})
         return {"answer": refusal, "citations": []}
 
@@ -373,7 +376,7 @@ class ChatAgent:
         # The model ran out of max_tokens mid-answer: tell the user instead of
         # ending silently mid-sentence.
         if final.get("finish_reason") == "length" and content:
-            spanish = bool(SPANISH_HINT.search(state["user_message"])) or bool(
+            spanish = state.get("language") == "es" if state.get("language") else bool(SPANISH_HINT.search(state["user_message"])) or bool(
                 re.search(r"[áéíóúñ¿¡]", content[:600], re.IGNORECASE)
             )
             notice = TRUNCATION_NOTICE_ES if spanish else TRUNCATION_NOTICE_EN
@@ -522,7 +525,11 @@ class ChatAgent:
     # ---- helpers ----
 
     def _bootstrap_messages(self, state: AgentState) -> list[dict[str, Any]]:
-        messages: list[dict[str, Any]] = [{"role": "system", "content": AGENT_SYSTEM_PROMPT}]
+        system = AGENT_SYSTEM_PROMPT
+        if state.get("language") in {"en", "es"}:
+            language = "Spanish (Spain)" if state["language"] == "es" else "English"
+            system = system.replace("Answer in the same language the user writes in.", f"Answer in {language}, the language selected on the website. Keep tool names, product names, code and URLs unchanged.")
+        messages: list[dict[str, Any]] = [{"role": "system", "content": system}]
         for item in state.get("history", []):
             if item.get("role") in {"user", "assistant"} and item.get("content"):
                 messages.append({"role": item["role"], "content": item["content"]})

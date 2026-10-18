@@ -2,16 +2,11 @@ import { existsSync, promises as fs } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import type { TimelineMediaItem } from "@/lib/timeline";
+import type { Locale } from "@/lib/i18n";
+import { getLocale } from "@/lib/i18n/server";
+export { getContentHref } from "@/lib/content-href";
 
-export const collections = [
-  "articles",
-  "projects",
-  "notes",
-  "pages",
-  "tutorials",
-  "talks",
-  "fiction",
-] as const;
+export const collections = ["articles", "projects", "notes", "pages", "tutorials", "talks", "fiction"] as const;
 
 export type CollectionName = (typeof collections)[number];
 
@@ -27,6 +22,7 @@ type CommonFrontmatter = {
   featured: boolean;
   coverImage: string;
   readingTime: string;
+  links?: Record<string, string>;
   /** Optional videos + images. Videos render above the article, images as a gallery below it. */
   media?: TimelineMediaItem[];
 };
@@ -98,7 +94,10 @@ async function readDirectory(collection: CollectionName) {
   return entries.filter((entry) => entry.endsWith(".mdx"));
 }
 
-function assertCommonFrontmatter(frontmatter: Record<string, unknown>, filePath: string): asserts frontmatter is CommonFrontmatter {
+function assertCommonFrontmatter(
+  frontmatter: Record<string, unknown>,
+  filePath: string,
+): asserts frontmatter is CommonFrontmatter {
   const requiredKeys = [
     "title",
     "description",
@@ -222,7 +221,11 @@ function buildExcerpt(body: string) {
     .slice(0, 180);
 }
 
-export async function getCollection<T extends CollectionName>(collection: T): Promise<ContentItem[]> {
+export async function getCollection<T extends CollectionName>(collection: T, locale?: Locale): Promise<ContentItem[]> {
+  locale ??= await getLocale();
+  const translations = JSON.parse(
+    await fs.readFile(path.join(getContentRoot(), "translations", `${locale}.json`), "utf8"),
+  ) as Record<string, { title: string; description: string; body: string; media: TimelineMediaItem[] }>;
   const entries = await readDirectory(collection);
 
   const items = await Promise.all(
@@ -231,13 +234,19 @@ export async function getCollection<T extends CollectionName>(collection: T): Pr
       const raw = await fs.readFile(sourcePath, "utf8");
       const { data, content } = matter(raw);
       const normalized = normalizeFrontmatter(collection, data, sourcePath);
+      const translation = translations[`${collection}/${normalized.slug}`];
+      if (!translation && !normalized.draft)
+        throw new Error(`Missing ${locale} translation for ${collection}/${normalized.slug}`);
+      const body = translation?.body ?? content.trim();
 
       return {
         ...normalized,
-        body: content.trim(),
+        ...translation,
+        language: locale,
+        body,
         collection,
         sourcePath,
-        excerpt: buildExcerpt(content),
+        excerpt: buildExcerpt(body),
       } satisfies ContentItem;
     }),
   );
@@ -268,8 +277,8 @@ export async function getCollection<T extends CollectionName>(collection: T): Pr
   });
 }
 
-export async function getItemBySlug<T extends CollectionName>(collection: T, slug: string) {
-  const collectionItems = await getCollection(collection);
+export async function getItemBySlug<T extends CollectionName>(collection: T, slug: string, locale?: Locale) {
+  const collectionItems = await getCollection(collection, locale);
   const item = collectionItems.find((entry) => entry.slug === slug);
 
   if (!item) {
@@ -279,19 +288,22 @@ export async function getItemBySlug<T extends CollectionName>(collection: T, slu
   return item;
 }
 
-export async function getFeaturedItems(collection: Extract<CollectionName, "articles" | "projects" | "notes">, limit = 3) {
+export async function getFeaturedItems(
+  collection: Extract<CollectionName, "articles" | "projects" | "notes">,
+  limit = 3,
+) {
   const items = await getCollection(collection);
   return items.filter((item) => item.featured).slice(0, limit);
 }
 
-export async function getAllPublicEntries() {
+export async function getAllPublicEntries(locale?: Locale) {
   const activeCollections = collections.filter((collection) => collection !== "pages");
-  const entries = await Promise.all(activeCollections.map((collection) => getCollection(collection)));
+  const entries = await Promise.all(activeCollections.map((collection) => getCollection(collection, locale)));
   return entries.flat();
 }
 
-export async function getTagIndex() {
-  const items = await getAllPublicEntries();
+export async function getTagIndex(locale?: Locale) {
+  const items = await getAllPublicEntries(locale);
   const map = new Map<string, ContentItem[]>();
 
   for (const item of items) {
@@ -314,7 +326,7 @@ export async function getEntriesByTag(tag: string) {
 }
 
 export async function getRelatedContent(item: ContentItem, limit = 3) {
-  const items = await getAllPublicEntries();
+  const items = await getAllPublicEntries(item.language);
   const related = items
     .filter((candidate) => `${candidate.collection}:${candidate.slug}` !== `${item.collection}:${item.slug}`)
     .map((candidate) => ({
@@ -327,12 +339,4 @@ export async function getRelatedContent(item: ContentItem, limit = 3) {
     .map((entry) => entry.candidate);
 
   return related;
-}
-
-export function getContentHref(item: Pick<ContentItem, "collection" | "slug">) {
-  if (item.collection === "pages") {
-    return item.slug === "about" ? "/about" : `/${item.slug}`;
-  }
-
-  return `/${item.collection}/${item.slug}`;
 }

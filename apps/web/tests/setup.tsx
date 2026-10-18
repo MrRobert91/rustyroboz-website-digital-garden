@@ -2,6 +2,8 @@ import "@testing-library/jest-dom/vitest";
 import React from "react";
 import { vi } from "vitest";
 
+vi.mock("next/headers", () => ({ cookies: vi.fn(async () => ({ get: () => undefined })) }));
+
 vi.mock("next/font/local", () => ({
   default: ({ variable }: { variable: string }) => ({ className: variable.slice(2), variable }),
 }));

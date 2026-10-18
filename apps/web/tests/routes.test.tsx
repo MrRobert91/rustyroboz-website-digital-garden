@@ -34,16 +34,24 @@ describe("public routes", () => {
     expect(latestWork).not.toBeNull();
     expect(latestArticles).not.toBeNull();
 
-    expect(within(latestWork as HTMLElement).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent)).toEqual([
+    expect(
+      within(latestWork as HTMLElement)
+        .getAllByRole("heading", { level: 3 })
+        .map((heading) => heading.textContent),
+    ).toEqual([
       "Metamorfosis — El Valle de los Colosos",
       "Moloch Arena",
       "The Last Observation",
       "Qiskit Certification Prep: an interactive quantum study lab",
     ]);
     expect(within(latestWork as HTMLElement).queryByText(/susbeer vr experience/i)).not.toBeInTheDocument();
-    expect(within(latestArticles as HTMLElement).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent?.replace("↗", "").trim())).toEqual([
-      "Cuando los humanos trabajan para los agentes: cómo nació El autor material",
-      "Hermes Agent en un VPS de Hetzner con OpenRouter",
+    expect(
+      within(latestArticles as HTMLElement)
+        .getAllByRole("heading", { level: 3 })
+        .map((heading) => heading.textContent?.replace("↗", "").trim()),
+    ).toEqual([
+      "When humans work for agents: how El autor material was born",
+      "Hermes Agent on a Hetzner VPS with OpenRouter",
       "12 Testers, 14 Days, and a Subreddit: How I Published My First App on Google Play",
       "From Dusty MVP to Google Play: Bringing Cartastrofe Back",
     ]);
@@ -128,14 +136,14 @@ describe("public routes", () => {
     expect(screen.getByRole("heading", { name: /technical interview chatbot/i })).toBeInTheDocument();
   });
 
-  it("marks Spanish article details and cards with their content language", async () => {
+  it("renders originally Spanish articles in the selected English language", async () => {
     const slug = "cuando-los-humanos-trabajan-para-los-agentes-como-nacio-el-autor-material";
     const detail = render(await ArticleDetailPage({ params: Promise.resolve({ slug }) }));
-    expect(detail.container.querySelector("article[lang='es']")).toBeInTheDocument();
+    expect(detail.container.querySelector("article[lang='en']")).toBeInTheDocument();
     detail.unmount();
 
     const list = render(await ArticlesPage());
-    expect(list.getByText(/Cuando los humanos trabajan/i).closest("article")).toHaveAttribute("lang", "es");
+    expect(list.getByText(/When humans work/i).closest("article")).toHaveAttribute("lang", "en");
   });
 
   it("renders the Learning AI Factory case study with a playable generated sample", async () => {
@@ -155,9 +163,7 @@ describe("public routes", () => {
       "href",
       "https://quantumcomputingguide-k4il6s.sliplane.app/",
     );
-    expect(screen.getByTestId("mdx-content")).toHaveTextContent(
-      "A Bell circuit executed on Qiskit Aer",
-    );
+    expect(screen.getByTestId("mdx-content")).toHaveTextContent("A Bell circuit executed on Qiskit Aer");
   });
 
   it("renders The Last Observation case study with local and YouTube video", async () => {
@@ -188,10 +194,7 @@ describe("public routes", () => {
       "href",
       "https://rustyroboz.itch.io/topokarts",
     );
-    expect(screen.getByRole("link", { name: "Live game" })).toHaveAttribute(
-      "href",
-      "https://topokarts.sliplane.app/",
-    );
+    expect(screen.getByRole("link", { name: "Live game" })).toHaveAttribute("href", "https://topokarts.sliplane.app/");
   });
 
   it("shows complete images in project detail galleries without cropping them", async () => {

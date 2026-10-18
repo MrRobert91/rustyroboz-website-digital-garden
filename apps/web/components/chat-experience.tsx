@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "@/components/language-provider";
+
 /**
  * Personal chat — notebook-styled front end for the LangGraph RAG agent.
  *
@@ -58,14 +60,6 @@ type ChatExperienceProps = {
 type StreamEvent = {
   event: string;
   data: Record<string, unknown>;
-};
-
-const STAGE_LABELS: Record<string, (detail: string) => string> = {
-  guard: () => "checking the question…",
-  thinking: () => "thinking…",
-  searching: (detail) => (detail ? `searching the site: “${detail}”` : "searching the site…"),
-  reading: (detail) => (detail ? `reading ${detail}…` : "reading a page…"),
-  browsing: () => "browsing everything published…",
 };
 
 async function* parseEventStream(stream: ReadableStream<Uint8Array>) {
@@ -127,6 +121,14 @@ const SUGGESTIONS = [
 ];
 
 export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
+  const { t, locale } = useTranslation();
+  const STAGE_LABELS: Record<string, (detail: string) => string> = {
+    guard: () => "checking the question…",
+    thinking: () => "thinking…",
+    searching: (detail) => (detail ? `${t("searching the site…")} “${detail}”` : "searching the site…"),
+    reading: (detail) => (detail ? `${t("reading a page…")} ${detail}` : "reading a page…"),
+    browsing: () => "browsing everything published…",
+  };
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -187,7 +189,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: prompt, session_id: sessionId }),
+        body: JSON.stringify({ message: prompt, session_id: sessionId, language: locale }),
       });
 
       if (!response.ok) {
@@ -233,7 +235,9 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
           }
           startTransition(() => {
             setMessages((current) =>
-              current.map((item) => (item.id === assistantMessageId ? { ...item, content: `${item.content}${delta}` } : item)),
+              current.map((item) =>
+                item.id === assistantMessageId ? { ...item, content: `${item.content}${delta}` } : item,
+              ),
             );
             if (eventPayload.data.session_id) {
               setSessionId(String(eventPayload.data.session_id));
@@ -244,7 +248,9 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
 
         if (eventPayload.event === "done") {
           const answer = String(eventPayload.data.answer ?? "");
-          const citations = Array.isArray(eventPayload.data.citations) ? (eventPayload.data.citations as Citation[]) : [];
+          const citations = Array.isArray(eventPayload.data.citations)
+            ? (eventPayload.data.citations as Citation[])
+            : [];
           const doneModel = String(eventPayload.data.model ?? "");
           const doneTelemetry: Telemetry = {
             usage: (eventPayload.data.usage as Usage) ?? undefined,
@@ -321,60 +327,68 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
           <div className="lg:sticky lg:top-24">
             <RobozAvatar className="mx-auto max-w-[220px]" mood={mood} />
             <p aria-live="polite" className="mt-3 min-h-7 text-center font-serif text-base text-accent-deep">
-              {statusLine ??
-                (mood === "talking"
-                  ? "explaining…"
-                  : mood === "listening"
-                    ? "listening…"
-                    : "ask me about David's work")}
+              {t(
+                statusLine ??
+                  (mood === "talking"
+                    ? "explaining…"
+                    : mood === "listening"
+                      ? "listening…"
+                      : "ask me about David's work"),
+              )}
             </p>
             <div className="mt-4 space-y-2 border-t border-dashed border-border/70 pt-4">
-              <p className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">Model online</p>
-              <p className="font-mono text-sm text-accent" title={model ?? undefined}>
+              <p className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">{t("Model online")}</p>
+              <p className="font-mono text-sm text-accent" title={t(model ?? undefined)}>
                 {model ? shortModelName(model) : "standby — assigned on first reply"}
               </p>
 
               {/* Live telemetry — this chatbot doubles as an LLM-engineering showcase */}
-              <p className="mt-3 font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">Telemetry</p>
+              <p className="mt-3 font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
+                {t("Telemetry")}
+              </p>
               <dl className="space-y-1 font-mono text-sm text-foreground/85">
                 <div className="flex justify-between gap-2">
-                  <dt className="text-muted-foreground">tokens in / out</dt>
+                  <dt className="text-muted-foreground">{t("tokens in / out")}</dt>
                   <dd>
-                    {telemetry?.usage
-                      ? `${telemetry.usage.prompt_tokens ?? 0} / ${telemetry.usage.completion_tokens ?? 0}`
-                      : "—"}
+                    {t(
+                      telemetry?.usage
+                        ? `${telemetry.usage.prompt_tokens ?? 0} / ${telemetry.usage.completion_tokens ?? 0}`
+                        : "—",
+                    )}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-2">
-                  <dt className="text-muted-foreground">tokens / s</dt>
+                  <dt className="text-muted-foreground">{t("tokens / s")}</dt>
                   <dd className={liveTps ? "text-accent" : undefined}>
-                    {liveTps ? `~${liveTps} (live)` : telemetry?.tps ? telemetry.tps : "—"}
+                    {t(liveTps ? `~${liveTps} (live)` : telemetry?.tps ? telemetry.tps : "—")}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-2">
-                  <dt className="text-muted-foreground">request cost</dt>
-                  <dd>{telemetry?.usage ? formatCost(telemetry.usage.cost_usd) : "—"}</dd>
+                  <dt className="text-muted-foreground">{t("request cost")}</dt>
+                  <dd>{t(telemetry?.usage ? formatCost(telemetry.usage.cost_usd) : "—")}</dd>
                 </div>
                 <div className="flex justify-between gap-2">
-                  <dt className="text-muted-foreground">llm calls · tools</dt>
-                  <dd>{telemetry?.llmCalls ? `${telemetry.llmCalls} · ${telemetry.toolRounds ?? 0}` : "—"}</dd>
+                  <dt className="text-muted-foreground">{t("llm calls · tools")}</dt>
+                  <dd>{t(telemetry?.llmCalls ? `${telemetry.llmCalls} · ${telemetry.toolRounds ?? 0}` : "—")}</dd>
                 </div>
                 <div className="flex justify-between gap-2">
-                  <dt className="text-muted-foreground">latency</dt>
-                  <dd>{telemetry?.durationS ? `${telemetry.durationS}s` : "—"}</dd>
+                  <dt className="text-muted-foreground">{t("latency")}</dt>
+                  <dd>{t(telemetry?.durationS ? `${telemetry.durationS}s` : "—")}</dd>
                 </div>
                 <div className="flex justify-between gap-2">
-                  <dt className="text-muted-foreground">cache</dt>
+                  <dt className="text-muted-foreground">{t("cache")}</dt>
                   <dd className={telemetry?.cached ? "text-accent" : undefined}>
-                    {telemetry ? (telemetry.cached ? "hit ⚡" : "miss") : "—"}
+                    {t(telemetry ? (telemetry.cached ? "hit ⚡" : "miss") : "—")}
                   </dd>
                 </div>
               </dl>
 
               {sessionId ? (
                 <>
-                  <p className="mt-3 font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">Session</p>
-                  <p className="truncate font-mono text-sm text-foreground/70" title={sessionId}>
+                  <p className="mt-3 font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
+                    {t("Session")}
+                  </p>
+                  <p className="truncate font-mono text-sm text-foreground/70" title={t(sessionId)}>
                     {sessionId.slice(0, 12)}…
                   </p>
                 </>
@@ -387,7 +401,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
         <div className="flex min-h-[34rem] flex-col">
           <div
             aria-busy={loading}
-            aria-label="Conversation with Roboz"
+            aria-label={t("Conversation with Roboz")}
             aria-live="polite"
             aria-relevant="additions text"
             className="max-h-[60vh] flex-1 space-y-5 overflow-y-auto px-5 py-6 lg:px-8"
@@ -397,20 +411,20 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
             {messages.length === 0 ? (
               <div className="relative border border-dashed border-border bg-background/60 px-5 py-6">
                 <p className="font-serif text-base leading-relaxed text-foreground/80">
-                  I&apos;m ROBOZ — I search and read everything published on this site (projects, articles, notes,
-                  background) to answer with sources. Grounded answers only: if it isn&apos;t published here, I&apos;ll
-                  say so.
+                  {t(
+                    "I'm ROBOZ — I search and read everything published on this site (projects, articles, notes, background) to answer with sources. Grounded answers only: if it isn't published here, I'll say so.",
+                  )}
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2.5">
                   {SUGGESTIONS.map((suggestion) => (
                     <button
                       className="hand-chip border border-control-border bg-paper-2 px-3.5 py-2 font-display text-sm font-medium text-foreground shadow-paper"
                       key={suggestion}
-                      onClick={() => setInput(suggestion)}
+                      onClick={() => setInput(t(suggestion))}
                       style={{ transform: `rotate(${(suggestion.length % 3) - 1}deg)` }}
                       type="button"
                     >
-                      {suggestion}
+                      {t(suggestion)}
                     </button>
                   ))}
                 </div>
@@ -423,7 +437,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                   return (
                     <article className="ml-auto max-w-[85%] sm:max-w-xl" key={message.id}>
                       <p className="text-right font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">
-                        You
+                        {t("You")}
                       </p>
                       <div className="mt-1.5 border border-foreground/20 bg-foreground px-4 py-3 text-background shadow-paper">
                         <p className="whitespace-pre-wrap font-serif text-[15px] leading-relaxed">{message.content}</p>
@@ -434,22 +448,22 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 return (
                   <article aria-hidden={isStreamingThis} className="max-w-[95%] sm:max-w-2xl" key={message.id}>
                     <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
-                      <p className="font-mono text-sm uppercase tracking-[0.2em] text-accent">Roboz</p>
+                      <p className="font-mono text-sm uppercase tracking-[0.2em] text-accent">{t("Roboz")}</p>
                       {message.model ? (
-                        <p className="font-mono text-sm text-muted-foreground" title={message.model}>
-                          via {shortModelName(message.model)}
+                        <p className="font-mono text-sm text-muted-foreground" title={t(message.model)}>
+                          {t("via")} {shortModelName(message.model)}
                         </p>
                       ) : null}
                       {message.telemetry?.usage ? (
                         <p className="font-mono text-sm text-muted-foreground">
-                          {message.telemetry.usage.total_tokens ?? 0} tok
-                          {message.telemetry.tps ? ` · ${message.telemetry.tps} tok/s` : ""}
-                          {` · ${formatCost(message.telemetry.usage.cost_usd)}`}
+                          {t(message.telemetry.usage.total_tokens ?? 0)} {t("tok")}
+                          {t(message.telemetry.tps ? ` · ${message.telemetry.tps} tok/s` : "")}
+                          {t(` · ${formatCost(message.telemetry.usage.cost_usd)}`)}
                         </p>
                       ) : null}
                       {message.telemetry?.cached ? (
                         <p className="inline-flex items-center gap-0.5 font-mono text-sm text-accent">
-                          <Zap className="size-2.5" /> cached
+                          <Zap className="size-2.5" /> {t("cached")}
                         </p>
                       ) : null}
                     </div>
@@ -457,16 +471,18 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                       <div>
                         <ChatMarkdown content={message.content} />
                         {isStreamingThis && message.content ? (
-                          <span aria-hidden className="ml-0.5 animate-pulse text-accent">▍</span>
+                          <span aria-hidden className="ml-0.5 animate-pulse text-accent">
+                            ▍
+                          </span>
                         ) : null}
                         {!message.content && isStreamingThis ? (
-                          <span className="font-serif text-base text-muted-foreground">Thinking…</span>
+                          <span className="font-serif text-base text-muted-foreground">{t("Thinking…")}</span>
                         ) : null}
                       </div>
                       {message.citations?.length ? (
                         <div className="mt-3 flex flex-wrap gap-2 border-t border-dashed border-border/70 pt-3">
                           <span className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
-                            Sources
+                            {t("Sources")}
                           </span>
                           {message.citations.map((citation) => (
                             <Link
@@ -474,7 +490,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                               href={citation.href}
                               key={`${message.id}-${citation.collection}-${citation.slug}`}
                             >
-                              {citation.title}
+                              {t(citation.title)}
                               <ArrowUpRight className="size-3" />
                             </Link>
                           ))}
@@ -490,7 +506,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
           {/* Composer */}
           <div className="border-t border-border/80 bg-paper-2/60 px-5 py-5 lg:px-8">
             <p aria-atomic="true" aria-live="polite" className="sr-only">
-              {completionAnnouncement}
+              {t(completionAnnouncement)}
             </p>
             {error ? (
               <div
@@ -498,13 +514,16 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 id="chat-error"
                 role="alert"
               >
-                ✱ Chat error: {error} Review your question and try again.
+                {t("✱ Chat error:")} {t(error)} {t("Review your question and try again.")}
               </div>
             ) : null}
 
             <form className="space-y-3" onSubmit={handleSubmit}>
-              <label className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground" htmlFor="chat-prompt">
-                Question
+              <label
+                className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground"
+                htmlFor="chat-prompt"
+              >
+                {t("Question")}
               </label>
               <textarea
                 aria-describedby={error ? "chat-error" : undefined}
@@ -516,22 +535,24 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
                 onChange={(event) => setInput(event.target.value)}
                 onFocus={() => setInputFocused(true)}
                 onKeyDown={handleKeyDown}
-                placeholder="e.g. How did David build the Hermes agent on a Hetzner VPS?"
+                placeholder={t("e.g. How did David build the Hermes agent on a Hetzner VPS?")}
                 value={input}
               />
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="font-mono text-sm uppercase tracking-[0.14em] text-muted-foreground">
-                  Grounded in published content · guarded against off-topic use
+                  {t("Grounded in published content · guarded against off-topic use")}
                 </p>
                 <button
                   className={cn(
                     "inline-flex items-center gap-2 bg-accent-surface px-5 py-2.5 font-mono text-sm font-semibold uppercase tracking-[0.16em] text-on-accent shadow-paper transition-all",
-                    loading || !input.trim() ? "cursor-not-allowed opacity-50" : "hover-button-lift hover:bg-accent-surface-hover",
+                    loading || !input.trim()
+                      ? "cursor-not-allowed opacity-50"
+                      : "hover-button-lift hover:bg-accent-surface-hover",
                   )}
                   disabled={loading || !input.trim()}
                   type="submit"
                 >
-                  {loading ? "Asking…" : "Send"}
+                  {t(loading ? "Asking…" : "Send")}
                   {!loading ? <CornerDownLeft className="size-3.5" /> : null}
                 </button>
               </div>
@@ -543,7 +564,7 @@ export function ChatExperience({ apiBaseUrl }: ChatExperienceProps) {
       <div className="border-t border-border/80 px-5 py-3 lg:px-8">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <span className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
-            LangGraph agent · FAISS retrieval · OpenRouter models with fallback
+            {t("LangGraph agent · FAISS retrieval · OpenRouter models with fallback")}
           </span>
           <Squiggle color="hsl(var(--accent) / 0.5)" height={8} seed={11} strokeWidth={1.5} width={90} />
         </div>

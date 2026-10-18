@@ -1,17 +1,22 @@
+"use client";
+
+import { useTranslation } from "@/components/language-provider";
+
 import { Reveal } from "@/components/reveal";
 import { Doodle } from "@/components/notebook";
 import { siteConfig } from "@/lib/site-config";
 
 /** Screen 04 — Stack / Toolbox. Handwritten chips of the working tech. */
 export function StackToolbox() {
+  const { t } = useTranslation();
   return (
     <section className="dotted-paper relative overflow-hidden border-b border-border/70">
       <div className="reading-surface mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§04 — Toolbox</p>
+            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">{t("§04 — Toolbox")}</p>
             <h2 className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-7xl">
-              Stack <span className="font-hand font-normal text-accent">(toolbox)</span>
+              {t("Stack")} <span className="font-hand font-normal text-accent">{t("(toolbox)")}</span>
             </h2>
           </div>
           <Doodle className="hidden sm:block" color="hsl(var(--accent-deep))" kind="gear" size={52} />
@@ -25,7 +30,7 @@ export function StackToolbox() {
                   className="absolute -top-4 left-6 bg-accent-surface px-3.5 py-1 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-on-accent"
                   style={{ transform: `rotate(${gi % 2 ? -2 : 1.5}deg)` }}
                 >
-                  {group.title}
+                  {t(group.title)}
                 </span>
                 <div className="mt-3 flex flex-wrap gap-2.5">
                   {group.items.map((item, i) => (
@@ -34,7 +39,7 @@ export function StackToolbox() {
                       key={item}
                       style={{ transform: `rotate(${((i * 7) % 5) - 2}deg) scale(0.96)` }}
                     >
-                      {item}
+                      {t(item)}
                     </span>
                   ))}
                 </div>

@@ -3,20 +3,12 @@ import { collections, getCollection, getContentHref } from "@/lib/content";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://rustyroboz.dev";
-  const contentCollections = collections.filter((collection) => collection !== "tutorials" && collection !== "talks" && collection !== "fiction");
-  const entries = await Promise.all(contentCollections.map((collection) => getCollection(collection)));
+  const contentCollections = collections.filter(
+    (collection) => collection !== "tutorials" && collection !== "talks" && collection !== "fiction",
+  );
+  const entries = await Promise.all(contentCollections.map((collection) => getCollection(collection, "en")));
 
-  const routes = [
-    "/",
-    "/about",
-    "/timeline",
-    "/contact",
-    "/projects",
-    "/articles",
-    "/notes",
-    "/lab",
-    "/chat",
-  ];
+  const routes = ["/", "/about", "/timeline", "/contact", "/projects", "/articles", "/notes", "/lab", "/chat"];
 
   return [
     ...routes.map((route) => ({
