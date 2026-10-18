@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslation } from "@/components/language-provider";
+
 import Link from "next/link";
 import { InkStamp, Polaroid, Squiggle } from "@/components/notebook";
 import { siteConfig } from "@/lib/site-config";
@@ -17,6 +21,7 @@ function handleFor(href: string, label: string) {
 
 /** Screen 06 — Contact / Signal. */
 export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; headingLevel?: 1 | 2 }) {
+  const { t } = useTranslation();
   const email = siteConfig.email || "hello@rustyroboz.com";
   const Heading = headingLevel === 1 ? "h1" : "h2";
 
@@ -25,39 +30,47 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
       <div className="reading-surface mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
-            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§06 — Signal</p>
+            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">{t("§06 — Signal")}</p>
             <Heading className="mt-2 font-display text-6xl font-bold leading-[0.95] tracking-tight text-foreground lg:text-8xl">
-              Let&apos;s
+              {t("Let's")}
               <br />
               <span className="relative inline-block">
-                <span className="font-serif italic font-normal text-accent">build</span>
+                <span className="font-serif italic font-normal text-accent">{t("build")}</span>
                 <span className="absolute -bottom-2 left-0 hidden sm:block">
                   <Squiggle color="hsl(var(--accent))" height={14} seed={5} strokeWidth={3} width={240} />
                 </span>
               </span>{" "}
-              something
+              {t("something")}
               <br />
-              together.
+              {t("together.")}
             </Heading>
           </div>
           <div className="mt-4 flex items-start gap-5">
-            {photo ? <Polaroid alt="Portrait of David Robert." angle={4} caption="DAVID" height={150} src={photo} width={130} /> : null}
-            <InkStamp angle={6} label="OPEN FOR WORK" style={{ fontSize: 14, padding: "8px 14px" }} />
+            {photo ? (
+              <Polaroid
+                alt={t("Portrait of David Robert.")}
+                angle={4}
+                caption={t("DAVID")}
+                height={150}
+                src={photo}
+                width={130}
+              />
+            ) : null}
+            <InkStamp angle={6} label={t("OPEN FOR WORK")} style={{ fontSize: 14, padding: "8px 14px" }} />
           </div>
         </div>
 
         <div className="mt-14 max-w-3xl">
           <div>
             <p className="body-copy text-foreground/85">
-              Got an AI-related project? I run consulting sessions to guide companies and teams through adopting
-              generative AI — for every kind of profile, developers and non-developers alike. I also deliver AI
-              trainings, technical consulting where you walk me through your case and I advise you, or hands-on
-              development projects. Right now I&apos;m especially into building LLM-based AI agents, but I&apos;m also up
-              for smaller projects of other kinds — VR, web apps, Android apps, computer vision, data science, and more.
+              {t(
+                "Got an AI-related project? I run consulting sessions to guide companies and teams through adopting generative AI — for every kind of profile, developers and non-developers alike. I also deliver AI trainings, technical consulting where you walk me through your case and I advise you, or hands-on development projects. Right now I'm especially into building LLM-based AI agents, but I'm also up for smaller projects of other kinds — VR, web apps, Android apps, computer vision, data science, and more.",
+              )}
             </p>
             <p className="body-copy mt-5 text-foreground/85">
-              The easiest way to start is a quick email — tell me a bit about what you have in mind and I&apos;ll get
-              back to you.
+              {t(
+                "The easiest way to start is a quick email — tell me a bit about what you have in mind and I'll get back to you.",
+              )}
             </p>
 
             <div className="mt-9">
@@ -68,7 +81,9 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
             </div>
 
             <div className="mt-11">
-              <p className="mb-3 font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">▸ or find me at</p>
+              <p className="mb-3 font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">
+                {t("▸ or find me at")}
+              </p>
               <ul className="grid gap-3.5">
                 {siteConfig.socialLinks.map((link) => (
                   <li className="flex items-baseline gap-4 border-b border-dashed border-border pb-2.5" key={link.href}>
@@ -79,19 +94,16 @@ export function ContactSignal({ photo, headingLevel = 2 }: { photo?: string; hea
                       target="_blank"
                     >
                       <span className="w-24 font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
-                        {link.label}
+                        {t(link.label)}
                       </span>
-                      <span className="text-link font-serif text-lg">
-                        {handleFor(link.href, link.label)}
-                      </span>
-                      <span className="ml-auto font-mono text-sm tracking-[0.16em] text-accent">OPEN ↗</span>
+                      <span className="text-link font-serif text-lg">{handleFor(link.href, link.label)}</span>
+                      <span className="ml-auto font-mono text-sm tracking-[0.16em] text-accent">{t("OPEN ↗")}</span>
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-
         </div>
       </div>
     </section>

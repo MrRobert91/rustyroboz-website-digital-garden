@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "@/components/language-provider";
+
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import type { TimelineMediaItem } from "@/lib/timeline";
@@ -16,6 +18,7 @@ export function TimelineMedia({
   title: string;
   imageFit?: "cover" | "contain";
 }) {
+  const { t } = useTranslation();
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
 
@@ -35,14 +38,14 @@ export function TimelineMedia({
         {item.type === "image" ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            alt={item.alt ?? title}
+            alt={t(item.alt ?? title)}
             className={`size-full ${imageFit === "contain" ? "bg-background/80 object-contain" : "object-cover"}`}
             loading="lazy"
             src={item.src}
           />
         ) : item.type === "video" ? (
           <video
-            aria-label={item.title ?? title}
+            aria-label={t(item.title ?? title)}
             className="size-full bg-black object-contain"
             controls
             playsInline
@@ -56,18 +59,18 @@ export function TimelineMedia({
             allowFullScreen
             className="size-full"
             src={`https://www.youtube.com/embed/${item.id}?autoplay=1&rel=0`}
-            title={item.title ?? title}
+            title={t(item.title ?? title)}
           />
         ) : (
           <button
-            aria-label={`Play video: ${item.title ?? title}`}
+            aria-label={`${t("Play video:")} ${t(item.title ?? title)}`}
             className="group/play relative block size-full"
             onClick={() => setPlaying(true)}
             type="button"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              alt=""
+              alt={t("")}
               className="size-full object-cover"
               loading="lazy"
               src={`https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`}
@@ -83,10 +86,10 @@ export function TimelineMedia({
 
       {items.length > 1 ? (
         <>
-          <button aria-label="Previous" className={`${NAV_BUTTON} left-2`} onClick={() => move(-1)} type="button">
+          <button aria-label={t("Previous")} className={`${NAV_BUTTON} left-2`} onClick={() => move(-1)} type="button">
             <ChevronLeft className="size-4" />
           </button>
-          <button aria-label="Next" className={`${NAV_BUTTON} right-2`} onClick={() => move(1)} type="button">
+          <button aria-label={t("Next")} className={`${NAV_BUTTON} right-2`} onClick={() => move(1)} type="button">
             <ChevronRight className="size-4" />
           </button>
           <span className="absolute right-2 top-2 rounded-full bg-background/85 px-2 py-0.5 font-mono text-sm text-foreground/70">

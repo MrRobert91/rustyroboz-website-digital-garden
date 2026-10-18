@@ -3,12 +3,8 @@ import { describe, expect, it } from "vitest";
 import RootLayout from "@/app/layout";
 
 describe("root accessibility landmarks", () => {
-  it("provides a first-class skip link and focusable main target", () => {
-    const markup = renderToStaticMarkup(
-      <RootLayout>
-        <p>Page content</p>
-      </RootLayout>,
-    );
+  it("provides a first-class skip link and focusable main target", async () => {
+    const markup = renderToStaticMarkup(await RootLayout({ children: <p>Page content</p> }));
     const document = new DOMParser().parseFromString(markup, "text/html");
     const skipLink = document.querySelector("a.skip-link");
     const main = document.querySelector("main");

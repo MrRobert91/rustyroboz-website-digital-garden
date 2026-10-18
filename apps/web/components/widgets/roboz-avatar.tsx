@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "@/components/language-provider";
+
 /**
  * Full-body ROBOZ avatar for the personal chat — same hand-drawn 3D wireframe
  * language as the hero mascot (manual projection on a 2D canvas, no three.js).
@@ -29,13 +31,31 @@ const BODY_SEGS: Seg[] = [
   // pelvis
   ...boxEdges(0, -0.4, 0, 0.3, 0.12, 0.2),
   // neck
-  [[-0.08, 0.5, 0], [-0.08, 0.58, 0]],
-  [[0.08, 0.5, 0], [0.08, 0.58, 0]],
+  [
+    [-0.08, 0.5, 0],
+    [-0.08, 0.58, 0],
+  ],
+  [
+    [0.08, 0.5, 0],
+    [0.08, 0.58, 0],
+  ],
   // legs
-  [[-0.16, -0.52, 0], [-0.17, -0.9, 0]],
-  [[-0.17, -0.9, 0], [-0.16, -1.24, 0]],
-  [[0.16, -0.52, 0], [0.17, -0.9, 0]],
-  [[0.17, -0.9, 0], [0.16, -1.24, 0]],
+  [
+    [-0.16, -0.52, 0],
+    [-0.17, -0.9, 0],
+  ],
+  [
+    [-0.17, -0.9, 0],
+    [-0.16, -1.24, 0],
+  ],
+  [
+    [0.16, -0.52, 0],
+    [0.17, -0.9, 0],
+  ],
+  [
+    [0.17, -0.9, 0],
+    [0.16, -1.24, 0],
+  ],
   // feet
   ...boxEdges(-0.16, -1.3, 0.06, 0.09, 0.05, 0.16),
   ...boxEdges(0.16, -1.3, 0.06, 0.09, 0.05, 0.16),
@@ -44,22 +64,55 @@ const BODY_SEGS: Seg[] = [
 const HEAD_SEGS: Seg[] = [
   ...boxEdges(0, 0.88, 0, 0.38, 0.3, 0.27),
   // antenna mast
-  [[0, 1.18, 0], [0, 1.4, 0]],
+  [
+    [0, 1.18, 0],
+    [0, 1.4, 0],
+  ],
   // ear vents
-  [[-0.38, 0.82, -0.08], [-0.46, 0.82, -0.08]],
-  [[-0.38, 0.82, 0.08], [-0.46, 0.82, 0.08]],
-  [[-0.46, 0.82, -0.08], [-0.46, 0.82, 0.08]],
-  [[0.38, 0.82, -0.08], [0.46, 0.82, -0.08]],
-  [[0.38, 0.82, 0.08], [0.46, 0.82, 0.08]],
-  [[0.46, 0.82, -0.08], [0.46, 0.82, 0.08]],
+  [
+    [-0.38, 0.82, -0.08],
+    [-0.46, 0.82, -0.08],
+  ],
+  [
+    [-0.38, 0.82, 0.08],
+    [-0.46, 0.82, 0.08],
+  ],
+  [
+    [-0.46, 0.82, -0.08],
+    [-0.46, 0.82, 0.08],
+  ],
+  [
+    [0.38, 0.82, -0.08],
+    [0.46, 0.82, -0.08],
+  ],
+  [
+    [0.38, 0.82, 0.08],
+    [0.46, 0.82, 0.08],
+  ],
+  [
+    [0.46, 0.82, -0.08],
+    [0.46, 0.82, 0.08],
+  ],
 ];
 
 function rectOnZ(x0: number, y0: number, x1: number, y1: number, z: number): Seg[] {
   return [
-    [[x0, y0, z], [x1, y0, z]],
-    [[x1, y0, z], [x1, y1, z]],
-    [[x1, y1, z], [x0, y1, z]],
-    [[x0, y1, z], [x0, y0, z]],
+    [
+      [x0, y0, z],
+      [x1, y0, z],
+    ],
+    [
+      [x1, y0, z],
+      [x1, y1, z],
+    ],
+    [
+      [x1, y1, z],
+      [x0, y1, z],
+    ],
+    [
+      [x0, y1, z],
+      [x0, y0, z],
+    ],
   ];
 }
 
@@ -136,6 +189,7 @@ function blinkAmount(t: number): number {
 }
 
 export function RobozAvatar({ mood = "idle", className }: { mood?: RobozMood; className?: string }) {
+  const { t } = useTranslation();
   const moodRef = useRef<RobozMood>(mood);
   const poseRef = useRef<Pose>(targetPose("idle", 0));
   useEffect(() => {
@@ -212,10 +266,22 @@ export function RobozAvatar({ mood = "idle", className }: { mood?: RobozMood; cl
 
       // arms — shoulders fixed on the torso, joints from the eased pose
       const arms: Seg[] = [
-        [[-0.42, 0.38, 0], [pose.lElbow[0], pose.lElbow[1], 0.02]],
-        [[pose.lElbow[0], pose.lElbow[1], 0.02], [pose.lHand[0], pose.lHand[1], 0.06]],
-        [[0.42, 0.38, 0], [pose.rElbow[0], pose.rElbow[1], 0.02]],
-        [[pose.rElbow[0], pose.rElbow[1], 0.02], [pose.rHand[0], pose.rHand[1], 0.06]],
+        [
+          [-0.42, 0.38, 0],
+          [pose.lElbow[0], pose.lElbow[1], 0.02],
+        ],
+        [
+          [pose.lElbow[0], pose.lElbow[1], 0.02],
+          [pose.lHand[0], pose.lHand[1], 0.06],
+        ],
+        [
+          [0.42, 0.38, 0],
+          [pose.rElbow[0], pose.rElbow[1], 0.02],
+        ],
+        [
+          [pose.rElbow[0], pose.rElbow[1], 0.02],
+          [pose.rHand[0], pose.rHand[1], 0.06],
+        ],
       ];
       arms.forEach(([a, b], i) => drawSeg(a, b, i + 300, view));
       // hands
@@ -243,7 +309,9 @@ export function RobozAvatar({ mood = "idle", className }: { mood?: RobozMood; cl
         const eyeHalfH = 0.07 * (1 - shut);
         const lookX = Math.max(-0.04, Math.min(0.04, -Math.sin(state.ry + pose.headYaw) * 0.07));
         const lookY =
-          currentMood === "thinking" ? 0.035 : Math.max(-0.03, Math.min(0.03, Math.sin(state.rx + pose.headPitch) * 0.06));
+          currentMood === "thinking"
+            ? 0.035
+            : Math.max(-0.03, Math.min(0.03, Math.sin(state.rx + pose.headPitch) * 0.06));
         for (const ex of [-0.16, 0.16]) {
           // eye outline
           ctx.strokeStyle = ink.ink;
@@ -342,7 +410,9 @@ export function RobozAvatar({ mood = "idle", className }: { mood?: RobozMood; cl
   return (
     <div className={cn("w-full", className)}>
       <canvas
-        aria-label="ROBOZ, the hand-drawn robot assistant. It idles, listens, thinks and talks along with the conversation. Drag to spin."
+        aria-label={t(
+          "ROBOZ, the hand-drawn robot assistant. It idles, listens, thinks and talks along with the conversation. Drag to spin.",
+        )}
         className="h-64 w-full cursor-grab active:cursor-grabbing"
         ref={canvasRef}
         role="img"

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { ChatExperience } from "@/components/chat-experience";
+import { LanguageProvider } from "@/components/language-provider";
 
 function buildStreamResponse(lines: string[]) {
   const encoder = new TextEncoder();
@@ -19,6 +20,28 @@ afterEach(() => {
 });
 
 describe("ChatExperience", () => {
+  it("sends the selected language and the translated suggestion to the API", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue({
+        ok: true,
+        body: buildStreamResponse(['event: done\ndata: {"answer":"Proyectos publicados.","citations":[]}\n\n']),
+      });
+    vi.stubGlobal("fetch", fetchMock);
+    render(
+      <LanguageProvider locale="es">
+        <ChatExperience />
+      </LanguageProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "¿Qué proyectos de IA ha publicado David?" }));
+    expect(screen.getByLabelText("Pregunta")).toHaveValue("¿Qué proyectos de IA ha publicado David?");
+    fireEvent.click(screen.getByRole("button", { name: "Enviar" }));
+    await waitFor(() => expect(screen.getByText("Proyectos publicados.")).toBeInTheDocument());
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({
+      language: "es",
+      message: "¿Qué proyectos de IA ha publicado David?",
+    });
+  });
   it("renders an interactive chat form", () => {
     render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
     expect(screen.getByLabelText(/question/i)).toBeInTheDocument();
@@ -39,7 +62,9 @@ describe("ChatExperience", () => {
     );
 
     render(<ChatExperience apiBaseUrl="http://localhost:8000" />);
-    fireEvent.change(screen.getByLabelText(/question/i), { target: { value: "What is the Technical Interview Chatbot?" } });
+    fireEvent.change(screen.getByLabelText(/question/i), {
+      target: { value: "What is the Technical Interview Chatbot?" },
+    });
     fireEvent.click(screen.getByRole("button", { name: /send/i }));
 
     expect(screen.getByRole("button", { name: /asking/i })).toBeDisabled();

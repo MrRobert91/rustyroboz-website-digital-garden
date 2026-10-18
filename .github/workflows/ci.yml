@@ -27,6 +27,14 @@ jobs:
       - name: Build web
         run: npm run build:web
 
+      - name: Install browser for bilingual end-to-end checks
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify both languages against the standalone production build
+        env:
+          E2E_PRODUCTION: "1"
+        run: npm run test:e2e --workspace @rustyroboz/web -- --workers=2
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:

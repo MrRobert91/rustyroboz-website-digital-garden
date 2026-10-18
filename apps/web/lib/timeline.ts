@@ -56,8 +56,12 @@ function parseYearMonth(value: string) {
   return { year, month: Number.isFinite(month) ? month : 1 };
 }
 
-function formatYearMonth(value: string) {
+function formatYearMonth(value: string, locale: "en" | "es" = "en") {
   const { year, month } = parseYearMonth(value);
+  if (locale === "es")
+    return new Intl.DateTimeFormat("es-ES", { month: "short", year: "numeric", timeZone: "UTC" }).format(
+      new Date(Date.UTC(year, month - 1, 1)),
+    );
   return `${MONTHS[month - 1]} ${year}`;
 }
 
@@ -78,16 +82,17 @@ export function spanMonths(entry: TimelineEntry) {
 }
 
 /** Human label for the date or date range. */
-export function formatRange(entry: TimelineEntry) {
+export function formatRange(entry: TimelineEntry, locale: "en" | "es" = "en") {
   if (!entry.end) {
-    return formatYearMonth(entry.start);
+    return formatYearMonth(entry.start, locale);
   }
-  const end = entry.end === "present" ? "Present" : formatYearMonth(entry.end);
-  return `${formatYearMonth(entry.start)} – ${end}`;
+  const end =
+    entry.end === "present" ? (locale === "es" ? "Actualidad" : "Present") : formatYearMonth(entry.end, locale);
+  return `${formatYearMonth(entry.start, locale)} – ${end}`;
 }
 
 /** Compact duration label such as "4 yrs 2 mos" for ranged entries. */
-export function formatDuration(entry: TimelineEntry) {
+export function formatDuration(entry: TimelineEntry, locale: "en" | "es" = "en") {
   const months = spanMonths(entry);
   if (months <= 0) {
     return null;
@@ -96,10 +101,14 @@ export function formatDuration(entry: TimelineEntry) {
   const remaining = months % 12;
   const parts: string[] = [];
   if (years > 0) {
-    parts.push(`${years} yr${years === 1 ? "" : "s"}`);
+    parts.push(locale === "es" ? `${years} año${years === 1 ? "" : "s"}` : `${years} yr${years === 1 ? "" : "s"}`);
   }
   if (remaining > 0) {
-    parts.push(`${remaining} mo${remaining === 1 ? "" : "s"}`);
+    parts.push(
+      locale === "es"
+        ? `${remaining} mes${remaining === 1 ? "" : "es"}`
+        : `${remaining} mo${remaining === 1 ? "" : "s"}`,
+    );
   }
   return parts.join(" ");
 }

@@ -1,5 +1,8 @@
 "use client";
 
+import { useTranslation } from "@/components/language-provider";
+import { LanguageToggle } from "@/components/language-provider";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,8 +13,12 @@ import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   // Close the mobile menu whenever the route changes.
   useEffect(() => {
@@ -40,14 +47,18 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 sm:px-6 lg:px-10 lg:py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-5 py-3.5 sm:px-6 lg:px-10 lg:py-4">
         <Link className="flex items-baseline gap-2" href="/" onClick={() => setOpen(false)}>
-          <span className="font-hand text-3xl font-semibold leading-none text-accent-deep">Rusty Roboz</span>
-          <span className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">Labs</span>
+          <span className="whitespace-nowrap font-hand text-2xl font-semibold leading-none text-accent-deep sm:text-3xl">
+            Rusty Roboz
+          </span>
+          <span className="hidden font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground sm:inline">
+            Labs
+          </span>
         </Link>
 
         {/* Desktop navigation */}
-        <nav aria-label="Primary navigation" className="hidden items-center gap-1 md:flex">
+        <nav aria-label={t("Primary navigation")} className="hidden items-center gap-1 xl:flex">
           {siteConfig.navigation.map((item) => (
             <Link
               aria-current={isActive(item.href) ? "page" : undefined}
@@ -60,22 +71,27 @@ export function SiteHeader() {
               href={item.href}
               key={item.href}
             >
-              {item.label}
+              {t(item.label)}
             </Link>
           ))}
           <div className="ml-2">
+            <LanguageToggle />
+          </div>
+          <div>
             <ThemeToggle />
           </div>
         </nav>
 
         {/* Mobile: theme toggle + menu button */}
-        <div className="flex items-center gap-1 md:hidden">
+        <div className="flex items-center gap-1 xl:hidden">
+          <LanguageToggle />
           <ThemeToggle />
           <button
             aria-controls="mobile-nav"
             aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={t(open ? "Close menu" : "Open menu")}
             className="interactive-control -mr-1 grid size-11 place-items-center rounded-full border border-transparent text-foreground transition-colors hover:text-accent"
+            disabled={!mounted}
             onClick={() => setOpen((value) => !value)}
             type="button"
           >
@@ -90,12 +106,12 @@ export function SiteHeader() {
       {/* Mobile navigation panel */}
       <div
         className={cn(
-          "border-border/70 bg-background/95 backdrop-blur md:hidden",
+          "border-border/70 bg-background/95 backdrop-blur xl:hidden",
           open ? "block animate-menu-down border-b" : "hidden",
         )}
         id="mobile-nav"
       >
-        <nav aria-label="Mobile navigation" className="mx-auto flex max-w-6xl flex-col px-5 py-3 sm:px-6">
+        <nav aria-label={t("Mobile navigation")} className="mx-auto flex max-w-6xl flex-col px-5 py-3 sm:px-6">
           {siteConfig.navigation.map((item) => (
             <Link
               aria-current={isActive(item.href) ? "page" : undefined}
@@ -109,7 +125,7 @@ export function SiteHeader() {
               key={item.href}
               onClick={() => setOpen(false)}
             >
-              {item.label}
+              {t(item.label)}
             </Link>
           ))}
           <div className="flex flex-wrap gap-x-5 gap-y-2 pb-4 pt-4">
@@ -121,7 +137,7 @@ export function SiteHeader() {
                 rel="noreferrer"
                 target="_blank"
               >
-                {link.label} ↗
+                {t(link.label)} ↗
               </a>
             ))}
           </div>

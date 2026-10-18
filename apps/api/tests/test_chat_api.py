@@ -333,3 +333,29 @@ def test_model_candidates_deduplicate_primary():
         OPENROUTER_FALLBACK_MODELS="same/model,other/model",
     )
     assert settings.model_candidates == ["same/model", "other/model"]
+
+
+async def test_selected_language_reaches_agent_and_has_an_isolated_answer_cache(monkeypatch):
+    make_guard_allow(monkeypatch)
+    calls = []
+
+    async def localized_stream(self, messages, tools=None, temperature=0.2, max_tokens=900):
+        system = messages[0]["content"]
+        calls.append(system)
+        answer = "Proyectos publicados." if "Answer in Spanish (Spain)" in system else "Published projects."
+        yield {"type": "model", "model": "test/primary"}
+        yield {"type": "content", "delta": answer}
+        yield {"type": "end", "content": answer, "model": "test/primary", "tool_calls": [], "usage": FAKE_USAGE}
+
+    monkeypatch.setattr(OpenRouterClient, "stream_chat", localized_stream)
+    app, _ = build_test_app()
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver") as client:
+        for language, expected in [("en", "Published projects."), ("es", "Proyectos publicados."), ("en", "Published projects.")]:
+            response = await client.post("/api/v1/chat", json={"message": "David projects", "language": language})
+            assert response.status_code == 200
+            assert response.json()["answer"] == expected
+        assert response.json()["cached"] is True
+        assert (await client.post("/api/v1/chat", json={"message": "David projects", "language": "fr"})).status_code == 422
+    assert len(calls) == 2
+    assert "Answer in English" in calls[0]
+    assert "Answer in Spanish (Spain)" in calls[1]

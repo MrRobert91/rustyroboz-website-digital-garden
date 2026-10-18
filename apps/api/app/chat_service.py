@@ -42,12 +42,12 @@ class ChatService:
         # First-turn answer cache (suggested-question chips hit this a lot).
         self._answer_cache: dict[str, dict[str, Any]] = {}
 
-    def _prepare(self, message: str, session_id: str | None) -> tuple[str, dict[str, Any], bool]:
+    def _prepare(self, message: str, session_id: str | None, language: str | None = None) -> tuple[str, dict[str, Any], bool]:
         fresh = not (session_id and self.repository.session_exists(session_id))
         if fresh:
             session_id = self.repository.create_chat_session(message)
         history = self.repository.get_chat_messages(session_id, limit=self.settings.chat_history_limit)
-        return session_id, {"user_message": message, "history": history}, fresh and not history
+        return session_id, {"user_message": message, "history": history, "language": language}, fresh and not history
 
     def _finalize(self, session_id: str, message: str, state: dict[str, Any], started: float) -> dict[str, Any]:
         answer = state.get("answer", "") or ""
@@ -74,24 +74,24 @@ class ChatService:
     # ---- first-turn answer cache ----
 
     @staticmethod
-    def _cache_key(message: str) -> str:
-        return " ".join(message.lower().split())
+    def _cache_key(message: str, language: str | None = None) -> str:
+        return f"{language or 'auto'}:" + " ".join(message.lower().split())
 
-    def _cache_get(self, message: str) -> dict[str, Any] | None:
-        entry = self._answer_cache.get(self._cache_key(message))
+    def _cache_get(self, message: str, language: str | None = None) -> dict[str, Any] | None:
+        entry = self._answer_cache.get(self._cache_key(message, language))
         if not entry:
             return None
         if time.time() - entry["at"] > self.settings.answer_cache_ttl_seconds:
-            self._answer_cache.pop(self._cache_key(message), None)
+            self._answer_cache.pop(self._cache_key(message, language), None)
             return None
         return entry["payload"]
 
-    def _cache_put(self, message: str, payload: dict[str, Any]) -> None:
+    def _cache_put(self, message: str, payload: dict[str, Any], language: str | None = None) -> None:
         if not payload.get("answer"):
             return
         if len(self._answer_cache) >= 64:  # bounded — this is a tiny hot cache
             self._answer_cache.pop(next(iter(self._answer_cache)))
-        self._answer_cache[self._cache_key(message)] = {"at": time.time(), "payload": payload}
+        self._answer_cache[self._cache_key(message, language)] = {"at": time.time(), "payload": payload}
 
     def _cached_payload(self, cached: dict[str, Any], session_id: str) -> dict[str, Any]:
         usage = dict(cached.get("usage") or {})
@@ -100,11 +100,11 @@ class ChatService:
 
     # ---- entrypoints ----
 
-    async def ask(self, message: str, session_id: str | None = None) -> dict[str, Any]:
+    async def ask(self, message: str, session_id: str | None = None, language: str | None = None) -> dict[str, Any]:
         started = time.time()
-        session_id, state, cacheable = self._prepare(message, session_id)
+        session_id, state, cacheable = self._prepare(message, session_id, language)
 
-        cached = self._cache_get(message) if cacheable else None
+        cached = self._cache_get(message, language) if cacheable else None
         if cached:
             payload = self._cached_payload(cached, session_id)
             self.repository.append_chat_message(session_id, "user", message)
@@ -116,15 +116,15 @@ class ChatService:
         if not payload["answer"]:
             raise RuntimeError("The agent did not produce an answer.")
         if cacheable:
-            self._cache_put(message, payload)
+            self._cache_put(message, payload, language)
         return payload
 
-    async def stream(self, message: str, session_id: str | None = None):
+    async def stream(self, message: str, session_id: str | None = None, language: str | None = None):
         started = time.time()
         try:
-            session_id, state, cacheable = self._prepare(message, session_id)
+            session_id, state, cacheable = self._prepare(message, session_id, language)
 
-            cached = self._cache_get(message) if cacheable else None
+            cached = self._cache_get(message, language) if cacheable else None
             if cached:
                 payload = self._cached_payload(cached, session_id)
                 self.repository.append_chat_message(session_id, "user", message)
@@ -162,7 +162,7 @@ class ChatService:
                 yield _sse("error", {"detail": "The agent did not produce an answer."})
                 return
             if cacheable:
-                self._cache_put(message, payload)
+                self._cache_put(message, payload, language)
             yield _sse("done", payload)
         except Exception as exc:  # surfaced to the client as an SSE error frame
             yield _sse("error", {"detail": str(exc)})

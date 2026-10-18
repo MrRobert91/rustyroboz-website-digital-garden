@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslation } from "@/components/language-provider";
+
 import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { InkCircle, Tape } from "@/components/notebook";
@@ -19,12 +23,12 @@ const CARD_ROTATE = ["-rotate-[0.4deg]", "rotate-[0.5deg]", "-rotate-[0.3deg]", 
 const ERA_LABEL_CLASS = "font-display text-2xl font-bold uppercase tracking-tight text-muted-foreground sm:text-3xl";
 
 /** Compact "era" label drawn big and faded next to each entry. */
-function eraLabel(entry: TimelineEntry) {
+function eraLabel(entry: TimelineEntry, locale: "en" | "es") {
   const startYear = entry.start.slice(0, 4);
   if (!entry.end) {
     return startYear;
   }
-  const endYear = entry.end === "present" ? "now" : entry.end.slice(0, 4);
+  const endYear = entry.end === "present" ? (locale === "es" ? "hoy" : "now") : entry.end.slice(0, 4);
   return startYear === endYear ? startYear : `${startYear}–${endYear}`;
 }
 
@@ -38,6 +42,7 @@ function entryMinHeight(entry: TimelineEntry) {
 }
 
 function TimelineLinkChip({ link }: { link: TimelineLink }) {
+  const { t, locale } = useTranslation();
   const isInternal = link.href.startsWith("/");
   const className =
     "text-link interactive-control inline-flex items-center gap-1 border border-control-border px-3 py-1 font-mono text-sm uppercase tracking-[0.12em] transition-colors";
@@ -45,13 +50,13 @@ function TimelineLinkChip({ link }: { link: TimelineLink }) {
   if (isInternal) {
     return (
       <Link className={className} href={link.href}>
-        {link.label} →
+        {t(link.label)} →
       </Link>
     );
   }
   return (
     <a className={className} href={link.href} rel="noreferrer" target="_blank">
-      {link.label} ↗
+      {t(link.label)} ↗
     </a>
   );
 }
@@ -85,9 +90,10 @@ function TimelineCard({
   tapeSide?: "left" | "right";
   headingLevel?: 2 | 3;
 }) {
+  const { t, locale } = useTranslation();
   const ranged = Boolean(entry.end);
   const ongoing = isOngoing(entry);
-  const duration = formatDuration(entry);
+  const duration = formatDuration(entry, locale);
   const minHeight = entryMinHeight(entry);
   const Heading = headingLevel === 2 ? "h2" : "h3";
   const pageLink = entryPageLink(entry);
@@ -103,29 +109,31 @@ function TimelineCard({
       <Tape angle={tapeSide === "right" ? 4 : -6} height={16} style={{ top: -9, [tapeSide]: 22 }} width={64} />
       <div>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-sm uppercase tracking-[0.16em] text-muted-foreground">
-          <span className="text-accent-deep">{kindLabel(entry.kind)}</span>
+          <span className="text-accent-deep">{t(kindLabel(entry.kind))}</span>
           <span aria-hidden>·</span>
-          <span>{formatRange(entry)}</span>
+          <span>{t(formatRange(entry, locale))}</span>
           {duration ? (
             <>
               <span aria-hidden>·</span>
-              <span>{duration}</span>
+              <span>{t(duration)}</span>
             </>
           ) : null}
-          {ongoing ? <span className="font-semibold text-accent">● now</span> : null}
+          {ongoing ? <span className="font-semibold text-accent">{t("● now")}</span> : null}
         </div>
-        <Heading className={`mt-3 font-display font-bold text-foreground ${ranged ? "text-2xl lg:text-3xl" : "text-2xl"}`}>
+        <Heading
+          className={`mt-3 font-display font-bold text-foreground ${ranged ? "text-2xl lg:text-3xl" : "text-2xl"}`}
+        >
           {pageLink ? (
             <Link className="text-link" href={pageLink.href}>
-              {entry.title}
+              {t(entry.title)}
             </Link>
           ) : (
             entry.title
           )}
         </Heading>
-        {entry.org ? <p className="mt-1 font-serif text-lg font-semibold text-accent-deep">{entry.org}</p> : null}
-        <p className="mt-2 font-serif text-base leading-relaxed text-foreground/75">{entry.description}</p>
-        {entry.media?.length ? <TimelineMedia items={entry.media} title={entry.title} /> : null}
+        {entry.org ? <p className="mt-1 font-serif text-lg font-semibold text-accent-deep">{t(entry.org)}</p> : null}
+        <p className="mt-2 font-serif text-base leading-relaxed text-foreground/75">{t(entry.description)}</p>
+        {entry.media?.length ? <TimelineMedia items={entry.media} title={t(entry.title)} /> : null}
       </div>
       {secondaryLinks?.length ? (
         <div className="mt-5 flex flex-wrap gap-2">
@@ -143,18 +151,15 @@ function TimelineCard({
 /* ------------------------------------------------------------------ */
 
 function TimelineItem({ entry, index }: { entry: TimelineEntry; index: number }) {
+  const { t, locale } = useTranslation();
   // Work experience sits on the LEFT of the rail; everything else on the RIGHT.
   const onLeft = entry.kind === "experience";
 
   return (
     <li className="relative pb-12 last:pb-0 sm:grid sm:grid-cols-2 sm:gap-x-16">
       <EntryDot className="absolute left-4 top-1 z-10 -translate-x-1/2 sm:left-1/2" entry={entry} index={index} />
-      <div
-        className={`pl-12 sm:pl-0 ${
-          onLeft ? "sm:col-start-1 sm:pr-12 sm:text-right" : "sm:col-start-2 sm:pl-12"
-        }`}
-      >
-        <p className={ERA_LABEL_CLASS}>{eraLabel(entry)}</p>
+      <div className={`pl-12 sm:pl-0 ${onLeft ? "sm:col-start-1 sm:pr-12 sm:text-right" : "sm:col-start-2 sm:pl-12"}`}>
+        <p className={ERA_LABEL_CLASS}>{t(eraLabel(entry, locale))}</p>
         <Reveal className="mt-3 block">
           <TimelineCard entry={entry} index={index} tapeSide={onLeft ? "right" : "left"} />
         </Reveal>
@@ -184,9 +189,10 @@ export function Timeline({ entries }: { entries: TimelineEntry[] }) {
 /* ------------------------------------------------------------------ */
 
 function EraRow({ era, index }: { era: TimelineEra; index: number }) {
+  const { t, locale } = useTranslation();
   const exp = era.experience;
   // Approximate card height, used to vertically center the pinned card.
-  const cardHeight = exp ? entryMinHeight(exp) ?? 320 : 0;
+  const cardHeight = exp ? (entryMinHeight(exp) ?? 320) : 0;
 
   return (
     <section className="relative sm:grid sm:grid-cols-2 sm:gap-x-16">
@@ -203,7 +209,7 @@ function EraRow({ era, index }: { era: TimelineEra; index: number }) {
         {exp ? (
           <div className="pb-12 sm:sticky sm:pb-0" style={{ top: `calc(50vh - ${Math.round(cardHeight / 2)}px)` }}>
             <div className="pl-12 sm:pl-0 sm:pr-12 sm:text-right">
-              <p className={ERA_LABEL_CLASS}>{eraLabel(exp)}</p>
+              <p className={ERA_LABEL_CLASS}>{t(eraLabel(exp, locale))}</p>
               <Reveal className="mt-3 block">
                 <TimelineCard entry={exp} headingLevel={2} index={index} tapeSide="right" />
               </Reveal>
@@ -222,7 +228,7 @@ function EraRow({ era, index }: { era: TimelineEra; index: number }) {
                 entry={event}
                 index={eventIndex}
               />
-              <p className={ERA_LABEL_CLASS}>{eraLabel(event)}</p>
+              <p className={ERA_LABEL_CLASS}>{t(eraLabel(event, locale))}</p>
               <Reveal className="mt-3 block">
                 <TimelineCard entry={event} headingLevel={2} index={eventIndex} tapeSide="left" />
               </Reveal>

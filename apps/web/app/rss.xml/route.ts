@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { getCollection, getContentHref } from "@/lib/content";
+import { getLocale } from "@/lib/i18n/server";
 
 export async function GET() {
-  const articles = await getCollection("articles");
+  const locale = await getLocale();
+  const articles = await getCollection("articles", locale);
 
   const items = articles
     .map(
@@ -21,7 +23,8 @@ export async function GET() {
     <rss version="2.0">
       <channel>
         <title>David Robert</title>
-        <description>Articles about systems, AI, and product work.</description>
+        <description>${locale === "es" ? "Artículos sobre sistemas, IA y desarrollo de producto." : "Articles about systems, AI, and product work."}</description>
+        <language>${locale}</language>
         <link>https://rustyroboz.dev</link>
         ${items}
       </channel>

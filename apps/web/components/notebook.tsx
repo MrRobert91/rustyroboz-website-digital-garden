@@ -177,7 +177,7 @@ export function InkStamp({
   angle = -8,
   className,
   style,
-}: Common & { label?: string; angle?: number }) {
+}: Common & { label?: ReactNode; angle?: number }) {
   return (
     <span
       className={`font-mono ${className ?? ""}`}

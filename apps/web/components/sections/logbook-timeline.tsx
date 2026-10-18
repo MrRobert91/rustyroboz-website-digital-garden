@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslation } from "@/components/language-provider";
+
 import Link from "next/link";
 import { Sticky } from "@/components/notebook";
 import { Timeline } from "@/components/timeline";
@@ -5,6 +9,7 @@ import { getRecentTimeline } from "@/lib/timeline";
 
 /** Screen 05 — Logbook / Timeline. Shows recent real entries; full list lives at /timeline. */
 export function LogbookTimeline() {
+  const { t } = useTranslation();
   const recent = getRecentTimeline(5);
 
   return (
@@ -12,13 +17,13 @@ export function LogbookTimeline() {
       <div className="reading-surface mx-auto max-w-6xl px-6 py-16 lg:px-16 lg:py-24">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
-            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">§05 — Logbook</p>
+            <p className="font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">{t("§05 — Logbook")}</p>
             <h2 className="mt-2 font-display text-5xl font-bold tracking-tight text-foreground lg:text-7xl">
-              Timeline <span className="font-hand font-normal text-accent">(recent)</span>
+              {t("Timeline")} <span className="font-hand font-normal text-accent">{t("(recent)")}</span>
             </h2>
           </div>
           <Sticky angle={-4} className="hidden sm:block" color="#fcd9c8" style={{ width: 190 }}>
-            ↓ time goes <span className="font-bold text-[#6b2d1a]">down</span> the page
+            {t("↓ time goes")} <span className="font-bold text-[#6b2d1a]">{t("down")}</span> {t("the page")}
           </Sticky>
         </div>
 
@@ -30,7 +35,7 @@ export function LogbookTimeline() {
           className="text-link mt-6 inline-block font-mono text-sm uppercase tracking-[0.08em] sm:ml-12"
           href="/timeline"
         >
-          → see the full timeline
+          {t("→ see the full timeline")}
         </Link>
       </div>
     </section>

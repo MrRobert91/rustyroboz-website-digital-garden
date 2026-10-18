@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "@/components/language-provider";
+
 /**
  * ROBOZ MK-1 — the site mascot as an interactive 3D wireframe, sketched on
  * a 2D canvas with manual projection (no three.js, ~zero bundle cost).
@@ -59,6 +61,7 @@ function blinkAmount(t: number): number {
 }
 
 export function WireframeRoboz({ className }: { className?: string }) {
+  const { t } = useTranslation();
   const draw = useCallback(
     (ctx: CanvasRenderingContext2D, width: number, height: number, state: SketchState, ink: SketchInk) => {
       const scale = Math.min(width, height) * 0.34;
@@ -148,7 +151,7 @@ export function WireframeRoboz({ className }: { className?: string }) {
       <Tape angle={-5} height={20} style={{ top: -10, left: 24 }} width={84} />
       <div className="border border-border bg-paper-2/70 p-3 shadow-paper">
         <canvas
-          aria-label="Interactive 3D wireframe sketch of the Rusty Roboz robot mascot. Drag to spin it around."
+          aria-label={t("Interactive 3D wireframe sketch of the Rusty Roboz robot mascot. Drag to spin it around.")}
           className="h-60 w-full cursor-grab active:cursor-grabbing"
           ref={canvasRef}
           role="img"
@@ -156,10 +159,10 @@ export function WireframeRoboz({ className }: { className?: string }) {
         />
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-dashed border-border/70 pt-2">
           <span className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
-            Fig. 00 — Roboz MK-1
+            {t("Fig. 00 — Roboz MK-1")}
           </span>
           <div className="flex items-center gap-3">
-            <span className="font-mono text-sm text-accent-deep">Drag to spin ↻</span>
+            <span className="font-mono text-sm text-accent-deep">{t("Drag to spin ↻")}</span>
             <AnimationToggle
               className="min-h-11 border border-control-border bg-background px-3 font-mono text-sm uppercase tracking-[0.12em] text-foreground"
               pause={pause}

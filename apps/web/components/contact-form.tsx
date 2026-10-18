@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "@/components/language-provider";
+
 import { useRef, useState } from "react";
 import { CONTACT_SERVICES, validateContactPayload } from "@/lib/contact";
 
@@ -14,6 +16,7 @@ const fieldClass =
   "mt-2 min-h-11 w-full border border-control-border bg-background px-3 py-2 font-serif text-base text-foreground placeholder:text-muted-foreground";
 
 export function ContactForm() {
+  const { t } = useTranslation();
   const formRef = useRef<HTMLFormElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -69,17 +72,18 @@ export function ContactForm() {
 
   return (
     <div className="relative border border-border bg-paper-2 p-6 shadow-soft sm:p-8">
-      <h2 className="font-display text-2xl font-bold text-accent-deep">Quick brief</h2>
+      <h2 className="font-display text-2xl font-bold text-accent-deep">{t("Quick brief")}</h2>
       <p className="mt-2 font-serif text-base text-muted-foreground">
-        Fields marked <span aria-hidden>*</span><span className="sr-only">with an asterisk</span> are required.
+        {t("Fields marked")} <span aria-hidden>*</span>
+        <span className="sr-only">{t("with an asterisk")}</span> {t("are required.")}
       </p>
 
       {Object.keys(errors).length ? (
         <div className="mt-5 border-l-4 border-accent bg-background p-4" ref={summaryRef} role="alert" tabIndex={-1}>
-          <p className="font-display text-base font-bold">Please review the form.</p>
+          <p className="font-display text-base font-bold">{t("Please review the form.")}</p>
           <ul className="mt-2 list-disc pl-5 font-serif text-sm">
             {Object.entries(errors).map(([field, message]) => (
-              <li key={field}>{message}</li>
+              <li key={field}>{t(message)}</li>
             ))}
           </ul>
         </div>
@@ -87,7 +91,9 @@ export function ContactForm() {
 
       <form className="mt-6 space-y-5" noValidate onSubmit={submit} ref={formRef}>
         <div>
-          <label className="font-display text-sm font-semibold" htmlFor="contact-name">Name (required)</label>
+          <label className="font-display text-sm font-semibold" htmlFor="contact-name">
+            {t("Name (required)")}
+          </label>
           <input
             aria-describedby={describedBy("name")}
             aria-invalid={Boolean(errors.name)}
@@ -98,11 +104,17 @@ export function ContactForm() {
             name="name"
             required
           />
-          {errors.name ? <p className="mt-1 font-serif text-sm text-accent-deep" id="name-error">{errors.name}</p> : null}
+          {errors.name ? (
+            <p className="mt-1 font-serif text-sm text-accent-deep" id="name-error">
+              {t(errors.name)}
+            </p>
+          ) : null}
         </div>
 
         <div>
-          <label className="font-display text-sm font-semibold" htmlFor="contact-email">Email (required)</label>
+          <label className="font-display text-sm font-semibold" htmlFor="contact-email">
+            {t("Email (required)")}
+          </label>
           <input
             aria-describedby={describedBy("email", "email-hint")}
             aria-invalid={Boolean(errors.email)}
@@ -115,12 +127,20 @@ export function ContactForm() {
             required
             type="email"
           />
-          <p className="mt-1 font-serif text-sm text-muted-foreground" id="email-hint">Used only to reply to this request.</p>
-          {errors.email ? <p className="mt-1 font-serif text-sm text-accent-deep" id="email-error">{errors.email}</p> : null}
+          <p className="mt-1 font-serif text-sm text-muted-foreground" id="email-hint">
+            {t("Used only to reply to this request.")}
+          </p>
+          {errors.email ? (
+            <p className="mt-1 font-serif text-sm text-accent-deep" id="email-error">
+              {t(errors.email)}
+            </p>
+          ) : null}
         </div>
 
         <div>
-          <label className="font-display text-sm font-semibold" htmlFor="contact-project">Project or idea (required)</label>
+          <label className="font-display text-sm font-semibold" htmlFor="contact-project">
+            {t("Project or idea (required)")}
+          </label>
           <textarea
             aria-describedby={describedBy("project")}
             aria-invalid={Boolean(errors.project)}
@@ -130,11 +150,17 @@ export function ContactForm() {
             name="project"
             required
           />
-          {errors.project ? <p className="mt-1 font-serif text-sm text-accent-deep" id="project-error">{errors.project}</p> : null}
+          {errors.project ? (
+            <p className="mt-1 font-serif text-sm text-accent-deep" id="project-error">
+              {t(errors.project)}
+            </p>
+          ) : null}
         </div>
 
         <div>
-          <label className="font-display text-sm font-semibold" htmlFor="contact-service">Type of work (required)</label>
+          <label className="font-display text-sm font-semibold" htmlFor="contact-service">
+            {t("Type of work (required)")}
+          </label>
           <select
             aria-describedby={describedBy("service")}
             aria-invalid={Boolean(errors.service)}
@@ -144,14 +170,26 @@ export function ContactForm() {
             name="service"
             required
           >
-            <option disabled value="">Choose one</option>
-            {CONTACT_SERVICES.map((service) => <option key={service} value={service}>{LABELS[service]}</option>)}
+            <option disabled value="">
+              {t("Choose one")}
+            </option>
+            {CONTACT_SERVICES.map((service) => (
+              <option key={service} value={service}>
+                {t(LABELS[service])}
+              </option>
+            ))}
           </select>
-          {errors.service ? <p className="mt-1 font-serif text-sm text-accent-deep" id="service-error">{errors.service}</p> : null}
+          {errors.service ? (
+            <p className="mt-1 font-serif text-sm text-accent-deep" id="service-error">
+              {t(errors.service)}
+            </p>
+          ) : null}
         </div>
 
         <div>
-          <label className="font-display text-sm font-semibold" htmlFor="contact-timeline">Timeline (required)</label>
+          <label className="font-display text-sm font-semibold" htmlFor="contact-timeline">
+            {t("Timeline (required)")}
+          </label>
           <input
             aria-describedby={describedBy("timeline", "timeline-hint")}
             aria-invalid={Boolean(errors.timeline)}
@@ -162,12 +200,20 @@ export function ContactForm() {
             name="timeline"
             required
           />
-          <p className="mt-1 font-serif text-sm text-muted-foreground" id="timeline-hint">For example: next month or Q4.</p>
-          {errors.timeline ? <p className="mt-1 font-serif text-sm text-accent-deep" id="timeline-error">{errors.timeline}</p> : null}
+          <p className="mt-1 font-serif text-sm text-muted-foreground" id="timeline-hint">
+            {t("For example: next month or Q4.")}
+          </p>
+          {errors.timeline ? (
+            <p className="mt-1 font-serif text-sm text-accent-deep" id="timeline-error">
+              {t(errors.timeline)}
+            </p>
+          ) : null}
         </div>
 
         <div>
-          <label className="font-display text-sm font-semibold" htmlFor="contact-message">Message (required)</label>
+          <label className="font-display text-sm font-semibold" htmlFor="contact-message">
+            {t("Message (required)")}
+          </label>
           <textarea
             aria-describedby={describedBy("message")}
             aria-invalid={Boolean(errors.message)}
@@ -177,25 +223,33 @@ export function ContactForm() {
             name="message"
             required
           />
-          {errors.message ? <p className="mt-1 font-serif text-sm text-accent-deep" id="message-error">{errors.message}</p> : null}
+          {errors.message ? (
+            <p className="mt-1 font-serif text-sm text-accent-deep" id="message-error">
+              {t(errors.message)}
+            </p>
+          ) : null}
         </div>
 
         <div aria-hidden className="absolute -left-[10000px] size-px overflow-hidden">
-          <label htmlFor="contact-company">Company website</label>
+          <label htmlFor="contact-company">{t("Company website")}</label>
           <input autoComplete="off" id="contact-company" name="company" tabIndex={-1} />
         </div>
 
         <p className="font-serif text-sm text-muted-foreground">
-          Your details are used only to answer this request and are sent to the configured delivery provider. Do not include sensitive data.
+          {t(
+            "Your details are used only to answer this request and are sent to the configured delivery provider. Do not include sensitive data.",
+          )}
         </p>
         <button
           className="min-h-11 bg-accent-surface px-5 py-3 font-mono text-sm font-semibold uppercase tracking-[0.12em] text-on-accent disabled:cursor-not-allowed disabled:opacity-50"
           disabled={submitting}
           type="submit"
         >
-          {submitting ? "Sending…" : "Send message"}
+          {t(submitting ? "Sending…" : "Send message")}
         </button>
-        <p aria-live="polite" className="min-h-6 font-serif text-base text-accent-deep" role="status">{status}</p>
+        <p aria-live="polite" className="min-h-6 font-serif text-base text-accent-deep" role="status">
+          {t(status)}
+        </p>
       </form>
     </div>
   );

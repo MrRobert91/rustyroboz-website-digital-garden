@@ -1,3 +1,4 @@
+import { createTranslator } from "@/lib/i18n";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -25,7 +26,8 @@ function getCrossLinks(item: ContentItem): { href: string; label: string }[] {
   if (!links) {
     return [];
   }
-  const wantPrefix = item.collection === "projects" ? "/articles/" : item.collection === "articles" ? "/projects/" : null;
+  const wantPrefix =
+    item.collection === "projects" ? "/articles/" : item.collection === "articles" ? "/projects/" : null;
   if (!wantPrefix) {
     return [];
   }
@@ -39,6 +41,7 @@ function isInternalCrossHref(href: string) {
 }
 
 export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
+  const t = createTranslator(item.language);
   const media = item.media ?? [];
   const videos = media.filter((entry) => entry.type === "youtube" || entry.type === "video");
   const images = media.filter((entry) => entry.type === "image");
@@ -48,24 +51,26 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
     <article className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-20" lang={item.language}>
       <div className="max-w-3xl">
         <div className="flex flex-wrap gap-2">
-          <Badge>{item.collection}</Badge>
+          <Badge>{t(item.collection)}</Badge>
           {item.tags.map((tag) => (
             <Link href={`/tags/${tag}`} key={tag}>
-              <Badge variant="outline">{tag}</Badge>
+              <Badge variant="outline">{t(tag)}</Badge>
             </Link>
           ))}
         </div>
-        <h1 className="mt-6 font-manrope text-4xl font-semibold tracking-tight text-foreground md:text-6xl">{item.title}</h1>
-        <p className="body-copy mt-5 text-muted-foreground">{item.description}</p>
+        <h1 className="mt-6 font-manrope text-4xl font-semibold tracking-tight text-foreground md:text-6xl">
+          {t(item.title)}
+        </h1>
+        <p className="body-copy mt-5 text-muted-foreground">{t(item.description)}</p>
         <div className="mt-8 flex flex-wrap items-center gap-4 text-sm uppercase tracking-[0.16em] text-muted-foreground">
-          <span>{new Date(item.publishedAt).toLocaleDateString("en-US")}</span>
-          <span>{item.readingTime}</span>
+          <span>{t(new Date(item.publishedAt).toLocaleDateString(item.language === "es" ? "es-ES" : "en-US", { timeZone: "UTC" }))}</span>
+          <span>{t(item.readingTime)}</span>
         </div>
       </div>
 
       {videos.length ? (
         <div className="mt-10 max-w-3xl">
-          <TimelineMedia items={videos} title={item.title} />
+          <TimelineMedia items={videos} title={t(item.title)} />
         </div>
       ) : null}
 
@@ -76,8 +81,8 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
           <MdxRenderer source={item.body} />
           {images.length ? (
             <div className="mt-14">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">Gallery</p>
-              <TimelineMedia imageFit="contain" items={images} title={item.title} />
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">{t("Gallery")}</p>
+              <TimelineMedia imageFit="contain" items={images} title={t(item.title)} />
             </div>
           ) : null}
         </div>
@@ -85,49 +90,51 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
           {crossLinks.length ? (
             <div className="rounded-[2rem] border-[1.5px] border-accent/40 bg-accent/5 p-6 shadow-soft">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">
-                {item.collection === "projects" ? "Write-up" : "Project"}
+                {t(item.collection === "projects" ? "Write-up" : "Project")}
               </p>
               <div className="mt-4 flex flex-col gap-3 text-sm">
                 {crossLinks.map((link) => (
                   <Link className="text-link" href={link.href} key={link.href}>
-                    {link.label} →
+                    {t(link.label)} →
                   </Link>
                 ))}
               </div>
             </div>
           ) : null}
           <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">Metadata</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">{t("Metadata")}</p>
             <dl className="mt-5 grid gap-3 text-sm text-muted-foreground">
               <div className="grid gap-1">
-                <dt className="font-medium text-foreground">Collection</dt>
-                <dd>{item.collection}</dd>
+                <dt className="font-medium text-foreground">{t("Collection")}</dt>
+                <dd>{t(item.collection)}</dd>
               </div>
               <div className="grid gap-1">
-                <dt className="font-medium text-foreground">Slug</dt>
+                <dt className="font-medium text-foreground">{t("Slug")}</dt>
                 <dd>{item.slug}</dd>
               </div>
               <div className="grid gap-1">
-                <dt className="font-medium text-foreground">Path</dt>
+                <dt className="font-medium text-foreground">{t("Path")}</dt>
                 <dd>{getContentHref(item)}</dd>
               </div>
               {isProjectItem(item) && item.tech?.length ? (
                 <div className="grid gap-1">
-                  <dt className="font-medium text-foreground">Technologies</dt>
+                  <dt className="font-medium text-foreground">{t("Technologies")}</dt>
                   <dd>{item.tech.join(", ")}</dd>
                 </div>
               ) : null}
             </dl>
           </div>
-          {isProjectItem(item) && item.links && Object.entries(item.links).filter(([, href]) => !isInternalCrossHref(href)).length ? (
+          {isProjectItem(item) &&
+          item.links &&
+          Object.entries(item.links).filter(([, href]) => !isInternalCrossHref(href)).length ? (
             <div className="rounded-[2rem] border border-border bg-card p-6 shadow-soft">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">Links</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">{t("Links")}</p>
               <div className="mt-5 flex flex-col gap-3 text-sm">
                 {Object.entries(item.links)
                   .filter(([, href]) => !isInternalCrossHref(href))
                   .map(([label, href]) => (
                     <Link className="text-link" href={href} key={href} rel="noreferrer" target="_blank">
-                      {label}
+                      {t(label)}
                     </Link>
                   ))}
               </div>
@@ -135,7 +142,7 @@ export function ContentDetailPage({ item, related }: ContentDetailPageProps) {
           ) : null}
           {related.length ? (
             <div className="space-y-4">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">Related</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">{t("Related")}</p>
               {related.map((entry) => (
                 <ContentCard item={entry} key={`${entry.collection}-${entry.slug}`} />
               ))}
