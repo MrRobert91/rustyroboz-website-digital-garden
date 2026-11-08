@@ -1047,5 +1047,48 @@
       }
     ],
     "sourceHash": "bc788ca3cfd404a391ccf6b09f5a1ad5097f16c7de69947bb066340bd6fdbef6"
+  },
+  "projects/rusty-together": {
+    "title": "RustyTogether",
+    "description": "Un prototipo de plataformas cooperativas para dos, inspirado por mi afición a juegos como It Takes Two y desarrollado con ayuda de IA. En desarrollo.",
+    "body": "Me encantan los juegos en los que toca ponerse de acuerdo, ayudarse y reírse cuando algo sale mal. **It Takes Two** me encantó, y llevaba tiempo con ganas de probar a hacer algo de ese estilo. Nunca había desarrollado un juego online; con la ayuda de la IA me he animado a intentarlo. Así nació **RustyTogether**.\n\n## Dos robots y un cuerpo compartido\n\nEs un prototipo de plataformas cooperativas en 3D que se juega directamente en el navegador. Cada persona lleva un pequeño robot: podéis saltar sobre la cabeza del compañero, darle la mano para subirlo o ayudaros a cruzar obstáculos. En algunas zonas os unís en un solo cuerpo y cada jugador controla una pierna y un brazo. Incluso un salto se convierte en un ejercicio de coordinación.\n\nLa idea es sencilla: **uno crea una sala privada, comparte el código y el otro se une**. Sin buscar partidas con desconocidos. También hay un tutorial para un jugador con Ámbar-bot, un compañero controlado por IA, para aprender las mecánicas antes de entrar con alguien.\n\n[Jugar en el navegador](https://rusty-together.sliplane.app/) · [Ver el tráiler en YouTube](https://youtu.be/OVM84gUFRzw) · [Código en GitHub](https://github.com/MrRobert91/Rusty-Together)\n\n## Aprender a hacer un cooperativo\n\nLo estoy desarrollando con ayuda de **Claude Code, de Anthropic**. Los gráficos usan React Three Fiber y Drei sobre three.js; Rapier se encarga de la física y Colyseus conecta a los jugadores. Yuka mueve al compañero del tutorial y al cangrejo, y WebRTC permite hablar por proximidad. Los escenarios y los robots se construyen por código, y el sonido y la música del juego se sintetizan con Web Audio.\n\nLo más curioso está siendo probarlo. El modo de un jugador lo puedo recorrer solo, pero para comprobar el online me toca alternar entre dos navegadores, o entre el ordenador y el móvil. Manejar a los dos a la vez no es precisamente la mejor forma de descubrir si un cooperativo es divertido.\n\n**Sigue en desarrollo.** Las mecánicas aún necesitan pulirse, pero creo que ha quedado un prototipo bastante chulo. Ahora quiero probarlo con más gente y ver qué momentos funcionan y cuáles necesitan otra vuelta.\n\n## El tráiler también se hizo con ayuda de IA\n\nTodo lo que se ve es **gameplay real**. No hay escenas animadas a mano para el vídeo: unos bots recorren el tutorial y el nivel 1 utilizando las mismas entradas que un jugador. Playwright y Chromium capturan los momentos elegidos con un reloj virtual que avanza fotograma a fotograma, para obtener un vídeo a 30 fps aunque renderizar cada imagen tarde más.\n\nLa música del tráiler se sintetizó desde cero con Python y NumPy, sin samples, a 120 BPM. Después, FFmpeg une las capturas y los rótulos con la tipografía del juego, con los cortes ajustados al ritmo. El proceso se puede regenerar con los scripts de `scripts/trailer` del repositorio.",
+    "media": [
+      {
+        "type": "youtube",
+        "id": "OVM84gUFRzw",
+        "title": "RustyTogether — tráiler con gameplay real"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/cooperativo.webp",
+        "alt": "Cian y Ámbar juntos en Escuela de guantes durante una partida online"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/tutorial.webp",
+        "alt": "Cian en el inicio del Taller de pruebas, con la pelota, la portería y las plataformas flotantes"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/plataformas.webp",
+        "alt": "Cian supera el primer salto del tutorial entre plataformas flotantes"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/cajas.webp",
+        "alt": "Zona de cajas y botón de presión para abrir la puerta del tutorial"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/muelles.webp",
+        "alt": "Vista de Escuela de guantes, con la barredora, los contenedores y ambos robots"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/anillos.webp",
+        "alt": "Cian ante un muro y un anillo de agarre en la zona cooperativa de los muelles"
+      }
+    ],
+    "sourceHash": "cd9adcc671c78cf07ec4d9c06449acd495fe2e2257b2f24ceb4e2b5ee2218f7b"
   }
 }

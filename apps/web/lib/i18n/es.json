@@ -561,5 +561,12 @@
   "YOLO": "YOLO",
   "You": "Tú",
   "Your details are used only to answer this request and are sent to the configured delivery provider. Do not include sensitive data.": "Tus datos solo se usan para responder a esta solicitud y se envían al proveedor de entrega configurado. No incluyas información sensible.",
-  "Z": "Z"
+  "Z": "Z",
+  "Jugar en el navegador": "Jugar en el navegador",
+  "Tráiler en YouTube": "Tráiler en YouTube",
+  "Código en GitHub": "Código en GitHub",
+  "A cooperative browser platformer for two: join a private room by code, help each other as small robots and coordinate a shared body. Built with AI assistance and still in progress.": "Un plataformas cooperativo en el navegador para dos: comparte el código de una sala privada, ayuda a tu compañero y coordina un cuerpo compartido. Hecho con ayuda de IA y todavía en desarrollo.",
+  "Cian and Ámbar during an online cooperative play session": "Cian y Ámbar durante una partida cooperativa online",
+  "RustyTogether — real gameplay trailer": "RustyTogether — tráiler con gameplay real",
+  "Cian at the start of the tutorial with its floating platforms": "Cian al inicio del tutorial con sus plataformas flotantes"
 }

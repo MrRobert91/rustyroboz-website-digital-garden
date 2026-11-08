@@ -1047,5 +1047,48 @@
       }
     ],
     "sourceHash": "bc788ca3cfd404a391ccf6b09f5a1ad5097f16c7de69947bb066340bd6fdbef6"
+  },
+  "projects/rusty-together": {
+    "title": "RustyTogether",
+    "description": "A cooperative platforming prototype for two, inspired by my love of games like It Takes Two and developed with help from AI. Work in progress.",
+    "body": "I love games where you have to agree on a plan, help each other out and laugh when things go wrong. **It Takes Two** was a favourite, and I had wanted to try making something along those lines for a while. I had never built an online game; with help from AI, I finally gave it a go. That is how **RustyTogether** started.\n\n## Two robots, one shared body\n\nIt is a 3D cooperative platforming prototype that runs directly in the browser. Each person controls a small robot: you can bounce off your partner’s head, offer a hand to pull them up or help each other across obstacles. In some areas, you join into a single body, with each player controlling one leg and one arm. Even a jump becomes a coordination challenge.\n\nThe idea is simple: **one person creates a private room, shares the code and the other joins**. There is no matchmaking with strangers. A single-player tutorial with Ámbar-bot, an AI companion, also lets you learn the mechanics before playing with someone else.\n\n[Play in the browser](https://rusty-together.sliplane.app/) · [Watch the trailer on YouTube](https://youtu.be/OVM84gUFRzw) · [Source code on GitHub](https://github.com/MrRobert91/Rusty-Together)\n\n## Learning to build a cooperative game\n\nI am developing it with help from **Claude Code, by Anthropic**. The graphics use React Three Fiber and Drei on top of three.js; Rapier handles physics and Colyseus connects the players. Yuka drives the tutorial companion and the crab, while WebRTC enables proximity voice chat. The environments and robots are built in code, and the game’s sound and music are synthesised with Web Audio.\n\nTesting has been an interesting challenge. I can play through the single-player mode myself, but checking the online mode means switching between two browsers, or between my computer and phone. Controlling both players at once is hardly the best way to find out whether a cooperative game is fun.\n\n**It is still in progress.** The mechanics need more polish, but I think it has turned into a pretty cool prototype. Now I want to try it with more people and see which moments work and which need another pass.\n\n## The trailer was also made with help from AI\n\nEverything on screen is **real gameplay**. There are no scenes animated by hand for the video: bots play through the tutorial and level 1 using the same inputs as a player. Playwright and Chromium capture selected moments with a virtual clock that advances frame by frame, producing a 30 fps video even when rendering an individual frame takes longer.\n\nThe trailer music was synthesised from scratch with Python and NumPy, without samples, at 120 BPM. FFmpeg then combines the footage and title cards using the game’s typeface, with cuts timed to the music. The process can be regenerated using the scripts in `scripts/trailer` in the repository.",
+    "media": [
+      {
+        "type": "youtube",
+        "id": "OVM84gUFRzw",
+        "title": "RustyTogether — real gameplay trailer"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/cooperativo.webp",
+        "alt": "Cian and Ámbar together in Escuela de guantes during an online session"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/tutorial.webp",
+        "alt": "Cian at the start of Taller de pruebas, with the ball, goal and floating platforms"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/plataformas.webp",
+        "alt": "Cian clears the first tutorial jump between floating platforms"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/cajas.webp",
+        "alt": "The tutorial box and pressure plate puzzle for opening the door"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/muelles.webp",
+        "alt": "View of Escuela de guantes, with the sweeper, containers and both robots"
+      },
+      {
+        "type": "image",
+        "src": "/images/projects/rusty-together/anillos.webp",
+        "alt": "Cian facing a wall and a grapple ring in the cooperative dock area"
+      }
+    ],
+    "sourceHash": "cd9adcc671c78cf07ec4d9c06449acd495fe2e2257b2f24ceb4e2b5ee2218f7b"
   }
 }

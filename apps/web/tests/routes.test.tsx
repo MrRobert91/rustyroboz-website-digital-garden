@@ -39,10 +39,10 @@ describe("public routes", () => {
         .getAllByRole("heading", { level: 3 })
         .map((heading) => heading.textContent),
     ).toEqual([
+      "RustyTogether",
       "Metamorfosis — El Valle de los Colosos",
       "Moloch Arena",
       "The Last Observation",
-      "Qiskit Certification Prep: an interactive quantum study lab",
     ]);
     expect(within(latestWork as HTMLElement).queryByText(/susbeer vr experience/i)).not.toBeInTheDocument();
     expect(
@@ -62,16 +62,18 @@ describe("public routes", () => {
     expect(moloch.catalogCode).toMatch(/^EXP-\d+$/);
     const home = render(await HomePage());
     const homeMoloch = screen.getByRole("heading", { name: /moloch arena/i }).closest("article");
-    const homeQiskit = screen.getByRole("heading", { name: /qiskit certification prep/i }).closest("article");
+    const rustyTogether = await getItemBySlug("projects", "rusty-together");
+    const homeRustyTogether = screen.getByRole("heading", { name: "RustyTogether" }).closest("article");
     expect(within(homeMoloch as HTMLElement).getByText(moloch.catalogCode!)).toBeInTheDocument();
-    expect(within(homeQiskit as HTMLElement).getByText("EXP-15")).toBeInTheDocument();
+    expect(within(homeRustyTogether as HTMLElement).getByText(rustyTogether.catalogCode!)).toBeInTheDocument();
+    expect(within(homeRustyTogether as HTMLElement).getByText(/WORK IN PROGRESS/)).toBeInTheDocument();
     home.unmount();
 
     render(await ProjectsPage());
     const projectsMoloch = screen.getByRole("heading", { name: /moloch arena/i }).closest("article");
-    const projectsQiskit = screen.getByRole("heading", { name: /qiskit certification prep/i }).closest("article");
+    const projectsRustyTogether = screen.getByRole("heading", { name: "RustyTogether" }).closest("article");
     expect(within(projectsMoloch as HTMLElement).getByText(moloch.catalogCode!)).toBeInTheDocument();
-    expect(within(projectsQiskit as HTMLElement).getByText("EXP-15")).toBeInTheDocument();
+    expect(within(projectsRustyTogether as HTMLElement).getByText(rustyTogether.catalogCode!)).toBeInTheDocument();
   });
 
   it("renders the about and contact pages in english", async () => {

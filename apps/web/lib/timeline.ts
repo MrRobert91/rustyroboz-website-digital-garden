@@ -209,6 +209,26 @@ export function groupTimelineByEra(entries: TimelineEntry[]): TimelineEra[] {
  */
 export const timeline: TimelineEntry[] = [
   {
+    id: "rusty-together",
+    kind: "project",
+    title: "RustyTogether",
+    start: "2026-11",
+    end: "present",
+    description:
+      "A cooperative browser platformer for two: join a private room by code, help each other as small robots and coordinate a shared body. Built with AI assistance and still in progress.",
+    media: [
+      { type: "image", src: "/images/projects/rusty-together/cooperativo.webp", alt: "Cian and Ámbar during an online cooperative play session" },
+      { type: "youtube", id: "OVM84gUFRzw", title: "RustyTogether — real gameplay trailer" },
+      { type: "image", src: "/images/projects/rusty-together/tutorial.webp", alt: "Cian at the start of the tutorial with its floating platforms" },
+    ],
+    links: [
+      { label: "Play", href: "https://rusty-together.sliplane.app/" },
+      { label: "YouTube", href: "https://youtu.be/OVM84gUFRzw" },
+      { label: "GitHub", href: "https://github.com/MrRobert91/Rusty-Together" },
+      { label: "Case study", href: "/projects/rusty-together" },
+    ],
+  },
+  {
     id: "moloch-arena",
     kind: "experiment",
     title: "Moloch Arena",
